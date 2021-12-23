@@ -12,6 +12,7 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/window.cpp
         ${PROJECT_SOURCE_DIR}/shader.cpp
         ${PROJECT_SOURCE_DIR}/vertexBuffer.cpp
+        ${PROJECT_SOURCE_DIR}/renderer.cpp
 )
 
 set(PROJECT_HEADERS
@@ -19,6 +20,7 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/window.h
         ${PROJECT_INCLUDE_DIR}/shader.h
         ${PROJECT_INCLUDE_DIR}/vertexBuffer.h
+        ${PROJECT_INCLUDE_DIR}/renderer.h
 )
 
 find_package(glfw3 3.3 REQUIRED)
