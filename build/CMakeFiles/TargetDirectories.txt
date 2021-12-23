@@ -1,0 +1,3 @@
+/home/johndoe/Masaüstü/Codes/C++/NixEngine/build/CMakeFiles/deneme.dir
+/home/johndoe/Masaüstü/Codes/C++/NixEngine/build/CMakeFiles/edit_cache.dir
+/home/johndoe/Masaüstü/Codes/C++/NixEngine/build/CMakeFiles/rebuild_cache.dir

@@ -1,6 +1,8 @@
 #include "window.h"
+#include "vertexBuffer.h"
 
-int main() {
+int main()
+{
     Window window;
     window.main();
     glfwTerminate();

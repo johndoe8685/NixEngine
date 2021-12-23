@@ -3,21 +3,22 @@ cmake_minimum_required(VERSION 3.21)
 project(deneme)
 
 set(PROJECT_DIR ${CMAKE_SOURCE_DIR})
-
 set(PROJECT_INCLUDE_DIR ${PROJECT_DIR}/include)
 set(PROJECT_SOURCE_DIR ${PROJECT_DIR}/src)
 
 set(PROJECT_SOURCES
+        ${PROJECT_SOURCE_DIR}/glad.c
         ${PROJECT_SOURCE_DIR}/main.cpp
         ${PROJECT_SOURCE_DIR}/window.cpp
-        ${PROJECT_SOURCE_DIR}/glad.c
         ${PROJECT_SOURCE_DIR}/shader.cpp
+        ${PROJECT_SOURCE_DIR}/vertexBuffer.cpp
 )
 
 set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/glad/glad.h
         ${PROJECT_INCLUDE_DIR}/window.h
         ${PROJECT_INCLUDE_DIR}/shader.h
+        ${PROJECT_INCLUDE_DIR}/vertexBuffer.h
 )
 
 find_package(glfw3 3.3 REQUIRED)

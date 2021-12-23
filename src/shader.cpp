@@ -7,7 +7,8 @@ Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader
     std::string vertexSource = GetShaderSource(vertexShader);
 }
 
-std::string Shader::GetShaderSource(const std::string& filepath) {
+std::string Shader::GetShaderSource(const std::string& filepath)
+{
     std::ifstream stream(filepath);
     std::string line;
     std::stringstream ss[1];

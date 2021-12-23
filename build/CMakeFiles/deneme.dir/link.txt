@@ -1,0 +1,1 @@
+/bin/c++ -g  -lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl CMakeFiles/deneme.dir/src/glad.c.o CMakeFiles/deneme.dir/src/main.cpp.o CMakeFiles/deneme.dir/src/window.cpp.o CMakeFiles/deneme.dir/src/shader.cpp.o CMakeFiles/deneme.dir/src/vertexBuffer.cpp.o -o deneme  /usr/local/lib/libglfw3.a /usr/lib/librt.so -lm -ldl /usr/lib/libX11.so -lpthread 
