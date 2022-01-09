@@ -9,6 +9,7 @@ set(PROJECT_SOURCE_DIR ${PROJECT_DIR}/src)
 set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/vendor/glad.c
         ${PROJECT_SOURCE_DIR}/main.cpp
+        ${PROJECT_SOURCE_DIR}/Application.cpp
         ${PROJECT_SOURCE_DIR}/window.cpp
         ${PROJECT_SOURCE_DIR}/shader.cpp
         ${PROJECT_SOURCE_DIR}/vertexBuffer.cpp
@@ -20,6 +21,7 @@ add_subdirectory(${PROJECT_INCLUDE_DIR}/vendor/glm)
 
 set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/vendor/glad/glad.h
+        ${PROJECT_INCLUDE_DIR}/Application.h
         ${PROJECT_INCLUDE_DIR}/window.h
         ${PROJECT_INCLUDE_DIR}/shader.h
         ${PROJECT_INCLUDE_DIR}/vertexBuffer.h
