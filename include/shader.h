@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <unistd.h>
 
 class Shader
 {
@@ -16,7 +17,7 @@ public:
     ~Shader();
 
     std::string GetShaderSource(const std::string& filepath);
-    void CreateShader(const std::string& vertexSource, const std::string& fragmentSource);
+    unsigned int CreateShader(const std::string& vertexSource, const std::string& fragmentSource);
     unsigned int CompileShader(unsigned int type, const std::string& source);
 
     void Bind() const;

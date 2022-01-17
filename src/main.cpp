@@ -2,7 +2,7 @@
 
 int main()
 {
-    Window window;
-    window.main();
+    NixEngine::Application App;
+    App.Run();
     glfwTerminate();
 }

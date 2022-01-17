@@ -16,10 +16,8 @@ public:
     ~Window();
 
 
-    void main();
-    void windowInitilaize(int height, int width);
-    void windowLoop();
+    void Init(int height, int width);
 
-    void swapBuffers() { glfwSwapBuffers(mainWindow); }
-    bool getWindowShouldClose() { return glfwWindowShouldClose(mainWindow); }
+    void SwapBuffers() { glfwSwapBuffers(mainWindow); }
+    bool GetWindowShouldClose() { return glfwWindowShouldClose(mainWindow); }
 };

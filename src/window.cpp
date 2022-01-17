@@ -6,6 +6,7 @@ Window::Window()
 {
     m_width = 800;
     m_height = 600;
+    Init(m_width, m_height);
 }
 
 Window::Window(int width, int height)
@@ -14,13 +15,7 @@ Window::Window(int width, int height)
     m_height = height;
 }
 
-void Window::main()
-{
-    windowInitilaize(m_width, m_height);
-    windowLoop();
-}
-
-void Window::windowInitilaize(int width, int height)
+void Window::Init(int width, int height)
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -41,19 +36,6 @@ void Window::windowInitilaize(int width, int height)
 
     glViewport(0, 0, width, height);
     glfwSetFramebufferSizeCallback(mainWindow, framebuffer_size_callback);
-}
-
-
-void Window::windowLoop()
-{
-    while(!glfwWindowShouldClose(mainWindow))
-    {
-        glfwSwapBuffers(mainWindow);
-        glfwPollEvents();
-
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-    }
 }
 
 Window::~Window()
