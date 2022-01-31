@@ -13,7 +13,7 @@ private:
 public:
     Window();
     Window(int width, int height);
-    ~Window();
+    ~Window() { glfwTerminate(); }
 
 
     void Init(int height, int width);

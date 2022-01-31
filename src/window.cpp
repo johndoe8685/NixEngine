@@ -37,8 +37,3 @@ void Window::Init(int width, int height)
     glViewport(0, 0, width, height);
     glfwSetFramebufferSizeCallback(mainWindow, framebuffer_size_callback);
 }
-
-Window::~Window()
-{
-    glfwTerminate();
-}

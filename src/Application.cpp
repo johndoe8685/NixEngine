@@ -3,7 +3,7 @@
 namespace NixEngine {
     Application::Application()
     {
-
+        
     }
     void Application::Run()
     {   

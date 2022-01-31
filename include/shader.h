@@ -14,12 +14,12 @@ private:
 	std::string m_VertexFilePath;
 public:
     Shader(const std::string& fragmentShader, const std::string& vertexShader);
-    ~Shader();
+    ~Shader() { glDeleteProgram(m_ModuleID); }
 
     std::string GetShaderSource(const std::string& filepath);
     unsigned int CreateShader(const std::string& vertexSource, const std::string& fragmentSource);
     unsigned int CompileShader(unsigned int type, const std::string& source);
 
-    void Bind() const;
-	void Unbind() const;
+    void Bind() const { glUseProgram(m_ModuleID); }
+	void Unbind() const { glUseProgram(0); }
 };

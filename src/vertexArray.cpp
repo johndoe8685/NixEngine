@@ -20,19 +20,4 @@ void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& la
 	}
 }
 
-void VertexArray::Bind() const
-{
-	glBindVertexArray(m_ModuleID);
-}
-void VertexArray::Unbind() const
-{
-	glBindVertexArray(0);
-}
-
-VertexArray::~VertexArray()
-{
-    glDeleteVertexArrays(1, &m_ModuleID);
-}
-
-
 

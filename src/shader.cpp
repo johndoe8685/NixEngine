@@ -63,16 +63,3 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
     }
     return shader;
 }
-void Shader::Bind() const
-{
-    glUseProgram(m_ModuleID);
-}
-void Shader::Unbind() const
-{
-    glUseProgram(0);
-}
-
-Shader::~Shader()
-{
-    glDeleteProgram(m_ModuleID);
-}
