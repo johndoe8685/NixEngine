@@ -13,6 +13,11 @@ namespace NixEngine {
              1.0f, -1.0f, 0.0f,
              0.0f,  1.0f, 0.0f
         };
+        float texCoords[] = {
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            0.5f, 1.0f
+        };
         VertexArray va;
         VertexBuffer vb(sizeof(vertices), vertices, GL_STATIC_DRAW);
         VertexBufferLayout layout;

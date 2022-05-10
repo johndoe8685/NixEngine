@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.0)
 
 project(deneme)
 
@@ -16,6 +16,7 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/vertexBuffer.cpp
         ${PROJECT_SOURCE_DIR}/vertexArray.cpp
         ${PROJECT_SOURCE_DIR}/vertexBufferLayout.cpp
+        ${PROJECT_SOURCE_DIR}/texture.cpp
         ${PROJECT_SOURCE_DIR}/renderer.cpp
 )
 
@@ -24,12 +25,14 @@ add_subdirectory(${PROJECT_VENDOR_DIR}/spdlog)
 
 set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/vendor/glad/glad.h
+        ${PROJECT_INCLUDE_DIR}/vendor/stb/stb_image.h
         ${PROJECT_INCLUDE_DIR}/Application.h
         ${PROJECT_INCLUDE_DIR}/window.h
         ${PROJECT_INCLUDE_DIR}/shader.h
         ${PROJECT_INCLUDE_DIR}/vertexBuffer.h
         ${PROJECT_INCLUDE_DIR}/vertexArray.h
         ${PROJECT_INCLUDE_DIR}/vertexBufferLayout.h
+        ${PROJECT_INCLUDE_DIR}/texture.h
         ${PROJECT_INCLUDE_DIR}/renderer.h
 )
 
