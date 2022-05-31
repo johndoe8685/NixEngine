@@ -9,19 +9,15 @@ namespace NixEngine {
     {   
         Window window;
         float vertices[] =  {
-            -1.0f, -1.0f, 0.0f,
-             1.0f, -1.0f, 0.0f,
-             0.0f,  1.0f, 0.0f
-        };
-        float texCoords[] = {
-            0.0f, 0.0f,
-            1.0f, 0.0f,
-            0.5f, 1.0f
+            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+             1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+             0.0f,  1.0f, 0.0f, 0.5f, 1.0f
         };
         VertexArray va;
         VertexBuffer vb(sizeof(vertices), vertices, GL_STATIC_DRAW);
         VertexBufferLayout layout;
         layout.AddLayout(VertexType::FLOAT, 3);
+        layout.AddLayout(VertexType::FLOAT, 2);
         va.AddBuffer(vb, layout);
         Shader shader("/res/shader/basic.frag", "/res/shader/basic.vert");
         
