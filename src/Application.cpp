@@ -1,4 +1,5 @@
 #include "Application.h"
+#include "vertexBufferLayout.h"
 
 namespace NixEngine {
     Application::Application()
@@ -20,7 +21,7 @@ namespace NixEngine {
         layout.AddLayout(VertexType::FLOAT, 2);
         va.AddBuffer(vb, layout);
         Shader shader("/res/shader/basic.frag", "/res/shader/basic.vert");
-        
+        Texture hmmtexture("/res/texture/hmm.png");
         while (!window.GetWindowShouldClose())
         {
             glfwPollEvents();
@@ -29,6 +30,7 @@ namespace NixEngine {
 
             shader.Bind();
             va.Bind();
+            hmmtexture.Bind();
             glDrawArrays(GL_TRIANGLES, 0, 3);
             va.Unbind();
             shader.Unbind();

@@ -9,6 +9,7 @@ set(PROJECT_VENDOR_DIR ${PROJECT_DIR}/vendor)
 
 set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/vendor/glad.c
+        ${PROJECT_SOURCE_DIR}/vendor/stb_image.cpp
         ${PROJECT_SOURCE_DIR}/main.cpp
         ${PROJECT_SOURCE_DIR}/Application.cpp
         ${PROJECT_SOURCE_DIR}/window.cpp
@@ -19,9 +20,6 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/texture.cpp
         ${PROJECT_SOURCE_DIR}/renderer.cpp
 )
-
-add_subdirectory(${PROJECT_VENDOR_DIR}/glm)
-add_subdirectory(${PROJECT_VENDOR_DIR}/spdlog)
 
 set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/vendor/glad/glad.h

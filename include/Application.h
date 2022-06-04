@@ -1,5 +1,5 @@
 #pragma once
-//#include "texture.h"
+#include "texture.h"
 #include "window.h"
 #include "vertexBuffer.h"
 #include "vertexArray.h"

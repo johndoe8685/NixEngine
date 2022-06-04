@@ -1,7 +1,7 @@
 #pragma once
 #include "renderer.h"
-#define STB_IMAGE_IMPLEMENTATION
-   #include "vendor/stb/stb_image.h"
+#include "vendor/stb/stb_image.h"
+#include <unistd.h>
 
 class Texture
 {
@@ -15,7 +15,7 @@ public:
     ~Texture();
 
     void Blend() const;
-    void Bind(unsigned int slot) const;
+    void Bind(unsigned int slot = 0) const;
     void Unbind() const;
 
     int GetWidth() const { return m_Width; }

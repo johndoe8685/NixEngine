@@ -1,4 +1,5 @@
   #include "shader.h"
+#include <iostream>
 
 Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader)
     : m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0)
@@ -8,6 +9,8 @@ Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader
     std::string vertexShaderDir = cwd + vertexShader;
     std::string fragmentSource = GetShaderSource(fragmentShaderDir);
     std::string vertexSource = GetShaderSource(vertexShaderDir);
+    std::cout << "[FRAGMENT SOURCE]:\n" << fragmentSource << std::endl;
+    std::cout << "[VERTEX SOURCE]\n" << vertexSource << std::endl;
     m_ModuleID = CreateShader(vertexSource, fragmentSource);
 }
 
@@ -62,4 +65,29 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
         return 0;
     }
     return shader;
+}
+
+int Shader::GetUniformLocation(const std::string& name)
+{
+    int location = glGetUniformLocation(m_ModuleID, name.c_str());
+    if (location == -1)
+        std::cout << "[WARNING] Uniform " << name << " doesnt exist!" << std::endl;
+    return location;
+}
+
+void Shader::SetUniformMatrix4fv(const std::string& name, glm::mat4 model, glm::mat4 value)
+{
+    glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
+}
+void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
+{
+    glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
+}
+void Shader::SetUniform3f(const std::string& name, float v0, float v1, float v2)
+{
+    glUniform3f(GetUniformLocation(name), v0, v1, v2);
+}
+void Shader::SetUniform1f(const std::string& name, float v0)
+{
+    glUniform1f(GetUniformLocation(name), v0);
 }
