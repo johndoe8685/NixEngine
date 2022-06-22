@@ -10,6 +10,13 @@ set(PROJECT_VENDOR_DIR ${PROJECT_DIR}/vendor)
 set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/vendor/glad.c
         ${PROJECT_SOURCE_DIR}/vendor/stb_image.cpp
+        ${PROJECT_SOURCE_DIR}/vendor/imGui/imgui.cpp
+        ${PROJECT_SOURCE_DIR}/vendor/imGui/imgui_draw.cpp
+        ${PROJECT_SOURCE_DIR}/vendor/imGui/imgui_tables.cpp
+        ${PROJECT_SOURCE_DIR}/vendor/imGui/imgui_widgets.cpp
+        ${PROJECT_SOURCE_DIR}/vendor/imGui/imgui_demo.cpp
+        ${PROJECT_SOURCE_DIR}/vendor/imGui/imgui_impl_glfw.cpp
+        ${PROJECT_SOURCE_DIR}/vendor/imGui/imgui_impl_opengl3.cpp
         ${PROJECT_SOURCE_DIR}/main.cpp
         ${PROJECT_SOURCE_DIR}/Application.cpp
         ${PROJECT_SOURCE_DIR}/window.cpp
@@ -17,6 +24,7 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/vertexBuffer.cpp
         ${PROJECT_SOURCE_DIR}/vertexArray.cpp
         ${PROJECT_SOURCE_DIR}/vertexBufferLayout.cpp
+        ${PROJECT_SOURCE_DIR}/indexBuffer.cpp
         ${PROJECT_SOURCE_DIR}/texture.cpp
         ${PROJECT_SOURCE_DIR}/renderer.cpp
 )
@@ -24,12 +32,21 @@ set(PROJECT_SOURCES
 set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/vendor/glad/glad.h
         ${PROJECT_INCLUDE_DIR}/vendor/stb/stb_image.h
+        ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui.h
+        ${PROJECT_INCLUDE_DIR}/vendor/imgui/imconfig.h
+        ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_internal.h
+        ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_textedit.h
+        ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_truetype.h
+        ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_rectpack.h
+        ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_impl_glfw.h
+        ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_impl_opengl3.h
         ${PROJECT_INCLUDE_DIR}/Application.h
         ${PROJECT_INCLUDE_DIR}/window.h
         ${PROJECT_INCLUDE_DIR}/shader.h
         ${PROJECT_INCLUDE_DIR}/vertexBuffer.h
         ${PROJECT_INCLUDE_DIR}/vertexArray.h
         ${PROJECT_INCLUDE_DIR}/vertexBufferLayout.h
+        ${PROJECT_INCLUDE_DIR}/indexBuffer.h
         ${PROJECT_INCLUDE_DIR}/texture.h
         ${PROJECT_INCLUDE_DIR}/renderer.h
 )

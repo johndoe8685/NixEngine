@@ -1,5 +1,4 @@
 #pragma once
-#include "renderer.h"
 
 class IndexBuffer
 {
@@ -11,6 +10,6 @@ public:
     ~IndexBuffer();
 
     unsigned int getID() { return m_ModuleID; }
-    void Bind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ModuleID); }
-    void Unbind() const { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); }
+    void Bind() const;
+	void Unbind() const;
 };

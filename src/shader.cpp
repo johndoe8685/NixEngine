@@ -1,4 +1,4 @@
-  #include "shader.h"
+#include "shader.h"
 #include <iostream>
 
 Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader)
@@ -75,19 +75,25 @@ int Shader::GetUniformLocation(const std::string& name)
     return location;
 }
 
-void Shader::SetUniformMatrix4fv(const std::string& name, glm::mat4 model, glm::mat4 value)
+void Shader::SetUniformMatrix4fv(const std::string& name, glm::mat4 value)
 {
     glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
 }
 void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
 {
+    Bind();
     glUniform4f(GetUniformLocation(name), v0, v1, v2, v3);
+    Unbind();
 }
 void Shader::SetUniform3f(const std::string& name, float v0, float v1, float v2)
 {
+    Bind();
     glUniform3f(GetUniformLocation(name), v0, v1, v2);
+    Unbind();
 }
 void Shader::SetUniform1f(const std::string& name, float v0)
 {
+    Bind();
     glUniform1f(GetUniformLocation(name), v0);
+    Unbind();
 }

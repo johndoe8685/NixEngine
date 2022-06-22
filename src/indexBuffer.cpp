@@ -1,4 +1,5 @@
 #include "indexBuffer.h"
+#include "renderer.h"
 
 IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int count, unsigned int mode)
 {
@@ -9,4 +10,13 @@ IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int count, unsigned 
 IndexBuffer::~IndexBuffer()
 {
     glDeleteBuffers(1, &m_ModuleID);
+}
+
+void IndexBuffer::Bind() const
+{
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ModuleID);
+}
+void IndexBuffer::Unbind() const
+{
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }

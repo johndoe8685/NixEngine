@@ -1,5 +1,4 @@
 #pragma once
-#include "renderer.h"
 #include <vendor/glad/glad.h>
 #include <vendor/glm/gtc/type_ptr.hpp>
 #include <GLFW/glfw3.h>
@@ -24,7 +23,7 @@ public:
     int GetUniformLocation(const std::string& name);
     std::string GetShaderSource(const std::string& filepath);
 
-    void SetUniformMatrix4fv(const std::string& name, glm::mat4 model, glm::mat4 value);
+    void SetUniformMatrix4fv(const std::string& name, glm::mat4 value);
     void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
 	void SetUniform3f(const std::string& name, float v0, float v1, float v2);
 	void SetUniform1f(const std::string& name, float v0);

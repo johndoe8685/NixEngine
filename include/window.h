@@ -20,4 +20,7 @@ public:
 
     void SwapBuffers() { glfwSwapBuffers(mainWindow); }
     bool GetWindowShouldClose() { return glfwWindowShouldClose(mainWindow); }
+    int getHeight() { return m_height; }
+    int getWidth() { return m_width; }
+    GLFWwindow* getGLFWwindow() { return mainWindow; }
 };
