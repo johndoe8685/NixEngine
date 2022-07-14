@@ -21,12 +21,10 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/Application.cpp
         ${PROJECT_SOURCE_DIR}/window.cpp
         ${PROJECT_SOURCE_DIR}/shader.cpp
-        ${PROJECT_SOURCE_DIR}/vertexBuffer.cpp
-        ${PROJECT_SOURCE_DIR}/vertexArray.cpp
-        ${PROJECT_SOURCE_DIR}/vertexBufferLayout.cpp
-        ${PROJECT_SOURCE_DIR}/indexBuffer.cpp
         ${PROJECT_SOURCE_DIR}/texture.cpp
         ${PROJECT_SOURCE_DIR}/renderer.cpp
+        ${PROJECT_SOURCE_DIR}/mesh.cpp
+        ${PROJECT_SOURCE_DIR}/camera.cpp
 )
 
 set(PROJECT_HEADERS
@@ -49,8 +47,9 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/indexBuffer.h
         ${PROJECT_INCLUDE_DIR}/texture.h
         ${PROJECT_INCLUDE_DIR}/renderer.h
+        ${PROJECT_INCLUDE_DIR}/mesh.h
+        ${PROJECT_INCLUDE_DIR}/camera.h
 )
-
 find_package(glfw3 3.3 REQUIRED)
 
 include_directories(${PROJECT_INCLUDE_DIR})

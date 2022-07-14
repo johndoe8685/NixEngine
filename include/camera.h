@@ -1,0 +1,33 @@
+#pragma once
+
+#include <vendor/glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <vendor/glm/glm.hpp>
+#include <vendor/glm/gtc/matrix_transform.hpp>
+
+class Camera
+{
+private:
+    unsigned int m_ModuleID;
+    glm::vec3 position;
+    glm::vec3 front, up, right;
+    glm::vec3 worldUp;
+
+    bool isFocused;
+
+    float yaw, pitch;
+    float moveSpeed, turnSpeed;
+public:
+    Camera(glm::vec3 startPosition, glm::vec3 startUp, float startYaw, float startPitch, float startMoveSpeed, float startTurnSpeed);
+    ~Camera();
+
+    void keyControl(bool* keys, float deltaTime);
+    void mouseControl(double xChange, double yChange);
+
+    bool getIsFocused() { return isFocused; }
+    void setIsFocused(bool value) { isFocused = value; }
+    glm::mat4 calculateViewMatrix();
+
+private:
+    void update();
+};

@@ -13,6 +13,7 @@ private:
     unsigned int m_ModuleID;
     std::string m_FragmentFilePath;
 	std::string m_VertexFilePath;
+    bool printed;
 public:
     Shader(const std::string& fragmentShader, const std::string& vertexShader);
     ~Shader() { glDeleteProgram(m_ModuleID); }

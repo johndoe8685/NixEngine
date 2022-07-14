@@ -1,12 +1,11 @@
 #pragma once
+#include <iostream>
 #include <vector>
 #include <vendor/glad/glad.h>
 #include <GLFW/glfw3.h>
 
-enum VertexType
+class Mesh
 {
-    FLOAT, UINT, UCHAR
-};
 
 struct VertexBufferElement
 {
@@ -26,17 +25,17 @@ struct VertexBufferElement
 	}
 };
 
-
-class VertexBufferLayout
-{
 private:
-    std::vector<VertexBufferElement> m_Elements;
+    unsigned int m_ModuleID;
     unsigned int m_Stride;
+    unsigned int VAO;
+    unsigned int VBO;
+    unsigned int IBO;
+    unsigned int indexCount;
+    std::vector<VertexBufferElement> m_Elements;
 public:
-    VertexBufferLayout();
-    ~VertexBufferLayout();
-
-    void AddLayout(enum VertexType type, unsigned int count);
-	const std::vector<VertexBufferElement> GetElements() const { return m_Elements; }
-	unsigned int GetStride() const& { return m_Stride; }
+    Mesh(float *vertices, unsigned int *indices, unsigned int *layouts, unsigned int numOfVertices, unsigned int numOfIndices, unsigned int numOfLayouts);
+    ~Mesh();
+    void RenderMesh();
+    void ClearMesh();
 };

@@ -2,10 +2,8 @@
 #include <iostream>
 #include <vendor/glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "vertexArray.h"
-#include "vertexBuffer.h"
 #include "shader.h"
-#include "indexBuffer.h"
+#include "mesh.h"
 
 
 class Renderer
@@ -15,7 +13,6 @@ private:
 public:
     Renderer();
     ~Renderer();
-    void Draw(VertexArray& va, VertexBuffer& vb, Shader& shader) const;
-    void Drawib(VertexArray& va, VertexBuffer& vb, IndexBuffer& ib, Shader& shader) const;
+    void Draw(Mesh* mesh, Shader* shader) const;
     void Clear() const;
 };

@@ -2,7 +2,7 @@
 #include <iostream>
 
 Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader)
-    : m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0)
+    : m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0), printed(false)
 {
     std::string cwd = get_current_dir_name();
     std::string fragmentShaderDir = cwd + fragmentShader;
@@ -70,14 +70,17 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 int Shader::GetUniformLocation(const std::string& name)
 {
     int location = glGetUniformLocation(m_ModuleID, name.c_str());
-    if (location == -1)
+    if (location == -1 && !printed)
         std::cout << "[WARNING] Uniform " << name << " doesnt exist!" << std::endl;
+        printed = true;
     return location;
 }
 
 void Shader::SetUniformMatrix4fv(const std::string& name, glm::mat4 value)
 {
+    Bind();
     glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
+    Unbind();
 }
 void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
 {
