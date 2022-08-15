@@ -1,4 +1,5 @@
 #include "camera.h"
+#include <GLFW/glfw3.h>
 
 Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, float startYaw, float startPitch, float startMoveSpeed, float startTurnSpeed)
 :position(startPosition), worldUp(startUp), yaw(startYaw), pitch(startPitch), moveSpeed(startMoveSpeed), turnSpeed(startTurnSpeed), front(glm::vec3(0.0f, 0.0f, -1.0f)), isFocused(false)
@@ -40,6 +41,7 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 
 void Camera::mouseControl(double xChange, double yChange)
 {
+	glfwPollEvents();
     if(isFocused)
     {
         xChange *= turnSpeed;

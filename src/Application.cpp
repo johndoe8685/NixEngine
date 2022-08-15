@@ -1,5 +1,5 @@
 #include "Application.h"
-
+#include "light.h"
 
 namespace NixEngine {
     Application::Application()
@@ -7,14 +7,13 @@ namespace NixEngine {
         
     }
     void Application::Run()
-    {   
-            
+    {       
         float toRadians = 3.14159265358979323846f / 180.f;
         float vertices[] =  {
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-             0.0f, -0.5f, 1.0f, 1.0f, 0.0f,
-             0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
-             0.0f,  0.5f, 0.0f, 0.5f, 1.0f
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+             0.0f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+             0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+             0.0f,  0.5f, 0.0f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f
         };
         unsigned int indices[] = {
             0, 3, 1,
@@ -22,22 +21,25 @@ namespace NixEngine {
             2, 3, 0,
             0, 1, 2
         };
-        unsigned int layouts[] = { 3, 2 };
-        Camera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f);
+        unsigned int layouts[] = { 3, 2, 3 };
+        
+        Camera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.2f);
         Window window(800, 600, &camera);
         
+        Light mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 2.0f, -1.0f, -2.0f, 0.8f);
+        mainLight.calcAverageNormals(indices, 12, vertices, 32, 8, 5);
         
-        Mesh *obj1 = new Mesh(vertices, indices, layouts, 20, 12, 2);
+        Mesh *obj1 = new Mesh(vertices, indices, layouts, 32, 12, 3);
         m_meshList.push_back(obj1);
         Shader *shader = new Shader("/res/shader/basic.frag", "/res/shader/basic.vert");
         m_shaderList.push_back(shader);
 
-        Mesh *obj2 = new Mesh(vertices, indices, layouts, 20, 12, 2);
+        Mesh *obj2 = new Mesh(vertices, indices, layouts, 32, 12, 3);
         m_meshList.push_back(obj2);
 
         Renderer renderer;
         Texture hmmtexture("/res/texture/hmm.png");
-
+        
         //ImGui Stuff
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -50,15 +52,16 @@ namespace NixEngine {
         float x = 0.0f;
         float y = 0.0f;
         float z = -2.5f;
+        float fov = 90.0f;
         bool direction = true;
         float curAngle = 0.0f, angle = 10.0f;
         float speed = 0.0f;
         float deltaTime = 0.0f, curFrame = 0.0f, lastFrame = 0.0f;
+        float red = 0.0f, green = 0.0f, blue = 0.0f;
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
         //For Camera Perspective
         glm::mat4 projection(1.0f);
-        projection = glm::perspective(glm::radians(45.0f), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 100.0f);
 
         //Get the first frame time
         lastFrame = glfwGetTime();
@@ -67,8 +70,6 @@ namespace NixEngine {
         {
             glfwPollEvents();
 
-            
-            
             //Get the deltaTime
             curFrame = glfwGetTime();
             deltaTime = curFrame - lastFrame;
@@ -77,7 +78,6 @@ namespace NixEngine {
             camera.keyControl(window.getKeys(), deltaTime);
 		    camera.mouseControl(window.getXChange(), window.getYChange());
 
-
             //Rotate the triangle
             speed = angle * toRadians * deltaTime;
             curAngle += speed;
@@ -85,9 +85,13 @@ namespace NixEngine {
             {
                 curAngle -= 360;
             }
+            
+            //Calculate fov
+            projection = glm::perspective(glm::radians(fov), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 100.0f);
 
             //Clear the screen
-            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             renderer.Clear();
 
             //Do math calculations on mesh
@@ -100,6 +104,9 @@ namespace NixEngine {
 
             //Bind the texture
             hmmtexture.Bind();
+
+            //Use Light 
+            mainLight.useLight(*m_shaderList[0], "directionalLight.color", "directionalLight.ambientIntensity", "directionalLight.direction", "directionalLight.diffuseIntensity");
 
             //Draw the mesh
             renderer.Draw(m_meshList[0], m_shaderList[0]);
@@ -135,4 +142,6 @@ namespace NixEngine {
     {
 
     }
+
+    
 }

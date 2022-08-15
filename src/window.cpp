@@ -44,6 +44,10 @@ void Window::Init(int width, int height)
     //Set Key and mouse input
     glfwSetKeyCallback(mainWindow, handleKeys);
     glfwSetCursorPosCallback(mainWindow, handleMouse);
+
+    //Check raw motion support if it's supported activate 
+    if (glfwRawMouseMotionSupported())
+    glfwSetInputMode(mainWindow, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
     
     //Locked the cursor to the window
     glfwSetInputMode(mainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
