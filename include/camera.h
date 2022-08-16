@@ -28,6 +28,7 @@ public:
     void setIsFocused(bool value) { isFocused = value; }
     glm::mat4 calculateViewMatrix();
 
+    glm::vec3 getPosition() { return position; }
 private:
     void update();
 };

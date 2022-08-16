@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "light.h"
+#include "material.h"
 
 namespace NixEngine {
     Application::Application()
@@ -27,6 +28,8 @@ namespace NixEngine {
         Window window(800, 600, &camera);
         
         Light mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 2.0f, -1.0f, -2.0f, 0.8f);
+        Material shinyMaterial(1.0f, 32);
+        Material dullMaterial(1.0f, 4);
         mainLight.calcAverageNormals(indices, 12, vertices, 32, 8, 5);
         
         Mesh *obj1 = new Mesh(vertices, indices, layouts, 32, 12, 3);
@@ -107,6 +110,7 @@ namespace NixEngine {
 
             //Use Light 
             mainLight.useLight(*m_shaderList[0], "directionalLight.color", "directionalLight.ambientIntensity", "directionalLight.direction", "directionalLight.diffuseIntensity");
+            dullMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
 
             //Draw the mesh
             renderer.Draw(m_meshList[0], m_shaderList[0]);
