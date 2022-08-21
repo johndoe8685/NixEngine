@@ -27,10 +27,11 @@ namespace NixEngine {
         Camera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.2f);
         Window window(800, 600, &camera);
         
-        Light mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 2.0f, -1.0f, -2.0f, 0.8f);
+        Light directionalLight = Light(1.0f, 1.0f, 1.0f);
+        directionalLight.setAsDirectionalLight(0.2f, 2.0f, -1.0f, -2.0f, 0.8f, "directionalLight.color", "directionalLight.ambientIntensity", "directionalLight.direction", "directionalLight.diffuseIntensity");
         Material shinyMaterial(1.0f, 32);
         Material dullMaterial(1.0f, 4);
-        mainLight.calcAverageNormals(indices, 12, vertices, 32, 8, 5);
+        directionalLight.calcAverageNormals(indices, 12, vertices, 32, 8, 5);
         
         Mesh *obj1 = new Mesh(vertices, indices, layouts, 32, 12, 3);
         m_meshList.push_back(obj1);
@@ -109,7 +110,7 @@ namespace NixEngine {
             hmmtexture.Bind();
 
             //Use Light 
-            mainLight.useLight(*m_shaderList[0], "directionalLight.color", "directionalLight.ambientIntensity", "directionalLight.direction", "directionalLight.diffuseIntensity");
+            directionalLight.useLight(*m_shaderList[0]);
             dullMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
 
             //Draw the mesh

@@ -1,10 +1,10 @@
 #include "shader.h"
-#include <iostream>
 
+#ifdef __linux__
 Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader)
     : m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0), printed(false)
 {
-    std::string cwd = get_current_dir_name();
+    std::filesystem::path cwd = std::filesystem::current_path;
     std::string fragmentShaderDir = cwd + fragmentShader;
     std::string vertexShaderDir = cwd + vertexShader;
     std::string fragmentSource = GetShaderSource(fragmentShaderDir);
@@ -13,6 +13,24 @@ Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader
     std::cout << "[VERTEX SOURCE]\n" << vertexSource << std::endl;
     m_ModuleID = CreateShader(vertexSource, fragmentSource);
 }
+#endif
+
+#ifdef _WIN64
+Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader)
+    : m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0), printed(false)
+{
+    char buff[FILENAME_MAX];
+    GetCurrentDir(buff, FILENAME_MAX);
+    std::string cwd(buff);
+    std::string fragmentShaderDir = cwd + fragmentShader;
+    std::string vertexShaderDir = cwd + vertexShader;
+    std::string fragmentSource = GetShaderSource(fragmentShaderDir);
+    std::string vertexSource = GetShaderSource(vertexShaderDir);
+    std::cout << "[FRAGMENT SOURCE]:\n" << fragmentSource << std::endl;
+    std::cout << "[VERTEX SOURCE]\n" << vertexSource << std::endl;
+    m_ModuleID = CreateShader(vertexSource, fragmentSource);
+}
+#endif
 
 std::string Shader::GetShaderSource(const std::string& filepath)
 {

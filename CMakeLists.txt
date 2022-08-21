@@ -2,10 +2,18 @@ cmake_minimum_required(VERSION 3.0)
 
 project(deneme)
 
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+
+
 set(PROJECT_DIR ${CMAKE_SOURCE_DIR})
 set(PROJECT_INCLUDE_DIR ${PROJECT_DIR}/include)
 set(PROJECT_SOURCE_DIR ${PROJECT_DIR}/src)
 set(PROJECT_VENDOR_DIR ${PROJECT_DIR}/vendor)
+
+add_subdirectory(${PROJECT_DIR}/vendor/glfw-3.3.8)
 
 set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/vendor/glad.c
@@ -54,7 +62,6 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/light.h
         ${PROJECT_INCLUDE_DIR}/material.h
 )
-find_package(glfw3 3.3 REQUIRED)
 
 include_directories(${PROJECT_INCLUDE_DIR})
 file(COPY ${PROJECT_DIR}/res DESTINATION ${CMAKE_BINARY_DIR})

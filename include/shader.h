@@ -5,7 +5,13 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <unistd.h>
+#ifdef __linux__
+#include "unistd.h"
+#endif
+#ifdef _WIN64
+#include <direct.h>
+#define GetCurrentDir _getcwd
+#endif
 
 class Shader
 {

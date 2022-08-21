@@ -1,34 +1,78 @@
 #include "light.h"
-#include "vendor/glm/fwd.hpp"
 
 
 Light::Light()
-:m_color(glm::vec3(1.0f, 1.0f, 1.0f)), m_ambientIntensity(0.5f), m_direction(glm::vec3(0.0f, -1.0f, 0.0f)), m_diffuseIntensity(1.0f)
+:m_color(glm::vec3(1.0f, 1.0f, 1.0f))
+{
+	
+}
+
+Light::Light(float red, float green, float blue)
+:m_color(glm::vec3(red, green, blue))
 {
 
 }
 
-Light::Light(float red, float green, float blue, float ambientIntensity, float x, float y, float z, float diffuseIntensity)
-:m_color(glm::vec3(red, green, blue)), m_ambientIntensity(ambientIntensity), m_direction(glm::vec3(x, y, z)), m_diffuseIntensity(diffuseIntensity) 
+void Light::useLight(Shader &shader)
 {
-
-}
-
-void Light::useLight(Shader &shader, const std::string& ambientName, const std::string& ambientIntensityName, const std::string& diffuseName, const std::string& diffuseIntensityName)
-{
-    shader.SetUniform3f(ambientName, m_color.x, m_color.y, m_color.z);
-    shader.SetUniform1f(ambientIntensityName, m_ambientIntensity);
+	if (light == LightType::ambientLight)
+	{
+		shader.SetUniform3f(ambient.m_ambientName, m_color.x, m_color.y, m_color.z);
+    	shader.SetUniform1f(ambient.m_ambientIntensityName, ambient.m_ambientIntensity);
+	}
+	else if(light == LightType::directionalLight)
+	{
+		shader.SetUniform3f(directional.ambient.m_ambientName, m_color.x, m_color.y, m_color.z);
+    	shader.SetUniform1f(directional.ambient.m_ambientIntensityName, directional.ambient.m_ambientIntensity);
     
-    shader.SetUniform3f(diffuseName, m_direction.x, m_direction.y, m_direction.z);
-    shader.SetUniform1f(diffuseIntensityName, m_diffuseIntensity);
-}
+    	shader.SetUniform3f(directional.m_diffuseName, directional.m_direction.x, directional.m_direction.y, directional.m_direction.z);
+    	shader.SetUniform1f(directional.m_diffuseIntensityName, directional.m_diffuseIntensity);
+	}
+	else if (light == LightType::pointLight)
+	{
+		shader.SetUniform3f(point.directional.ambient.m_ambientName, m_color.x, m_color.y, m_color.z);
+		shader.SetUniform1f(point.directional.ambient.m_ambientIntensityName, point.directional.ambient.m_ambientIntensity);
+		shader.SetUniform1f(point.directional.m_diffuseIntensityName, point.directional.m_diffuseIntensity);
 
-void Light::setLight(float red, float green, float blue, float intensity)
+		shader.SetUniform3f(point.m_pointName, point.m_position.x, point.m_position.y, point.m_position.z);
+		shader.SetUniform1f(point.m_linearName, point.m_linear);
+		shader.SetUniform1f(point.m_constantName, point.m_constant);
+		shader.SetUniform1f(point.m_exponentName, point.m_exponent);
+	}
+}
+void Light::setAsAmbientLight(float ambientIntensity, const std::string& ambientName, const std::string& ambientIntensityName)
 {
-    m_color = glm::vec3(red, green, blue);
-    m_ambientIntensity = intensity;
+    ambient.m_ambientIntensity = ambientIntensity;
+	ambient.m_ambientName = ambientName;
+	ambient.m_ambientIntensityName = ambientIntensityName;
+	light = LightType::ambientLight;
 }
-
+void Light::setAsDirectionalLight(float ambientIntensity, float x, float y, float z, float diffuseIntensity, const std::string& ambientName, const std::string& ambientIntensityName, const std::string& diffuseName, const std::string& diffuseIntensityName)
+{
+	directional.ambient.m_ambientIntensity = ambientIntensity;
+	directional.ambient.m_ambientName = ambientName;
+	directional.ambient.m_ambientIntensityName = ambientIntensityName;
+	directional.m_diffuseIntensity = diffuseIntensity;
+	directional.m_direction = glm::vec3(x,y,z);
+	directional.m_diffuseName = diffuseName;
+	directional.m_diffuseIntensityName = diffuseIntensityName;
+	light = LightType::directionalLight;
+}
+void Light::setAsPointLight(float x, float y, float z, float constant, float linear, float exponent, float ambientIntensity, float diffuseIntensity, const std::string& ambientName, const std::string& ambientIntensityName, const std::string& diffuseName, const std::string& diffuseIntensityName, const std::string& pointPositionName, const std::string& pointConstantName, const std::string& pointLinearName, const std::string& pointExponentName)
+{
+	point.directional.ambient.m_ambientIntensity = ambientIntensity;
+	point.directional.ambient.m_ambientName = ambientName;
+	point.directional.ambient.m_ambientIntensityName = ambientIntensityName;
+	point.directional.m_diffuseIntensity = diffuseIntensity;
+	point.directional.m_diffuseName = diffuseName;
+	point.directional.m_diffuseIntensityName = diffuseIntensityName;
+	point.m_position = glm::vec3(x,y,z);
+	point.m_pointName = pointPositionName;
+	point.m_constant = constant;
+	point.m_linear = linear;
+	point.m_exponent = exponent;
+	light = LightType::pointLight;
+}
 void Light::calcAverageNormals(unsigned int * indices, unsigned int indiceCount, GLfloat * vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset)
 {
 	for (size_t i = 0; i < indiceCount; i += 3)
