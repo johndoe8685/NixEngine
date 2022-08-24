@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <vendor/glm/glm.hpp>
 #include <vendor/glm/gtc/matrix_transform.hpp>
+#include "shader.h"
 
 class Camera
 {
@@ -26,6 +27,7 @@ public:
 
     bool getIsFocused() { return isFocused; }
     void setIsFocused(bool value) { isFocused = value; }
+    void setUniformCameraPosition(Shader &shader);
     glm::mat4 calculateViewMatrix();
 
     glm::vec3 getPosition() { return position; }

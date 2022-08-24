@@ -2,9 +2,9 @@
 
 #ifdef __linux__
 Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader)
-    : m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0), printed(false)
+    : m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0)
 {
-    std::filesystem::path cwd = std::filesystem::current_path;
+    std::string cwd = get_current_dir_name();
     std::string fragmentShaderDir = cwd + fragmentShader;
     std::string vertexShaderDir = cwd + vertexShader;
     std::string fragmentSource = GetShaderSource(fragmentShaderDir);
@@ -17,7 +17,7 @@ Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader
 
 #ifdef _WIN64
 Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader)
-    : m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0), printed(false)
+    : m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0)
 {
     char buff[FILENAME_MAX];
     GetCurrentDir(buff, FILENAME_MAX);
@@ -88,9 +88,8 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 int Shader::GetUniformLocation(const std::string& name)
 {
     int location = glGetUniformLocation(m_ModuleID, name.c_str());
-    if (location == -1 && !printed)
+    if (location == -1)
         std::cout << "[WARNING] Uniform " << name << " doesnt exist!" << std::endl;
-        printed = true;
     return location;
 }
 
@@ -116,5 +115,11 @@ void Shader::SetUniform1f(const std::string& name, float v0)
 {
     Bind();
     glUniform1f(GetUniformLocation(name), v0);
+    Unbind();
+}
+void Shader::SetUniform1i(const std::string& name, int v0)
+{
+    Bind();
+    glUniform1i(GetUniformLocation(name), v0);
     Unbind();
 }

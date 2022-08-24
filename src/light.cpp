@@ -1,8 +1,9 @@
 #include "light.h"
 
+int Light::m_PointLightIndex = 0;
 
 Light::Light()
-:m_color(glm::vec3(1.0f, 1.0f, 1.0f))
+	:m_color(glm::vec3(1.0f, 1.0f, 1.0f))
 {
 	
 }
@@ -17,62 +18,82 @@ void Light::useLight(Shader &shader)
 {
 	if (light == LightType::ambientLight)
 	{
-		shader.SetUniform3f(ambient.m_ambientName, m_color.x, m_color.y, m_color.z);
-    	shader.SetUniform1f(ambient.m_ambientIntensityName, ambient.m_ambientIntensity);
+		struct ambientUniformList list;
+		shader.SetUniform3f(list.m_colorName, m_color.x, m_color.y, m_color.z);
+    	shader.SetUniform1f(list.m_ambientIntensityName, ambient.m_ambientIntensity);
 	}
 	else if(light == LightType::directionalLight)
 	{
-		shader.SetUniform3f(directional.ambient.m_ambientName, m_color.x, m_color.y, m_color.z);
-    	shader.SetUniform1f(directional.ambient.m_ambientIntensityName, directional.ambient.m_ambientIntensity);
+		struct directionalUniformList list;
+		shader.SetUniform3f(list.m_colorName, m_color.x, m_color.y, m_color.z);
+    	shader.SetUniform1f(list.m_ambientIntensityName, directional.m_ambientIntensity);
     
-    	shader.SetUniform3f(directional.m_diffuseName, directional.m_direction.x, directional.m_direction.y, directional.m_direction.z);
-    	shader.SetUniform1f(directional.m_diffuseIntensityName, directional.m_diffuseIntensity);
+    	shader.SetUniform3f(list.m_directionName, directional.m_direction.x, directional.m_direction.y, directional.m_direction.z);
+    	shader.SetUniform1f(list.m_diffuseIntensityName, directional.m_diffuseIntensity);
 	}
 	else if (light == LightType::pointLight)
 	{
-		shader.SetUniform3f(point.directional.ambient.m_ambientName, m_color.x, m_color.y, m_color.z);
-		shader.SetUniform1f(point.directional.ambient.m_ambientIntensityName, point.directional.ambient.m_ambientIntensity);
-		shader.SetUniform1f(point.directional.m_diffuseIntensityName, point.directional.m_diffuseIntensity);
+		shader.SetUniform3f(pointList.m_colorName, m_color.x, m_color.y, m_color.z);
+		shader.SetUniform1f(pointList.m_ambientIntensityName, point.directional.m_ambientIntensity);
+		shader.SetUniform1f(pointList.m_diffuseIntensityName, point.directional.m_diffuseIntensity);
 
-		shader.SetUniform3f(point.m_pointName, point.m_position.x, point.m_position.y, point.m_position.z);
-		shader.SetUniform1f(point.m_linearName, point.m_linear);
-		shader.SetUniform1f(point.m_constantName, point.m_constant);
-		shader.SetUniform1f(point.m_exponentName, point.m_exponent);
+		shader.SetUniform3f(pointList.m_positionName, point.m_position.x, point.m_position.y, point.m_position.z);
+		shader.SetUniform1f(pointList.m_linearName, point.m_linear);
+		shader.SetUniform1f(pointList.m_constantName, point.m_constant);
+		shader.SetUniform1f(pointList.m_exponentName, point.m_exponent);
+		
+
+		shader.SetUniform1i(pointList.m_pointSizeName, point.m_pointSize);
 	}
 }
-void Light::setAsAmbientLight(float ambientIntensity, const std::string& ambientName, const std::string& ambientIntensityName)
+void Light::setAsAmbientLight(float ambientIntensity)
 {
     ambient.m_ambientIntensity = ambientIntensity;
-	ambient.m_ambientName = ambientName;
-	ambient.m_ambientIntensityName = ambientIntensityName;
 	light = LightType::ambientLight;
 }
-void Light::setAsDirectionalLight(float ambientIntensity, float x, float y, float z, float diffuseIntensity, const std::string& ambientName, const std::string& ambientIntensityName, const std::string& diffuseName, const std::string& diffuseIntensityName)
+void Light::setAsDirectionalLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z)
 {
-	directional.ambient.m_ambientIntensity = ambientIntensity;
-	directional.ambient.m_ambientName = ambientName;
-	directional.ambient.m_ambientIntensityName = ambientIntensityName;
+	directional.m_ambientIntensity = ambientIntensity;
 	directional.m_diffuseIntensity = diffuseIntensity;
-	directional.m_direction = glm::vec3(x,y,z);
-	directional.m_diffuseName = diffuseName;
-	directional.m_diffuseIntensityName = diffuseIntensityName;
+	directional.m_direction = glm::vec3(x, y, z);
 	light = LightType::directionalLight;
 }
-void Light::setAsPointLight(float x, float y, float z, float constant, float linear, float exponent, float ambientIntensity, float diffuseIntensity, const std::string& ambientName, const std::string& ambientIntensityName, const std::string& diffuseName, const std::string& diffuseIntensityName, const std::string& pointPositionName, const std::string& pointConstantName, const std::string& pointLinearName, const std::string& pointExponentName)
+void Light::setAsPointLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z, float constant, float linear, float exponent)
 {
-	point.directional.ambient.m_ambientIntensity = ambientIntensity;
-	point.directional.ambient.m_ambientName = ambientName;
-	point.directional.ambient.m_ambientIntensityName = ambientIntensityName;
-	point.directional.m_diffuseIntensity = diffuseIntensity;
-	point.directional.m_diffuseName = diffuseName;
-	point.directional.m_diffuseIntensityName = diffuseIntensityName;
-	point.m_position = glm::vec3(x,y,z);
-	point.m_pointName = pointPositionName;
-	point.m_constant = constant;
-	point.m_linear = linear;
-	point.m_exponent = exponent;
-	light = LightType::pointLight;
+	if (m_PointLightIndex > MAX_POINT_LIGHT) std::cerr << "Maximum point lights already initialized";
+	else
+	{ 
+		point.directional.m_ambientIntensity = ambientIntensity;
+		point.directional.m_diffuseIntensity = diffuseIntensity;
+		point.m_position = glm::vec3(x,y,z);
+		point.m_constant = constant;
+		point.m_linear = linear;
+		point.m_exponent = exponent;
+		
+
+		char Buffer[1024] = { "\0" };
+
+		snprintf(Buffer, sizeof(Buffer), pointArrayList.m_colorName, m_PointLightIndex);
+		pointList.m_colorName = Buffer;
+		snprintf(Buffer, sizeof(Buffer), pointArrayList.m_ambientIntensityName, m_PointLightIndex);
+		pointList.m_ambientIntensityName = Buffer;
+		snprintf(Buffer, sizeof(Buffer), pointArrayList.m_diffuseIntensityName, m_PointLightIndex);
+		pointList.m_diffuseIntensityName = Buffer;
+		snprintf(Buffer, sizeof(Buffer), pointArrayList.m_positionName, m_PointLightIndex);
+		pointList.m_positionName = Buffer;
+		snprintf(Buffer, sizeof(Buffer), pointArrayList.m_constantName, m_PointLightIndex);
+		pointList.m_constantName = Buffer;
+		snprintf(Buffer, sizeof(Buffer), pointArrayList.m_linearName, m_PointLightIndex);
+		pointList.m_linearName = Buffer;
+		snprintf(Buffer, sizeof(Buffer), pointArrayList.m_exponentName, m_PointLightIndex);
+		pointList.m_exponentName = Buffer;
+
+		light = LightType::pointLight;
+		m_PointLightIndex++;
+		point.m_pointSize = m_PointLightIndex;
+	}
 }
+
 void Light::calcAverageNormals(unsigned int * indices, unsigned int indiceCount, GLfloat * vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset)
 {
 	for (size_t i = 0; i < indiceCount; i += 3)

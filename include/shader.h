@@ -19,7 +19,6 @@ private:
     unsigned int m_ModuleID;
     std::string m_FragmentFilePath;
 	std::string m_VertexFilePath;
-    bool printed;
 public:
     Shader(const std::string& fragmentShader, const std::string& vertexShader);
     ~Shader() { glDeleteProgram(m_ModuleID); }
@@ -34,6 +33,7 @@ public:
     void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
 	void SetUniform3f(const std::string& name, float v0, float v1, float v2);
 	void SetUniform1f(const std::string& name, float v0);
+    void SetUniform1i(const std::string& name, int v0);
 
     void Bind() const { glUseProgram(m_ModuleID); }
 	void Unbind() const { glUseProgram(0); }
