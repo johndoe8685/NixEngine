@@ -5,6 +5,7 @@ in vec3 Normal;
 in vec3 FragPos;
 
 const int MAX_POINT_LIGHTS = 10;
+const int MAX_SPOT_LIGHTS = 5;
 
 struct Light
 {
@@ -33,6 +34,17 @@ struct PointLight
 	float constant;
 	float linear;
 	float exponent;
+	bool inUse;
+};
+struct SpotLight
+{
+    PointLight point;
+    vec3 direction;
+    float edge;
+};
+struct FlashLight
+{
+	SpotLight spot;
 };
 
 struct Material
@@ -42,10 +54,14 @@ struct Material
 };
 
 uniform int pointLightCount;	
+uniform int spotLightCount;
 uniform sampler2D aTexture;
+uniform sampler2D flashLightTexture;
 uniform AmbientLight ambientLight;
 uniform DirectionalLight directionalLight;
+uniform FlashLight flashLight;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
+uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 uniform Material material;
 uniform vec3 eyePosition;
 
@@ -79,18 +95,65 @@ vec4 CalcDirectionalLight()
 	return CalcLightByDirection(directionalLight.diffuse, directionalLight.direction);
 }
 
+vec4 CalcPointLight(PointLight point)
+{
+    vec3 direction = FragPos - point.position;
+    float distance = length(direction);
+    direction = normalize(direction);
+
+    vec4 color = CalcLightByDirection(point.diffuse, direction);
+    float attenuation = point.exponent * distance * distance + point.linear * distance + point.constant;
+
+    return ( color / attenuation);
+}
+
+vec4 CalcSpotLight(SpotLight spot)
+{
+    vec3 rayDirection = normalize(FragPos - spot.point.position);
+    float slFactor = dot(rayDirection, spot.direction);
+
+    if(slFactor > spot.edge)
+    {
+        vec4 color = CalcPointLight(spot.point);
+        return color * (1.0f - (1.0f - slFactor)*(1.0f/(1.0f - spot.edge)));
+    }
+    else
+    {
+        return vec4(0, 0, 0, 0);
+    }
+}
+vec4 CalcFlashLight(SpotLight spot)
+{
+	vec4 color = CalcSpotLight(spot);
+	color = color * texture(flashLightTexture, vec2(0.0f, 0.0f));
+	return color;
+}
+
 vec4 CalcPointLights()
 {
 	vec4 totalColor = vec4(0, 0, 0, 0);
 	for(int i=0; i < pointLightCount; i++)
 	{
+		if(pointLights[i].inUse)
+		{
 		vec3 direction = FragPos - pointLights[i].position;
 		float distance = length(direction);
 		
 		vec4 color = CalcLightByDirection(pointLights[i].diffuse, direction);
 		float attenuation = pointLights[i].exponent * distance * distance + pointLights[i].linear * distance + pointLights[i].constant;
 		totalColor += (color / attenuation);
+		}
 	}
+	return totalColor;
+}
+vec4 CalcSpotLights()
+{
+	vec4 totalColor = vec4(0, 0, 0, 0);
+	for(int i = 0; i < spotLightCount; i++)
+	{		
+		totalColor += CalcSpotLight(spotLights[i]);
+	}
+	
 	return totalColor;
 }
 
@@ -98,31 +161,8 @@ void main()
 {
 	vec4 finalColor = CalcDirectionalLight();
 	finalColor += CalcPointLights();
+    finalColor += CalcSpotLights();
+	finalColor += CalcFlashLight(flashLight.spot);
 	
 	FragColor = texture(aTexture, TexCoord) * finalColor;
 }
-
-/*
-void main()
-{
-    vec4 ambientColor = vec4(directionalLight.diffuse.ambient.base.color, 1.0f) * directionalLight.diffuse.ambient.ambientIntensity;
-    float diffuseFactor = max(dot(normalize(Normal), normalize(directionalLight.direction)), 0.0f);
-    vec4 diffuseColor = vec4(directionalLight.diffuse.ambient.base.color, 1.0f) * directionalLight.diffuse.diffuseIntensity * diffuseFactor;
-
-    vec4 specularColor = vec4(0, 0, 0, 0);
-
-    if(diffuseFactor > 0.0f)
-    {
-        vec3 fragToEye = normalize(eyePosition - FragPos);
-        vec3 reflectedVertex = normalize(reflect(directionalLight.direction, normalize(Normal)));
-        float specularFactor = dot(fragToEye, reflectedVertex);
-        if(specularFactor > 0.0f)
-        {
-            specularFactor = pow(specularFactor, material.shininess);
-            specularColor = vec4(directionalLight.diffuse.ambient.base.color * material.specularIntensity * specularFactor, 1.0f);
-        }
-    }
-
-    FragColor = texture(aTexture, TexCoord) * (ambientColor + diffuseColor + specularColor);
-}
-*/

@@ -31,6 +31,7 @@ public:
     glm::mat4 calculateViewMatrix();
 
     glm::vec3 getPosition() { return position; }
+    glm::vec3 getDirection() { return glm::normalize(front); }
 private:
     void update();
 };

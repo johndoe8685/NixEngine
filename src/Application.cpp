@@ -25,10 +25,10 @@ namespace NixEngine {
         unsigned int layouts[] = { 3, 2, 3 };
         
         float floorVertices[] = {
-            -10.0f, 0.0f, -10.0f, 0.0f,  0.0f,  0.0f, -1.0f, 0.0f,
-             10.0f, 0.0f, -10.0f, 10.0f, 0.0f,  0.0f, -1.0f, 0.0f,
-            -10.0f, 0.0f,  10.0f, 0.0f,  10.0f, 0.0f, -1.0f, 0.0f,
-             10.0f, 0.0f,  10.0f, 10.0f, 10.0f, 0.0f, -1.0f, 0.0f
+            -20.0f, 0.0f, -20.0f, 0.0f,  0.0f,  0.0f, -1.0f, 0.0f,
+             20.0f, 0.0f, -20.0f, 20.0f, 0.0f,  0.0f, -1.0f, 0.0f,
+            -20.0f, 0.0f,  20.0f, 0.0f,  20.0f, 0.0f, -1.0f, 0.0f,
+             20.0f, 0.0f,  20.0f, 20.0f, 20.0f, 0.0f, -1.0f, 0.0f
         };
         unsigned int floorIndices[] = {
         0, 2, 1,
@@ -43,11 +43,14 @@ namespace NixEngine {
         Light blueLight = Light(0.0f, 0.0f, 1.0f);
         Light greenLight = Light(0.0f, 1.0f, 0.0f);
         Light redLight = Light(1.0f, 0.0f, 0.0f);
+        Light flashLight = Light(1.0f, 1.0f, 1.0f);
         
         directionalLight.setAsDirectionalLight(0.2f, 0.8f, 2.0f, -1.0f, -2.0f);
-        blueLight.setAsPointLight(0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.3f, 0.2f, 0.1f);
-        greenLight.setAsPointLight(0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.3f, 0.2f, 0.1f);
-        redLight.setAsPointLight(0.0f, 0.5f, 0.0f, 0.0f, 1.732f, 0.3f, 0.2f, 0.1f);
+        blueLight.setAsPointLight(0.0f, 1.0f, -1.0f, 0.0f, -3.0f, 0.3f, 0.2f, 0.1f);
+        greenLight.setAsPointLight(0.0f, 1.0f, 1.0f, 0.0f, -3.0f, 0.3f, 0.2f, 0.1f);
+        redLight.setAsPointLight(0.0f, 0.5f, 0.0f, 0.0f, -1.732f, 0.3f, 0.2f, 0.1f);
+        flashLight.setAsSpotLight(0.0f, 0.5f, 0.0f, 2.0f, 0.0f, 1.0f, 0.0f, 0.0f, glm::vec3(-1.0f, 0.0f, 0.0f), 30.0f);
+
         Material shinyMaterial(4.0f, 256);
         Material dullMaterial(1.0f, 4);
         directionalLight.calcAverageNormals(indices, 12, vertices, 32, 8, 5);
@@ -64,6 +67,7 @@ namespace NixEngine {
         Renderer renderer;
         Texture hmmtexture("/res/texture/hmm.png");
         Texture plainTexture("/res/texture/plain.png");
+        Texture flashLightTexture("/res/texture/flashlight.png");
         
         //ImGui Stuff
         IMGUI_CHECKVERSION();
@@ -83,6 +87,7 @@ namespace NixEngine {
         float speed = 0.0f;
         float deltaTime = 0.0f, curFrame = 0.0f, lastFrame = 0.0f;
         float red = 0.0f, green = 0.0f, blue = 0.0f;
+        bool Useflash = true;
         ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
         //For Camera Perspective
@@ -120,10 +125,18 @@ namespace NixEngine {
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             renderer.Clear();
 
+            glm::vec3 hand = camera.getPosition();
+            hand.y = hand.y - 0.3f;
+            flashLight.setMovingLight(hand, camera.getDirection());
+
             //Use Light
+            flashLightTexture.Bind();
+            if (Useflash) flashLight.useLight(*m_shaderList[0]);
+            else flashLight.stopLight(*m_shaderList[0]);
             blueLight.useLight(*m_shaderList[0]);
             greenLight.useLight(*m_shaderList[0]);
             redLight.useLight(*m_shaderList[0]);
+            
             //directionalLight.useLight(*m_shaderList[0]);
 
             //Draw Triangle
@@ -146,6 +159,7 @@ namespace NixEngine {
             shinyMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
             renderer.Draw(m_meshList[1], m_shaderList[0]);
             hmmtexture.Unbind();
+            flashLightTexture.Unbind();
 
             //NixEngine Debug
             ImGui_ImplOpenGL3_NewFrame();
@@ -160,6 +174,8 @@ namespace NixEngine {
             ImGui::SliderFloat("Y Position", &y, -1.0f, 1.0f);
             ImGui::SliderFloat("Z Position", &z, -2.5f, -5.0f);
             ImGui::SliderFloat("Speed", &angle, 0.0f, 360.0f);
+            ImGui::SliderFloat("FOV", &fov, 5.0f, 120.0f);
+            ImGui::Checkbox("FlashLight", &Useflash);
             ImGui::End();
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

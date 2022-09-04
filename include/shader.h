@@ -23,6 +23,10 @@ public:
     Shader(const std::string& fragmentShader, const std::string& vertexShader);
     ~Shader() { glDeleteProgram(m_ModuleID); }
 
+    static int PointLightInUse;
+    void SetPointLightInUse(int value);
+    int  GetPointLightInUse();
+
     unsigned int CreateShader(const std::string& vertexSource, const std::string& fragmentSource);
     unsigned int CompileShader(unsigned int type, const std::string& source);
 

@@ -15,6 +15,7 @@ void Renderer::Draw(Mesh* mesh, Shader* shader) const
     
     shader->Bind();
     mesh->RenderMesh();
+    shader->SetPointLightInUse(0);
     shader->Unbind();
 }
 
