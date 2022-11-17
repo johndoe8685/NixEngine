@@ -1,45 +1,11 @@
 #include "texture.h"
 
-#ifdef __linux__
 Texture::Texture(const std::string& path)
     :m_ModuleID(0), m_filepath(path), m_LocalBuffer(nullptr), m_Width(0), m_Height(0)
 {
-    std::string cwd = get_current_dir_name();
-    std::string cpath = cwd + path;
+    Directory dir(path);
     stbi_set_flip_vertically_on_load(1);
-    m_LocalBuffer = stbi_load(cpath.c_str(), &m_Width, &m_Height, &m_BPP, 0);
-    if(!m_LocalBuffer)
-    {
-        printf("Failed to find: %s\n", m_LocalBuffer);
-        return;
-    }
-    glGenTextures(1, &m_ModuleID);
-    glBindTexture(GL_TEXTURE_2D, m_ModuleID);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_LocalBuffer);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    if(m_LocalBuffer)
-    {
-        stbi_image_free(m_LocalBuffer);
-    }
-}
-#endif
-#ifdef _WIN64
-Texture::Texture(const std::string& path)
-    :m_ModuleID(0), m_filepath(path), m_LocalBuffer(nullptr), m_Width(0), m_Height(0)
-{
-    char buff[FILENAME_MAX];
-    GetCurrentDir(buff, FILENAME_MAX);
-    std::string cwd(buff);
-    std::string cpath = cwd + path;
-    stbi_set_flip_vertically_on_load(1);
-    m_LocalBuffer = stbi_load(cpath.c_str(), &m_Width, &m_Height, &m_BPP, 0);
+    m_LocalBuffer = stbi_load(dir.getPath().c_str(), &m_Width, &m_Height, &m_BPP, 0);
     if (!m_LocalBuffer)
     {
         printf("Failed to find: %s\n", m_LocalBuffer);
@@ -61,7 +27,6 @@ Texture::Texture(const std::string& path)
         stbi_image_free(m_LocalBuffer);
     }
 }
-#endif
 
 Texture::~Texture()
 {

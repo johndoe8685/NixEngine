@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(deneme)
+project(NixEngine)
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -27,6 +27,7 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/vendor/imGui/imgui_impl_opengl3.cpp
         ${PROJECT_SOURCE_DIR}/main.cpp
         ${PROJECT_SOURCE_DIR}/Application.cpp
+        ${PROJECT_SOURCE_DIR}/directory.cpp
         ${PROJECT_SOURCE_DIR}/window.cpp
         ${PROJECT_SOURCE_DIR}/shader.cpp
         ${PROJECT_SOURCE_DIR}/texture.cpp
@@ -49,6 +50,7 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_impl_glfw.h
         ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_impl_opengl3.h
         ${PROJECT_INCLUDE_DIR}/Application.h
+        ${PROJECT_INCLUDE_DIR}/directory.h
         ${PROJECT_INCLUDE_DIR}/window.h
         ${PROJECT_INCLUDE_DIR}/shader.h
         ${PROJECT_INCLUDE_DIR}/vertexBuffer.h

@@ -21,11 +21,9 @@ Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader
 Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader)
     : m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0)
 {
-    char buff[FILENAME_MAX];
-    GetCurrentDir(buff, FILENAME_MAX);
-    std::string cwd(buff);
-    std::string fragmentShaderDir = cwd + fragmentShader;
-    std::string vertexShaderDir = cwd + vertexShader;
+    Directory dir;
+    std::string fragmentShaderDir = dir.getWorkDirectory() + fragmentShader;
+    std::string vertexShaderDir = dir.getWorkDirectory()  + vertexShader;
     std::string fragmentSource = GetShaderSource(fragmentShaderDir);
     std::string vertexSource = GetShaderSource(vertexShaderDir);
     std::cout << "[FRAGMENT SOURCE]:\n" << fragmentSource << std::endl;

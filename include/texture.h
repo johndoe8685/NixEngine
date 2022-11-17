@@ -1,13 +1,7 @@
 #pragma once
 #include "renderer.h"
 #include "vendor/stb/stb_image.h"
-#ifdef __linux__
-#include "unistd.h"
-#endif
-#ifdef _WIN64
-#include <direct.h>
-#define GetCurrentDir _getcwd
-#endif
+#include "directory.h"
 
 class Texture
 {
