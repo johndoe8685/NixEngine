@@ -10,32 +10,42 @@ namespace NixEngine {
     void Application::Run()
     {
         float toRadians = 3.14159265358979323846f / 180.f;
-        float vertices[] =  {
-            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-             0.0f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-             0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
-             0.0f,  0.5f, 0.0f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f
-        };
-        unsigned int indices[] = {
-            0, 3, 1,
-            1, 3, 2,
-            2, 3, 0,
-            0, 1, 2
-        };
-        unsigned int layouts[] = { 3, 2, 3 };
         
-        float floorVertices[] = {
-            -20.0f, 0.0f, -20.0f, 0.0f,  0.0f,  0.0f, -1.0f, 0.0f,
-             20.0f, 0.0f, -20.0f, 20.0f, 0.0f,  0.0f, -1.0f, 0.0f,
-            -20.0f, 0.0f,  20.0f, 0.0f,  20.0f, 0.0f, -1.0f, 0.0f,
-             20.0f, 0.0f,  20.0f, 20.0f, 20.0f, 0.0f, -1.0f, 0.0f
-        };
-        unsigned int floorIndices[] = {
-        0, 2, 1,
-        1, 2, 3
-        };
-        unsigned int floorLayouts[] = { 3, 2, 3 };
+        std::vector<Vertex> v_vertices;
+        v_vertices.push_back({ glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
+        v_vertices.push_back({ glm::vec3(0.0f, -0.5f, 1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
+        v_vertices.push_back({ glm::vec3(0.5f, -0.5f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
+        v_vertices.push_back({ glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
+
+        std::vector<unsigned int> v_indices;
+        v_indices.push_back({ 0 });
+        v_indices.push_back({ 3 });
+        v_indices.push_back({ 1 });
+        v_indices.push_back({ 1 });
+        v_indices.push_back({ 3 });
+        v_indices.push_back({ 2 });
+        v_indices.push_back({ 2 });
+        v_indices.push_back({ 3 });
+        v_indices.push_back({ 0 });
+        v_indices.push_back({ 0 });
+        v_indices.push_back({ 1 });
+        v_indices.push_back({ 2 });
+
+        std::vector<Vertex> v_floorVertices;
+        v_floorVertices.push_back({ glm::vec3(-20.0f, 0.0f, -20.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f) });
+        v_floorVertices.push_back({ glm::vec3(20.0f, 0.0f, -20.0f), glm::vec2(20.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f) });
+        v_floorVertices.push_back({ glm::vec3(-20.0f, 0.0f, 20.0f), glm::vec2(0.0f, 20.0f), glm::vec3(0.0f, -1.0f, 0.0f) });
+        v_floorVertices.push_back({ glm::vec3(20.0f, 0.0f, 20.0f), glm::vec2(20.0f, 20.0f), glm::vec3(0.0f, -1.0f, 0.0f) });
+
+        std::vector<unsigned int> v_floorIndices;
+        v_floorIndices.push_back({ 0 });
+        v_floorIndices.push_back({ 2 });
+        v_floorIndices.push_back({ 1 });
+        v_floorIndices.push_back({ 1 });
+        v_floorIndices.push_back({ 2 });
+        v_floorIndices.push_back({ 3 });
         
+
         Camera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.2f);
         Window window(800, 600, &camera);
         
@@ -53,12 +63,12 @@ namespace NixEngine {
 
         Material shinyMaterial(4.0f, 256);
         Material dullMaterial(1.0f, 4);
-        directionalLight.calcAverageNormals(indices, 12, vertices, 32, 8, 5);
+        directionalLight.calcAverageNormals(v_vertices, v_indices);
         
-        Mesh *obj1 = new Mesh(vertices, indices, layouts, 32, 12, 3);
+        Mesh *obj1 = new Mesh(v_vertices, v_indices);
         m_meshList.push_back(obj1);
         
-        Mesh *floorobj = new Mesh(floorVertices, floorIndices, layouts, 32, 6, 3);
+        Mesh *floorobj = new Mesh(v_floorVertices, v_floorIndices);
         m_meshList.push_back(floorobj);
         
         Shader *shader = new Shader("/res/shader/basic.frag", "/res/shader/basic.vert");
@@ -67,7 +77,6 @@ namespace NixEngine {
         Renderer renderer;
         Texture hmmtexture("/res/texture/hmm.png");
         Texture plainTexture("/res/texture/plain.png");
-        Texture flashLightTexture("/res/texture/flashlight.png");
         
         //ImGui Stuff
         IMGUI_CHECKVERSION();
@@ -121,8 +130,8 @@ namespace NixEngine {
             projection = glm::perspective(glm::radians(fov), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 100.0f);
 
             //Clear the screen
-            //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            //glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             renderer.Clear();
 
             glm::vec3 hand = camera.getPosition();
@@ -130,7 +139,6 @@ namespace NixEngine {
             flashLight.setMovingLight(hand, camera.getDirection());
 
             //Use Light
-            flashLightTexture.Bind();
             if (Useflash) flashLight.useLight(*m_shaderList[0]);
             else flashLight.stopLight(*m_shaderList[0]);
             blueLight.useLight(*m_shaderList[0]);
@@ -151,6 +159,7 @@ namespace NixEngine {
             renderer.Draw(m_meshList[0], m_shaderList[0]);
             hmmtexture.Unbind();
 
+            
             //Draw Floor
             model = glm::mat4(1.0f);
             model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
@@ -159,7 +168,7 @@ namespace NixEngine {
             shinyMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
             renderer.Draw(m_meshList[1], m_shaderList[0]);
             hmmtexture.Unbind();
-            flashLightTexture.Unbind();
+            
 
             //NixEngine Debug
             ImGui_ImplOpenGL3_NewFrame();

@@ -56,7 +56,6 @@ struct Material
 uniform int pointLightCount;	
 uniform int spotLightCount;
 uniform sampler2D aTexture;
-uniform sampler2D flashLightTexture;
 uniform AmbientLight ambientLight;
 uniform DirectionalLight directionalLight;
 uniform FlashLight flashLight;
@@ -122,12 +121,6 @@ vec4 CalcSpotLight(SpotLight spot)
         return vec4(0, 0, 0, 0);
     }
 }
-vec4 CalcFlashLight(SpotLight spot)
-{
-	vec4 color = CalcSpotLight(spot);
-	color = color * texture(flashLightTexture, vec2(0.0f, 0.0f));
-	return color;
-}
 
 vec4 CalcPointLights()
 {
@@ -162,7 +155,6 @@ void main()
 	vec4 finalColor = CalcDirectionalLight();
 	finalColor += CalcPointLights();
     finalColor += CalcSpotLights();
-	finalColor += CalcFlashLight(flashLight.spot);
 	
 	FragColor = texture(aTexture, TexCoord) * finalColor;
 }

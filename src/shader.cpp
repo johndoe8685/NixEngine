@@ -26,8 +26,8 @@ Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader
     std::string vertexShaderDir = dir.getWorkDirectory()  + vertexShader;
     std::string fragmentSource = GetShaderSource(fragmentShaderDir);
     std::string vertexSource = GetShaderSource(vertexShaderDir);
-    std::cout << "[FRAGMENT SOURCE]:\n" << fragmentSource << std::endl;
-    std::cout << "[VERTEX SOURCE]\n" << vertexSource << std::endl;
+    //std::cout << "[FRAGMENT SOURCE]:\n" << fragmentSource << std::endl;
+    //std::cout << "[VERTEX SOURCE]\n" << vertexSource << std::endl;
     m_ModuleID = CreateShader(vertexSource, fragmentSource);
 }
 #endif

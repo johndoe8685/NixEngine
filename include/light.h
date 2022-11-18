@@ -1,8 +1,10 @@
 #pragma once
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include "vendor/glm/glm.hpp"
 #include "shader.h"
+#include "mesh.h"
 #define MAX_POINT_LIGHT 10
 #define MAX_SPOT_LIGHT 5
 
@@ -165,5 +167,6 @@ public:
     void useLight(Shader &shader);
     void stopLight(Shader& shader);
 
-    void calcAverageNormals(unsigned int * indices, unsigned int indiceCount, GLfloat * vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset);
+    //void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset);
+    void calcAverageNormals(std::vector<Vertex> &vertices, std::vector<unsigned int> &sindices);
 };

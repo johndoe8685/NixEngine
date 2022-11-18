@@ -1,5 +1,6 @@
 #pragma once
-#include "renderer.h"
+#include <vendor/glad/glad.h>
+#include <vendor/glm/gtc/type_ptr.hpp>
 #include "vendor/stb/stb_image.h"
 #include "directory.h"
 
