@@ -42,3 +42,11 @@ std::string Directory::getWorkDirectory()
 {
 	return m_cwd;
 }
+
+std::string Directory::getFileName()
+{
+	int index_of_last_slash = m_path.rfind("/");
+	int index_of_last_dot = m_path.rfind(".");
+	std::string result = m_path.substr(index_of_last_slash + 1, index_of_last_dot - index_of_last_slash - 1);
+	return result;
+}

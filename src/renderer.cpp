@@ -10,10 +10,18 @@ Renderer::~Renderer()
     
 }
 
-void Renderer::Draw(Mesh* mesh, Shader* shader) const
+void Renderer::DrawMesh(Mesh* mesh, Shader* shader) const
 {
     shader->Bind();
     mesh->RenderMesh();
+    shader->SetPointLightInUse(0);
+    shader->Unbind();
+}
+
+void Renderer::DrawModel(Model* model, Shader* shader) const
+{
+    shader->Bind();
+    model->RenderModel();
     shader->SetPointLightInUse(0);
     shader->Unbind();
 }

@@ -1,6 +1,4 @@
 #include "Application.h"
-#include "light.h"
-#include "material.h"
 
 namespace NixEngine {
     Application::Application()
@@ -11,41 +9,6 @@ namespace NixEngine {
     {
         float toRadians = 3.14159265358979323846f / 180.f;
         
-        std::vector<Vertex> v_vertices;
-        v_vertices.push_back({ glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
-        v_vertices.push_back({ glm::vec3(0.0f, -0.5f, 1.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
-        v_vertices.push_back({ glm::vec3(0.5f, -0.5f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
-        v_vertices.push_back({ glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(0.5f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f) });
-
-        std::vector<unsigned int> v_indices;
-        v_indices.push_back({ 0 });
-        v_indices.push_back({ 3 });
-        v_indices.push_back({ 1 });
-        v_indices.push_back({ 1 });
-        v_indices.push_back({ 3 });
-        v_indices.push_back({ 2 });
-        v_indices.push_back({ 2 });
-        v_indices.push_back({ 3 });
-        v_indices.push_back({ 0 });
-        v_indices.push_back({ 0 });
-        v_indices.push_back({ 1 });
-        v_indices.push_back({ 2 });
-
-        std::vector<Vertex> v_floorVertices;
-        v_floorVertices.push_back({ glm::vec3(-20.0f, 0.0f, -20.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f) });
-        v_floorVertices.push_back({ glm::vec3(20.0f, 0.0f, -20.0f), glm::vec2(20.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f) });
-        v_floorVertices.push_back({ glm::vec3(-20.0f, 0.0f, 20.0f), glm::vec2(0.0f, 20.0f), glm::vec3(0.0f, -1.0f, 0.0f) });
-        v_floorVertices.push_back({ glm::vec3(20.0f, 0.0f, 20.0f), glm::vec2(20.0f, 20.0f), glm::vec3(0.0f, -1.0f, 0.0f) });
-
-        std::vector<unsigned int> v_floorIndices;
-        v_floorIndices.push_back({ 0 });
-        v_floorIndices.push_back({ 2 });
-        v_floorIndices.push_back({ 1 });
-        v_floorIndices.push_back({ 1 });
-        v_floorIndices.push_back({ 2 });
-        v_floorIndices.push_back({ 3 });
-        
-
         Camera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.2f);
         Window window(800, 600, &camera);
         
@@ -63,21 +26,15 @@ namespace NixEngine {
 
         Material shinyMaterial(4.0f, 256);
         Material dullMaterial(1.0f, 4);
-        directionalLight.calcAverageNormals(v_vertices, v_indices);
         
-        Mesh *obj1 = new Mesh(v_vertices, v_indices);
-        m_meshList.push_back(obj1);
-        
-        Mesh *floorobj = new Mesh(v_floorVertices, v_floorIndices);
-        m_meshList.push_back(floorobj);
-        
+        Model floor("/res/model/floor.obj");
+        Model backpack("/res/model/backpack.obj");
+
         Shader *shader = new Shader("/res/shader/basic.frag", "/res/shader/basic.vert");
         m_shaderList.push_back(shader);
 
         Renderer renderer;
-        Texture hmmtexture("/res/texture/hmm.png");
-        Texture plainTexture("/res/texture/plain.png");
-        
+
         //ImGui Stuff
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -92,7 +49,7 @@ namespace NixEngine {
         float z = -2.5f;
         float fov = 90.0f;
         bool direction = true;
-        float curAngle = 0.0f, angle = 10.0f;
+        float curAngle = 0.0f, angle = 80.0f;
         float speed = 0.0f;
         float deltaTime = 0.0f, curFrame = 0.0f, lastFrame = 0.0f;
         float red = 0.0f, green = 0.0f, blue = 0.0f;
@@ -130,8 +87,8 @@ namespace NixEngine {
             projection = glm::perspective(glm::radians(fov), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 100.0f);
 
             //Clear the screen
-            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            //glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             renderer.Clear();
 
             glm::vec3 hand = camera.getPosition();
@@ -146,29 +103,26 @@ namespace NixEngine {
             redLight.useLight(*m_shaderList[0]);
             
             //directionalLight.useLight(*m_shaderList[0]);
-
-            //Draw Triangle
+            
             glm::mat4 model(1.0f);
-            model = glm::translate(model, glm::vec3(x, y, z));
-            model = glm::rotate(model, curAngle, glm::vec3(0.0f, 1.0f, 0.0f));
-            m_shaderList[0]->SetUniformMatrix4fv("model", model);
             m_shaderList[0]->SetUniformMatrix4fv("projection", projection);
             m_shaderList[0]->SetUniformMatrix4fv("view", camera.calculateViewMatrix());
-            hmmtexture.Bind();
-            shinyMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
-            renderer.Draw(m_meshList[0], m_shaderList[0]);
-            hmmtexture.Unbind();
-
             
             //Draw Floor
             model = glm::mat4(1.0f);
             model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
             m_shaderList[0]->SetUniformMatrix4fv("model", model);
-            hmmtexture.Bind();
             shinyMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
-            renderer.Draw(m_meshList[1], m_shaderList[0]);
-            hmmtexture.Unbind();
-            
+            renderer.DrawModel(&floor, m_shaderList[0]);
+
+            //Draw Backpack
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, glm::vec3(x, y, z));
+            model = glm::rotate(model, curAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+            model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
+            m_shaderList[0]->SetUniformMatrix4fv("model", model);
+            shinyMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
+            renderer.DrawModel(&backpack, m_shaderList[0]);
 
             //NixEngine Debug
             ImGui_ImplOpenGL3_NewFrame();

@@ -12,12 +12,6 @@ struct Vertex
     glm::vec3 Normal;
 };
 
-struct TextureType
-{
-    unsigned int id;
-    std::string type;
-};
-
 struct VertexBufferElement
 {
     unsigned int type;
@@ -46,11 +40,9 @@ private:
     unsigned int indexCount;
     std::vector<VertexBufferElement> m_Elements;
     std::vector<Vertex> m_Vertices;
-    std::vector<TextureType> m_Textures;
     std::vector<unsigned int> m_Indices;
     std::vector<unsigned int> m_Layouts;
 public:
-    //Mesh(float *vertices, unsigned int *indices, unsigned int *layouts, unsigned int numOfVertices, unsigned int numOfIndices, unsigned int numOfLayouts);
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
     ~Mesh();
     void setupMesh();

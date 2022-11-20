@@ -36,6 +36,7 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/camera.cpp
         ${PROJECT_SOURCE_DIR}/light.cpp
         ${PROJECT_SOURCE_DIR}/material.cpp
+        ${PROJECT_SOURCE_DIR}/model.cpp
 )
 
 set(PROJECT_HEADERS
@@ -63,6 +64,7 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/camera.h
         ${PROJECT_INCLUDE_DIR}/light.h
         ${PROJECT_INCLUDE_DIR}/material.h
+        ${PROJECT_INCLUDE_DIR}/model.h
 )
 
 include_directories(${PROJECT_INCLUDE_DIR})
@@ -72,3 +74,5 @@ add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 set(GCC_COVERAGE_LINK_FLAGS "-lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl ")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 target_link_libraries(${PROJECT_NAME} glfw)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_VENDOR_DIR}/assimp-5.2.5/assimp-vc143-mtd.lib)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_VENDOR_DIR}/assimp-5.2.5/zlibstaticd.lib)

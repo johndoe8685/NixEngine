@@ -166,7 +166,4 @@ public:
     void setMovingLight(glm::vec3 position, glm::vec3 direction);
     void useLight(Shader &shader);
     void stopLight(Shader& shader);
-
-    //void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount, unsigned int vLength, unsigned int normalOffset);
-    void calcAverageNormals(std::vector<Vertex> &vertices, std::vector<unsigned int> &sindices);
 };

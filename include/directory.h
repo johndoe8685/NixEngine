@@ -23,4 +23,5 @@ public:
 	void changePath(std::string path);
 	std::string getPath();
 	std::string getWorkDirectory();
+	std::string getFileName();
 };
