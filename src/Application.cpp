@@ -112,7 +112,7 @@ namespace NixEngine {
             model = glm::mat4(1.0f);
             model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
             m_shaderList[0]->SetUniformMatrix4fv("model", model);
-            shinyMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
+            dullMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
             renderer.DrawModel(&floor, m_shaderList[0]);
 
             //Draw Backpack

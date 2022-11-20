@@ -28,13 +28,15 @@ public:
     Window(int width, int height, Camera* camera);
     ~Window() { glfwTerminate(); }
 
-
     void Init(int height, int width);
 
     void SwapBuffers() { glfwSwapBuffers(mainWindow); }
     bool GetWindowShouldClose() { return glfwWindowShouldClose(mainWindow); }
-    int getHeight() { return m_height; }
-    int getWidth() { return m_width; }
+    void getSize() { glfwGetWindowSize(mainWindow, &m_width, &m_height); }
+    int getHeight() { getSize(); return m_height; }
+    int getWidth() { getSize(); return m_width; }
+    void setHeight(int height) { m_height = height; };
+    void setWidth(int width) { m_width = width; };
     double getXChange() { double theChange = xChange; xChange = 0.0f; return theChange; }
     double getYChange() { double theChange = yChange; yChange = 0.0f; return theChange; }
     bool* getKeys() { return keys; }

@@ -141,7 +141,6 @@ private:
     struct SpotLight spot;
     struct FlashLight flash;
 
-
     struct pointArrayList pointArrayList;
     struct pointUniformList pointList;
     struct SpotArrayList spotArrayList;

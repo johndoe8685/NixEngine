@@ -1,7 +1,8 @@
 #include "window.h"
 #include "vendor/imGui/imgui.h"
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height); 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
 }
 Window::Window()
 :m_width(800), m_height(600), mouseFirstMoved(true), tabclicked(false), xChange(0), yChange(0)
@@ -12,6 +13,7 @@ Window::Window()
     }
     Init(m_width, m_height);
 }
+
 
 Window::Window(int width, int height, Camera* camera)
 :m_width(width), m_height(height), mouseFirstMoved(true), tabclicked(false), xChange(0), yChange(0), m_camera(camera)
@@ -114,6 +116,4 @@ void Window::handleMouse(GLFWwindow* window, double xPos, double yPos)
 
     theWindow->lastX = xPos;
     theWindow->lastY = yPos;
-
-    //std::cout << "[X/Y] " << xPos << " / " << yPos << std::endl;
 }
