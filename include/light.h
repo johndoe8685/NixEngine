@@ -5,6 +5,7 @@
 #include "vendor/glm/glm.hpp"
 #include "shader.h"
 #include "mesh.h"
+#include "debugger.h"
 #define MAX_POINT_LIGHT 10
 #define MAX_SPOT_LIGHT 5
 
@@ -115,22 +116,6 @@ class Light
         std::string m_edgeName;
         std::string m_spotSizeName = "spotLightCount";
     };
-    struct FlashLight
-    {
-        struct SpotLight spot;
-    };
-    struct FlashUniformList
-    {
-        char* m_colorName = "flashLight.spot.point.diffuse.ambient.base.color";
-        char* m_ambientIntensityName = "flashLight.spot.point.diffuse.ambient.ambientIntensity";
-        char* m_diffuseIntensityName = "flashLight.spot.point.diffuse.diffuseIntensity";
-        char* m_positionName = "flashLight.spot.point.position";
-        char* m_constantName = "flashLight.spot.point.constant";
-        char* m_linearName = "flashLight.spot.point.linear";
-        char* m_exponentName = "flashLight.spot.point.exponent";
-        char* m_directionName = "flashLight.spot.direction";
-        char* m_edgeName = "flashLight.spot.edge";
-    };
 
 private:
     glm::vec3 m_color;
@@ -139,30 +124,42 @@ private:
     struct directionalLight directional;
     struct pointLight point;
     struct SpotLight spot;
-    struct FlashLight flash;
 
     struct pointArrayList pointArrayList;
     struct pointUniformList pointList;
     struct SpotArrayList spotArrayList;
     struct SpotUniformList spotList;
 
+    unsigned int m_FBO;
+    unsigned int m_DepthMap;
+    int m_ShadowWidth;
+    int m_ShadowHeight;
+
     LightType light;
+    Debugger debugger;
 public:
     static int m_PointLightIndex;
     static int m_CurrentPointSize;
     static int m_SpotLightIndex;
     static int m_CurrentSpotSize;
 
+    glm::mat4 m_lightProj;
+
     Light();
     Light(float red, float green, float blue);
     ~Light();
+
+    bool createShadowMap(int shadowWidth, int shadowHeight);
+    void ShadowMapWrite();
+    void ShadowMapRead(unsigned int slot);
+    glm::mat4 CalculateLightTransform();
     
     void setAsAmbientLight(float ambientIntensity);
     void setAsDirectionalLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z);
     void setAsPointLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z, float constant, float linear, float exponent);
     void setAsSpotLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z, float constant, float linear, float exponent, glm::vec3 direction, float edge);
-    void setAsFlashLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z, float constant, float linear, float exponent, glm::vec3 direction, float edge);
     void setMovingLight(glm::vec3 position, glm::vec3 direction);
+
     void useLight(Shader &shader);
     void stopLight(Shader& shader);
 };

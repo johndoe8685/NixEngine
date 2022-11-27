@@ -7,6 +7,7 @@
 #include "directory.h"
 #include "mesh.h"
 #include "texture.h"
+#include "debugger.h"
 
 class Model
 {
@@ -15,6 +16,7 @@ private:
 	std::vector<Texture*> m_textureList;
 	std::vector<unsigned int> m_textureID;
 	Directory dir;
+	Debugger debugger;
 public:
 	Model(const std::string& path);
 	~Model();

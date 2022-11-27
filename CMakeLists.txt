@@ -37,6 +37,7 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/light.cpp
         ${PROJECT_SOURCE_DIR}/material.cpp
         ${PROJECT_SOURCE_DIR}/model.cpp
+        ${PROJECT_SOURCE_DIR}/debugger.cpp
 )
 
 set(PROJECT_HEADERS
@@ -65,6 +66,7 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/light.h
         ${PROJECT_INCLUDE_DIR}/material.h
         ${PROJECT_INCLUDE_DIR}/model.h
+        ${PROJECT_INCLUDE_DIR}/debugger.h
 )
 
 include_directories(${PROJECT_INCLUDE_DIR})

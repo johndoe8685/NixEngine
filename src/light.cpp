@@ -6,13 +6,13 @@ int	Light::m_CurrentPointSize = 0;
 int Light::m_CurrentSpotSize = 0;
 
 Light::Light()
-	:m_color(glm::vec3(1.0f, 1.0f, 1.0f))
+	:m_color(glm::vec3(1.0f, 1.0f, 1.0f)), debugger("Light")
 {
 	
 }
 
 Light::Light(float red, float green, float blue)
-:m_color(glm::vec3(red, green, blue))
+:m_color(glm::vec3(red, green, blue)), debugger("Light")
 {
 
 }
@@ -65,21 +65,6 @@ void Light::useLight(Shader &shader)
 		shader.SetUniform1f(spotList.m_edgeName, spot.m_edge);
 		shader.SetUniform1i(spotList.m_spotSizeName, spot.m_spotSize);
 	}
-	else if (light == LightType::flashLight)
-	{
-		struct FlashUniformList list;
-		shader.SetUniform3f(list.m_colorName, m_color.x, m_color.y, m_color.z);
-		shader.SetUniform1f(list.m_ambientIntensityName, flash.spot.point.directional.m_ambientIntensity);
-		shader.SetUniform1f(list.m_diffuseIntensityName, flash.spot.point.directional.m_diffuseIntensity);
-
-		shader.SetUniform3f(list.m_positionName, flash.spot.point.m_position.x, flash.spot.point.m_position.y, flash.spot.point.m_position.z);
-		shader.SetUniform1f(list.m_linearName, flash.spot.point.m_linear);
-		shader.SetUniform1f(list.m_constantName, flash.spot.point.m_constant);
-		shader.SetUniform1f(list.m_exponentName, flash.spot.point.m_exponent);
-
-		shader.SetUniform3f(list.m_directionName, flash.spot.m_direction.x, flash.spot.m_direction.y, flash.spot.m_direction.z);
-		shader.SetUniform1f(list.m_edgeName, flash.spot.m_edge);
-	}
 }
 
 void Light::stopLight(Shader& shader)
@@ -129,21 +114,7 @@ void Light::stopLight(Shader& shader)
 		shader.SetUniform1f(spotList.m_edgeName, 0);
 		shader.SetUniform1i(spotList.m_spotSizeName, 0);
 	}
-	else if (light == LightType::flashLight)
-	{
-		struct FlashUniformList list;
-		shader.SetUniform3f(list.m_colorName, 0, 0, 0);
-		shader.SetUniform1f(list.m_ambientIntensityName, 0);
-		shader.SetUniform1f(list.m_diffuseIntensityName, 0);
 
-		shader.SetUniform3f(list.m_positionName, 0, 0, 0);
-		shader.SetUniform1f(list.m_linearName, 0);
-		shader.SetUniform1f(list.m_constantName, 0);
-		shader.SetUniform1f(list.m_exponentName, 0);
-
-		shader.SetUniform3f(list.m_directionName, 0, 0, 0);
-		shader.SetUniform1f(list.m_edgeName, 0);
-	}
 }
 
 void Light::setAsAmbientLight(float ambientIntensity)
@@ -157,10 +128,12 @@ void Light::setAsDirectionalLight(float ambientIntensity, float diffuseIntensity
 	directional.m_diffuseIntensity = diffuseIntensity;
 	directional.m_direction = glm::vec3(x, y, z);
 	light = LightType::directionalLight;
+
+	m_lightProj = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, 0.1f, 100.0f);
 }
 void Light::setAsPointLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z, float constant, float linear, float exponent)
 {
-	if (m_PointLightIndex > MAX_POINT_LIGHT) std::cerr << "[ERROR] Maximum point lights already initialized" << std::endl;
+	if (m_PointLightIndex > MAX_POINT_LIGHT) debugger.giveMessage(DebugLevel::Error, "setAsPointLight", "Maximum point lights already initilaized.");
 	else
 	{
 		point.directional.m_ambientIntensity = ambientIntensity;
@@ -198,7 +171,7 @@ void Light::setAsPointLight(float ambientIntensity, float diffuseIntensity, floa
 
 void Light::setAsSpotLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z, float constant, float linear, float exponent, glm::vec3 direction, float edge)
 {
-	if (m_SpotLightIndex > MAX_SPOT_LIGHT) std::cerr << "[ERROR] Maximum spot lights already initialized" << std::endl;
+	if (m_SpotLightIndex > MAX_SPOT_LIGHT) debugger.giveMessage(DebugLevel::Error, "setAsSpotLight", "Maximum spot lights already initialized.");
 	else
 	{
 		spot.point.directional.m_ambientIntensity = ambientIntensity;
@@ -236,49 +209,87 @@ void Light::setAsSpotLight(float ambientIntensity, float diffuseIntensity, float
 		spot.m_spotSize = m_SpotLightIndex;
 	}
 }
-//Implement This Later
-void Light::setAsFlashLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z, float constant, float linear, float exponent, glm::vec3 direction, float edge)
-{
-	spot.point.directional.m_ambientIntensity = ambientIntensity;
-	spot.point.directional.m_diffuseIntensity = diffuseIntensity;
-	spot.point.m_position = glm::vec3(x, y, z);
-	spot.point.m_constant = constant;
-	spot.point.m_linear = linear;
-	spot.point.m_exponent = exponent;
-	spot.m_direction = glm::normalize(direction);
-	spot.m_edge = cosf(glm::radians(edge));
 
-	char Buffer[1024] = { "\0" };
-
-	snprintf(Buffer, sizeof(Buffer), spotArrayList.m_colorName, m_SpotLightIndex);
-	spotList.m_colorName = Buffer;
-	snprintf(Buffer, sizeof(Buffer), spotArrayList.m_ambientIntensityName, m_SpotLightIndex);
-	spotList.m_ambientIntensityName = Buffer;
-	snprintf(Buffer, sizeof(Buffer), spotArrayList.m_diffuseIntensityName, m_SpotLightIndex);
-	spotList.m_diffuseIntensityName = Buffer;
-	snprintf(Buffer, sizeof(Buffer), spotArrayList.m_positionName, m_SpotLightIndex);
-	spotList.m_positionName = Buffer;
-	snprintf(Buffer, sizeof(Buffer), spotArrayList.m_constantName, m_SpotLightIndex);
-	spotList.m_constantName = Buffer;
-	snprintf(Buffer, sizeof(Buffer), spotArrayList.m_linearName, m_SpotLightIndex);
-	spotList.m_linearName = Buffer;
-	snprintf(Buffer, sizeof(Buffer), spotArrayList.m_exponentName, m_SpotLightIndex);
-	spotList.m_exponentName = Buffer;
-	snprintf(Buffer, sizeof(Buffer), spotArrayList.m_directionName, m_SpotLightIndex);
-	spotList.m_directionName = Buffer;
-	snprintf(Buffer, sizeof(Buffer), spotArrayList.m_edgeName, m_SpotLightIndex);
-	spotList.m_edgeName = Buffer;
-
-	light = LightType::flashLight;
-}
 
 void Light::setMovingLight(glm::vec3 position, glm::vec3 direction)
 {
-	if (LightType::spotLight) spot.setFlash(position, direction);
-	else if (LightType::flashLight) flash.spot.setFlash(position, direction);
+	spot.setFlash(position, direction);
+}
+
+bool Light::createShadowMap(int shadowWidth, int shadowHeight)
+{
+	if (light != LightType::spotLight) 
+	{
+		debugger.giveMessage(DebugLevel::Error, "Light::ShadowMap::Init", "Light type isnt supported.");
+		return false;
+	}
+	else
+	{
+		m_ShadowWidth = shadowWidth;
+		m_ShadowHeight = shadowHeight;
+		glGenFramebuffers(1, &m_FBO);
+
+		glGenTextures(1, &m_DepthMap);
+		glBindTexture(GL_TEXTURE_2D, m_DepthMap);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, m_ShadowWidth, m_ShadowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+		float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthMap, 0);
+
+		glDrawBuffer(GL_NONE);
+		glReadBuffer(GL_NONE);
+
+		unsigned int Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+		if (Status != GL_FRAMEBUFFER_COMPLETE)
+		{
+			debugger.giveMessage(DebugLevel::Error, "createShadowMap::FrameBuffer", (const char*)Status);
+			return false;
+		}
+
+		return true;
+	}
+}
+
+
+void Light::ShadowMapWrite()
+{
+	if (!m_FBO)
+	{
+		debugger.giveMessage(DebugLevel::Error, "Light::ShadowMap::Write", "FBO doenst exist.");
+	}
+	else
+	{
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FBO);
+	}
+}
+
+void Light::ShadowMapRead(unsigned int slot)
+{
+		if (!m_FBO)
+		{
+			debugger.giveMessage(DebugLevel::Error, "Light::ShadowMap::Write", "FBO doenst exist.");
+		}
+		else
+		{
+			glActiveTexture(slot);
+			glBindTexture(GL_TEXTURE_2D, m_DepthMap);
+		}
+}
+
+glm::mat4 Light::CalculateLightTransform()
+{
+	return m_lightProj * glm::lookAt(-directional.m_direction, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 Light::~Light()
 {
 
 }
+

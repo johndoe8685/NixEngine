@@ -9,6 +9,7 @@
 #include "light.h"
 #include "material.h"
 #include "model.h"
+#include "debugger.h"
 #include "vendor/glm/glm.hpp"
 #include "vendor/glm/gtc/matrix_transform.hpp"
 #include "vendor/glm/gtc/type_ptr.hpp"
@@ -20,8 +21,10 @@ namespace NixEngine {
     class Application
     {
     private:
-        std::vector<Mesh*> m_meshList;
         std::vector<Shader*> m_shaderList;
+        std::vector<Material*> m_materialList;
+        std::vector<Model*> m_modelList;
+
     public:
         Application();
         ~Application();
