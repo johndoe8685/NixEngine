@@ -35,8 +35,7 @@ namespace NixEngine {
 
         Renderer renderer;
         
-        Debugger debugger("Application");
-        debugger.InitImgui(window);
+        DebugConsole debugconsole(&window);
 
         //Variables
         float curAngle = 0.0f;
@@ -64,7 +63,7 @@ namespace NixEngine {
             camera.setUniformCameraPosition(*m_shaderList[0]);
 
             //Rotate the triangle
-            speed = debugger.getAngle() * toRadians * deltaTime;
+            speed = debugconsole.getAngle() * toRadians * deltaTime;
             curAngle += speed;
             if (curAngle >= 360)
             {
@@ -72,7 +71,7 @@ namespace NixEngine {
             }
             
             //Calculate fov
-            projection = glm::perspective(glm::radians(debugger.getFov()), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 100.0f);
+            projection = glm::perspective(glm::radians(debugconsole.getFov()), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 100.0f);
 
             //Clear the screen
             //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -84,7 +83,7 @@ namespace NixEngine {
             flashLight.setMovingLight(hand, camera.getDirection());
 
             //Use Light
-            if (debugger.getUseFlash()) flashLight.useLight(*m_shaderList[0]);
+            if (debugconsole.getUseFlash()) flashLight.useLight(*m_shaderList[0]);
             else flashLight.stopLight(*m_shaderList[0]);
             blueLight.useLight(*m_shaderList[0]);
             greenLight.useLight(*m_shaderList[0]);
@@ -112,21 +111,18 @@ namespace NixEngine {
 
             //Draw Dragon
             model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(debugger.getX(), debugger.getY(), debugger.getZ()));
+            model = glm::translate(model, glm::vec3(debugconsole.getX(), debugconsole.getY(), debugconsole.getZ()));
             model = glm::rotate(model, curAngle, glm::vec3(0.0f, 1.0f, 0.0f));
             model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
             m_shaderList[0]->SetUniformMatrix4fv("model", model);
             shinyMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
             renderer.DrawModel(&dragon, m_shaderList[0]);
 
-            debugger.DebugConsole();
+            debugconsole.Run();
 
             //Swap Buffers
             window.SwapBuffers();
         }
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
 
         glfwTerminate();
     }
