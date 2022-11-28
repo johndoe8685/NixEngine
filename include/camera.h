@@ -1,5 +1,4 @@
 #pragma once
-
 #include <vendor/glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <vendor/glm/glm.hpp>

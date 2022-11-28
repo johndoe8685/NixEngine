@@ -32,7 +32,7 @@ void Model::LoadModel()
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
-		debugger.giveMessage(DebugLevel::Error, "LoadModel::Assimp", importer.GetErrorString());
+		debugger.giveMessage(Debugger::DebugLevel::Error, "LoadModel::Assimp", importer.GetErrorString());
 		return;
 	}
 
@@ -118,13 +118,13 @@ void Model::processTexture(const aiScene* scene)
 				std::string filename = std::string(path.data).substr(idx + 1);
 
 				std::string texPath = std::string("/res/texture/") + dir.getFileName() + "/" + filename;
-				debugger.giveMessage(DebugLevel::Info, "Model::Loading::Texture", texPath);
+				debugger.giveMessage(Debugger::DebugLevel::Info, "Model::Loading::Texture", texPath);
 
 				m_textureList[i] = new Texture(texPath);
 
 				if (!m_textureList[i]->LoadTexture())
 				{
-					debugger.giveMessage(DebugLevel::Error, "Model::texture::Failed to load a texture", texPath);
+					debugger.giveMessage(Debugger::DebugLevel::Error, "Model::texture::Failed to load a texture", texPath);
 					delete m_textureList[i];
 					m_textureList[i] = nullptr;
 				}

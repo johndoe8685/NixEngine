@@ -27,8 +27,10 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/vendor/imGui/imgui_impl_opengl3.cpp
         ${PROJECT_SOURCE_DIR}/main.cpp
         ${PROJECT_SOURCE_DIR}/Application.cpp
-        ${PROJECT_SOURCE_DIR}/directory.cpp
         ${PROJECT_SOURCE_DIR}/window.cpp
+        ${PROJECT_SOURCE_DIR}/system.cpp
+        ${PROJECT_SOURCE_DIR}/directory.cpp
+        ${PROJECT_SOURCE_DIR}/debugger.cpp
         ${PROJECT_SOURCE_DIR}/shader.cpp
         ${PROJECT_SOURCE_DIR}/texture.cpp
         ${PROJECT_SOURCE_DIR}/renderer.cpp
@@ -37,8 +39,7 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/light.cpp
         ${PROJECT_SOURCE_DIR}/material.cpp
         ${PROJECT_SOURCE_DIR}/model.cpp
-        ${PROJECT_SOURCE_DIR}/debugger.cpp
-         ${PROJECT_SOURCE_DIR}/debugconsole.cpp
+        ${PROJECT_SOURCE_DIR}/debugconsole.cpp
 )
 
 set(PROJECT_HEADERS
@@ -53,8 +54,10 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_impl_glfw.h
         ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_impl_opengl3.h
         ${PROJECT_INCLUDE_DIR}/Application.h
-        ${PROJECT_INCLUDE_DIR}/directory.h
         ${PROJECT_INCLUDE_DIR}/window.h
+        ${PROJECT_INCLUDE_DIR}/system.h
+        ${PROJECT_INCLUDE_DIR}/directory.h
+        ${PROJECT_INCLUDE_DIR}/debugger.h
         ${PROJECT_INCLUDE_DIR}/shader.h
         ${PROJECT_INCLUDE_DIR}/vertexBuffer.h
         ${PROJECT_INCLUDE_DIR}/vertexArray.h
@@ -67,14 +70,13 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/light.h
         ${PROJECT_INCLUDE_DIR}/material.h
         ${PROJECT_INCLUDE_DIR}/model.h
-        ${PROJECT_INCLUDE_DIR}/debugger.h
         ${PROJECT_INCLUDE_DIR}/debugconsole.h
 )
 
 include_directories(${PROJECT_INCLUDE_DIR})
 file(COPY ${PROJECT_DIR}/res DESTINATION ${CMAKE_BINARY_DIR})
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} )
 set(GCC_COVERAGE_LINK_FLAGS "-lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl ")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 target_link_libraries(${PROJECT_NAME} glfw)

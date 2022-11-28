@@ -1,19 +1,18 @@
 #include "texture.h"
 
 Texture::Texture(const std::string& path)
-    :m_textureID(0), m_filepath(path), m_LocalBuffer(nullptr), m_Width(0), m_Height(0)
+    :m_textureID(0), m_BPP(0), m_filepath(path), m_LocalBuffer(nullptr), m_Width(0), m_Height(0), System("Texture")
 {
-    
+    directory.changePath(m_filepath);
 }
 
 bool Texture::LoadTexture()
 {
-    Directory dir(m_filepath);
     stbi_set_flip_vertically_on_load(1);
-    m_LocalBuffer = stbi_load(dir.getPath().c_str(), &m_Width, &m_Height, &m_BPP, 4);
+    m_LocalBuffer = stbi_load(directory.getPath().c_str(), &m_Width, &m_Height, &m_BPP, 4);
     if (!m_LocalBuffer)
     {
-        printf("[ERROR] [Texture::Failed to find> %s\n", m_LocalBuffer);
+        debugger.giveMessage(Debugger::DebugLevel::Error, "Failed to Find", m_filepath);
         return false;
     }
     glGenTextures(1, &m_textureID);

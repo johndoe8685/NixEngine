@@ -2,9 +2,11 @@
 #include <vendor/glad/glad.h>
 #include <vendor/glm/gtc/type_ptr.hpp>
 #include "vendor/stb/stb_image.h"
+#include "system.h"
 #include "directory.h"
 
-class Texture
+
+class Texture : public System
 {
 private:
     unsigned int m_textureID;
