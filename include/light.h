@@ -5,7 +5,6 @@
 #include "vendor/glm/glm.hpp"
 #include "shader.h"
 #include "mesh.h"
-#include "debugger.h"
 #define MAX_POINT_LIGHT 10
 #define MAX_SPOT_LIGHT 5
 
@@ -136,7 +135,6 @@ private:
     int m_ShadowHeight;
 
     LightType light;
-    Debugger debugger;
 public:
     static int m_PointLightIndex;
     static int m_CurrentPointSize;

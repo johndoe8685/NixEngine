@@ -6,13 +6,13 @@ int	Light::m_CurrentPointSize = 0;
 int Light::m_CurrentSpotSize = 0;
 
 Light::Light()
-	:m_color(glm::vec3(1.0f, 1.0f, 1.0f)), debugger("Light")
+	:m_color(glm::vec3(1.0f, 1.0f, 1.0f))
 {
 	
 }
 
 Light::Light(float red, float green, float blue)
-:m_color(glm::vec3(red, green, blue)), debugger("Light")
+:m_color(glm::vec3(red, green, blue))
 {
 
 }
@@ -133,7 +133,7 @@ void Light::setAsDirectionalLight(float ambientIntensity, float diffuseIntensity
 }
 void Light::setAsPointLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z, float constant, float linear, float exponent)
 {
-	if (m_PointLightIndex > MAX_POINT_LIGHT) debugger.giveMessage(Debugger::DebugLevel::Error, "setAsPointLight", "Maximum point lights already initilaized.");
+	if (m_PointLightIndex > MAX_POINT_LIGHT) printf("Maximum point lights already initilaized.\n"); //debugger.giveMessage(Debugger::DebugLevel::Error, "setAsPointLight", "Maximum point lights already initilaized.");
 	else
 	{
 		point.directional.m_ambientIntensity = ambientIntensity;
@@ -171,7 +171,7 @@ void Light::setAsPointLight(float ambientIntensity, float diffuseIntensity, floa
 
 void Light::setAsSpotLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z, float constant, float linear, float exponent, glm::vec3 direction, float edge)
 {
-	if (m_SpotLightIndex > MAX_SPOT_LIGHT) debugger.giveMessage(Debugger::DebugLevel::Error, "setAsSpotLight", "Maximum spot lights already initialized.");
+	if (m_SpotLightIndex > MAX_SPOT_LIGHT) printf("Maximum spot lights already initialized.\n"); //debugger.giveMessage(Debugger::DebugLevel::Error, "setAsSpotLight", "Maximum spot lights already initialized.");
 	else
 	{
 		spot.point.directional.m_ambientIntensity = ambientIntensity;
@@ -220,7 +220,7 @@ bool Light::createShadowMap(int shadowWidth, int shadowHeight)
 {
 	if (light != LightType::spotLight) 
 	{
-		debugger.giveMessage(Debugger::DebugLevel::Error, "Light::ShadowMap::Init", "Light type isnt supported.");
+		//debugger.giveMessage(Debugger::DebugLevel::Error, "Light::ShadowMap::Init", "Light type isnt supported.");
 		return false;
 	}
 	else
@@ -249,7 +249,7 @@ bool Light::createShadowMap(int shadowWidth, int shadowHeight)
 
 		if (Status != GL_FRAMEBUFFER_COMPLETE)
 		{
-			debugger.giveMessage(Debugger::DebugLevel::Error, "createShadowMap::FrameBuffer", (const char*)Status);
+			//debugger.giveMessage(Debugger::DebugLevel::Error, "createShadowMap::FrameBuffer", (const char*)Status);
 			return false;
 		}
 
@@ -262,7 +262,7 @@ void Light::ShadowMapWrite()
 {
 	if (!m_FBO)
 	{
-		debugger.giveMessage(Debugger::DebugLevel::Error, "Light::ShadowMap::Write", "FBO doenst exist.");
+		//debugger.giveMessage(Debugger::DebugLevel::Error, "Light::ShadowMap::Write", "FBO doenst exist.");
 	}
 	else
 	{
@@ -274,7 +274,7 @@ void Light::ShadowMapRead(unsigned int slot)
 {
 		if (!m_FBO)
 		{
-			debugger.giveMessage(Debugger::DebugLevel::Error, "Light::ShadowMap::Write", "FBO doenst exist.");
+			//debugger.giveMessage(Debugger::DebugLevel::Error, "Light::ShadowMap::Write", "FBO doenst exist.");
 		}
 		else
 		{

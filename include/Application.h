@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
+#include "shader.h"
 #include "texture.h"
 #include "renderer.h"
 #include "window.h"
-#include "shader.h"
 #include "mesh.h"
 #include "camera.h"
 #include "light.h"

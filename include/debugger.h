@@ -1,10 +1,11 @@
 #pragma once
 #include <iostream>
-#include "window.h"
 class Debugger
 {
 private:
 	std::string m_className;
+	std::string m_componentName;
+	std::string m_previousMessage;
 public:
 	enum DebugLevel
 	{
@@ -13,6 +14,7 @@ public:
 		Error,
 		Unknown
 	};
+	Debugger(std::string componentName, std::string className);
 	Debugger(std::string className);
 	
 	void giveMessage(DebugLevel level, std::string message);

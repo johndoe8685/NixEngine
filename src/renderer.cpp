@@ -10,7 +10,7 @@ Renderer::~Renderer()
     
 }
 
-void Renderer::DrawMesh(Mesh* mesh, Shader* shader) const
+void Renderer::DrawMesh(Mesh* mesh, Shader* shader)
 {
     shader->Bind();
     mesh->RenderMesh();
@@ -18,7 +18,7 @@ void Renderer::DrawMesh(Mesh* mesh, Shader* shader) const
     shader->Unbind();
 }
 
-void Renderer::DrawModel(Model* model, Shader* shader) const
+void Renderer::DrawModel(Model* model, Shader* shader)
 {
     shader->Bind();
     model->RenderModel();
@@ -26,7 +26,7 @@ void Renderer::DrawModel(Model* model, Shader* shader) const
     shader->Unbind();
 }
 
-void Renderer::Clear() const
+void Renderer::Clear()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

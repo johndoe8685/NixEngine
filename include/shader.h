@@ -1,20 +1,20 @@
 #pragma once
 #include <vendor/glad/glad.h>
-#include <vendor/glm/gtc/type_ptr.hpp>
 #include <GLFW/glfw3.h>
+#include <vendor/glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include "directory.h"
+#include "system.h"
 
-class Shader
+class Shader : public System
 {
 private:
     unsigned int m_ModuleID;
     std::string m_FragmentFilePath;
 	std::string m_VertexFilePath;
 public:
-    Shader(const std::string& fragmentShader, const std::string& vertexShader);
+    Shader(std::string componentName, const std::string& fragmentShader, const std::string& vertexShader);
     ~Shader() { glDeleteProgram(m_ModuleID); }
 
     static int PointLightInUse;

@@ -3,7 +3,6 @@
 #include <vendor/glm/gtc/type_ptr.hpp>
 #include "vendor/stb/stb_image.h"
 #include "system.h"
-#include "directory.h"
 
 
 class Texture : public System

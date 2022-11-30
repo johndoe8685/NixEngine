@@ -31,6 +31,7 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/system.cpp
         ${PROJECT_SOURCE_DIR}/directory.cpp
         ${PROJECT_SOURCE_DIR}/debugger.cpp
+        ${PROJECT_SOURCE_DIR}/storage.cpp
         ${PROJECT_SOURCE_DIR}/shader.cpp
         ${PROJECT_SOURCE_DIR}/texture.cpp
         ${PROJECT_SOURCE_DIR}/renderer.cpp
@@ -40,6 +41,7 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/material.cpp
         ${PROJECT_SOURCE_DIR}/model.cpp
         ${PROJECT_SOURCE_DIR}/debugconsole.cpp
+        ${PROJECT_SOURCE_DIR}/scene.cpp
 )
 
 set(PROJECT_HEADERS
@@ -58,6 +60,7 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/system.h
         ${PROJECT_INCLUDE_DIR}/directory.h
         ${PROJECT_INCLUDE_DIR}/debugger.h
+        ${PROJECT_INCLUDE_DIR}/storage.h
         ${PROJECT_INCLUDE_DIR}/shader.h
         ${PROJECT_INCLUDE_DIR}/vertexBuffer.h
         ${PROJECT_INCLUDE_DIR}/vertexArray.h
@@ -68,6 +71,7 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/mesh.h
         ${PROJECT_INCLUDE_DIR}/camera.h
         ${PROJECT_INCLUDE_DIR}/light.h
+        ${PROJECT_INCLUDE_DIR}/scene.h
         ${PROJECT_INCLUDE_DIR}/material.h
         ${PROJECT_INCLUDE_DIR}/model.h
         ${PROJECT_INCLUDE_DIR}/debugconsole.h

@@ -1,10 +1,27 @@
 #include "model.h"
 
-Model::Model(const std::string& path)
-	:dir(path), debugger("Model")
+Model::Model(std::string componentName, const std::string& path)
+	:System(componentName, "Model"), m_position(0, 0, 0),
+	 m_rotation(0, 0, 0), m_scale(0, 0, 0)
 {
-	std::cout << "[INFO]  [Model::Loading> " << path << std::endl;
+	directory.changePath(path);
+	debugger.giveMessage(Debugger::DebugLevel::Info, "Loading", path);
 	LoadModel();
+}
+
+void Model::SetPosition(float x, float y, float z)
+{
+	m_position = glm::vec3(x, y, z);
+}
+
+void Model::SetRotation(float x, float y, float z)
+{
+	m_rotation = glm::vec3(x, y, z);
+}
+
+void Model::SetScale(float x, float y, float z)
+{
+	m_scale = glm::vec3(x, y, z);
 }
 
 void Model::RenderModel()
@@ -28,7 +45,7 @@ void Model::RenderModel()
 void Model::LoadModel()
 {
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(dir.getPath(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
+	const aiScene* scene = importer.ReadFile(directory.getPath(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -117,14 +134,14 @@ void Model::processTexture(const aiScene* scene)
 				int idx = std::string(path.data).rfind("\\");
 				std::string filename = std::string(path.data).substr(idx + 1);
 
-				std::string texPath = std::string("/res/texture/") + dir.getFileName() + "/" + filename;
-				debugger.giveMessage(Debugger::DebugLevel::Info, "Model::Loading::Texture", texPath);
+				std::string texPath = std::string("/res/texture/") + directory.getFileName() + "/" + filename;
+				debugger.giveMessage(Debugger::DebugLevel::Info, "Loading::Texture", texPath);
 
 				m_textureList[i] = new Texture(texPath);
 
 				if (!m_textureList[i]->LoadTexture())
 				{
-					debugger.giveMessage(Debugger::DebugLevel::Error, "Model::texture::Failed to load a texture", texPath);
+					debugger.giveMessage(Debugger::DebugLevel::Error, "Texture::Failed to load a texture", texPath);
 					delete m_textureList[i];
 					m_textureList[i] = nullptr;
 				}

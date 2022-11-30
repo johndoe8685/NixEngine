@@ -22,15 +22,16 @@ namespace NixEngine {
         blueLight.setAsPointLight(0.0f, 1.0f, -1.0f, 0.0f, -3.0f, 0.3f, 0.2f, 0.1f);
         greenLight.setAsPointLight(0.0f, 1.0f, 1.0f, 0.0f, -3.0f, 0.3f, 0.2f, 0.1f);
         redLight.setAsPointLight(0.0f, 0.5f, 0.0f, 0.0f, -1.732f, 0.3f, 0.2f, 0.1f);
+        flashLight.setAsSpotLight(0.0f, 0.5f, 0.0f, 2.0f, 0.0f, 1.0f, 0.0f, 0.0f, glm::vec3(-1.0f, 0.0f, 0.0f), 30.0f);
 
         Material shinyMaterial(4.0f, 256);
         Material dullMaterial(1.0f, 4);
         
-        Model floor("/res/model/floor.obj");
-        Model backpack("/res/model/backpack.obj");
-        Model dragon("/res/model/dragon2.obj");
+        Model floor("Floor", "/res/model/floor.obj");
+        Model backpack("Backpack", "/res/model/backpack.obj");
+        Model dragon("Dragon", "/res/model/dragon2.obj");
 
-        Shader *shader = new Shader("/res/shader/basic.frag", "/res/shader/basic.vert");
+        Shader *shader = new Shader("Basic", "/res/shader/basic.frag", "/res/shader/basic.vert");
         m_shaderList.push_back(shader);
 
         Renderer renderer;
@@ -74,7 +75,6 @@ namespace NixEngine {
             projection = glm::perspective(glm::radians(debugconsole.getFov()), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 100.0f);
 
             //Clear the screen
-            //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             renderer.Clear();
 

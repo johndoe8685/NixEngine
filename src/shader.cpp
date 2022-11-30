@@ -2,35 +2,15 @@
 
 int Shader::PointLightInUse = 0;
 
-#ifdef __linux__
-Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader)
-    : m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0)
+Shader::Shader(std::string componentName,const std::string& fragmentShader,const std::string& vertexShader)
+    :System(componentName, "Shader"), m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0)
 {
-    std::string cwd = get_current_dir_name();
-    std::string fragmentShaderDir = cwd + fragmentShader;
-    std::string vertexShaderDir = cwd + vertexShader;
+    std::string fragmentShaderDir = directory.getWorkDirectory() + fragmentShader;
+    std::string vertexShaderDir = directory.getWorkDirectory()  + vertexShader;
     std::string fragmentSource = GetShaderSource(fragmentShaderDir);
     std::string vertexSource = GetShaderSource(vertexShaderDir);
-    std::cout << "[FRAGMENT SOURCE]:\n" << fragmentSource << std::endl;
-    std::cout << "[VERTEX SOURCE]\n" << vertexSource << std::endl;
     m_ModuleID = CreateShader(vertexSource, fragmentSource);
 }
-#endif
-
-#ifdef _WIN64
-Shader::Shader(const std::string& fragmentShader,const std::string& vertexShader)
-    : m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0)
-{
-    Directory dir;
-    std::string fragmentShaderDir = dir.getWorkDirectory() + fragmentShader;
-    std::string vertexShaderDir = dir.getWorkDirectory()  + vertexShader;
-    std::string fragmentSource = GetShaderSource(fragmentShaderDir);
-    std::string vertexSource = GetShaderSource(vertexShaderDir);
-    //std::cout << "[FRAGMENT SOURCE]:\n" << fragmentSource << std::endl;
-    //std::cout << "[VERTEX SOURCE]\n" << vertexSource << std::endl;
-    m_ModuleID = CreateShader(vertexSource, fragmentSource);
-}
-#endif
 
 std::string Shader::GetShaderSource(const std::string& filepath)
 {
@@ -57,7 +37,7 @@ unsigned int Shader::CreateShader(const std::string& vertexSource, const std::st
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
     if(!success) {
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "[ERROR] PROGRAM COMPILATION FAILED\n" << infoLog << std::endl;
+        debugger.giveMessage(Debugger::Error, "CreateShader::Program compliation failed", infoLog);
     }
     glUseProgram(shaderProgram);
     glDeleteShader(vertexShader);
@@ -78,7 +58,7 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
     if(!success)
     {
         glGetShaderInfoLog(shader, 512, NULL, infoLog);
-        std::cout << "[ERROR] SHADER COMPILATION FAILED\n" << infoLog << std::endl;
+        debugger.giveMessage(Debugger::Error, "CompileShader::Shader compliation failed", infoLog);
         glDeleteShader(shader);
         return 0;
     }
@@ -89,7 +69,7 @@ int Shader::GetUniformLocation(const std::string& name)
 {
     int location = glGetUniformLocation(m_ModuleID, name.c_str());
     if (location == -1)
-        std::cout << "[WARNING] Uniform " << name << " doesnt exist!" << std::endl;
+        debugger.giveMessage(Debugger::Warning, "GetUniformLocation::Uniform Doesnt exist", name);
     return location;
 }
 
