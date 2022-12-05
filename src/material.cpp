@@ -12,8 +12,8 @@ Material::Material(float specularIntensity, float shininess)
 
 }
 
-void Material::useMaterial(Shader &shader, const std::string& specularIntensityName, const std::string& shininessName)
+void Material::useMaterial(Shader* shader, const std::string& specularIntensityName, const std::string& shininessName)
 {
-    shader.SetUniform1f(specularIntensityName, m_specularIntensity);
-    shader.SetUniform1f(shininessName, m_shininess);
+    shader->SetUniform1f(specularIntensityName, m_specularIntensity);
+    shader->SetUniform1f(shininessName, m_shininess);
 }

@@ -4,8 +4,10 @@
 #include <vendor/glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "shader.h"
+#include "scene.h"
 #include "mesh.h"
 #include "model.h"
+
 
 class Renderer
 {
@@ -16,5 +18,6 @@ public:
     ~Renderer();
     void DrawMesh(Mesh* mesh, Shader* shader);
     void DrawModel(Model* model, Shader* shader);
+    void DrawScene(Scene* scene, Shader* shader);
     void Clear();
 };

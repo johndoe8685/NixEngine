@@ -64,9 +64,9 @@ void Camera::mouseControl(double xChange, double yChange)
     }
 }
 
-void Camera::setUniformCameraPosition(Shader &shader)
+void Camera::setUniformCameraPosition(Shader *shader)
 {
-	shader.SetUniform3f("eyePosition", position.x, position.y, position.z);
+	shader->SetUniform3f("eyePosition", position.x, position.y, position.z);
 }
 
 glm::mat4 Camera::calculateViewMatrix()

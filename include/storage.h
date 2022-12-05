@@ -1,5 +1,6 @@
 #pragma once
-#include <vector>
+#include <unordered_map>
+#include <memory>
 #include "scene.h"
 #include "shader.h"
 #include "camera.h"
@@ -7,18 +8,22 @@
 class Storage : public System
 {
 private:
-	std::vector<Shader*> m_shaderList;
-	std::vector<Scene*> m_sceneList;
-	std::vector<Camera*> m_cameraList;
+	static Storage s_Instance;
 
-	template <typename T> unsigned int find(std::string componentName, std::vector<T*> list);
+	std::unordered_map<std::string, std::shared_ptr<Shader>> m_shaderMap;
+	std::unordered_map<std::string, std::shared_ptr<Scene>> m_sceneMap;
+	std::unordered_map<std::string, std::shared_ptr<Camera>> m_cameraMap;
+
+	template <typename T> T* find(std::string componentName, std::unordered_map<std::string, std::shared_ptr<T>> map);
 public:
 	Storage();
+	Storage(std::string componentName);
+
+	static Storage& get() { return s_Instance; }
 
 	void addShader(std::string componentName,const std::string& fragmentShader, const std::string& vertexShader);
 	void addScene(std::string componentName);
 
 	Shader* getShader(std::string componentName);
 	Scene* getScene(std::string componentName);
-	~Storage();
 };

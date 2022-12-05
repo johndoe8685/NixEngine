@@ -26,7 +26,7 @@ public:
 
     bool getIsFocused() { return isFocused; }
     void setIsFocused(bool value) { isFocused = value; }
-    void setUniformCameraPosition(Shader &shader);
+    void setUniformCameraPosition(Shader* shader);
     glm::mat4 calculateViewMatrix();
 
     glm::vec3 getPosition() { return position; }

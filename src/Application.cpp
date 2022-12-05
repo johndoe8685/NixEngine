@@ -27,12 +27,17 @@ namespace NixEngine {
         Material shinyMaterial(4.0f, 256);
         Material dullMaterial(1.0f, 4);
         
-        Model floor("Floor", "/res/model/floor.obj");
-        Model backpack("Backpack", "/res/model/backpack.obj");
-        Model dragon("Dragon", "/res/model/dragon2.obj");
+        ShaderManager& shaderManager = ShaderManager::Get();
+        AssetManager& assetManager = AssetManager::Get();
 
-        Shader *shader = new Shader("Basic", "/res/shader/basic.frag", "/res/shader/basic.vert");
-        m_shaderList.push_back(shader);
+        assetManager.addScene("Default");
+        shaderManager.addShader("Basic", "/res/shader/basic.frag", "/res/shader/basic.vert");
+
+        Shader* shader = shaderManager.getShader("Basic");
+        Scene* scene = assetManager.getScene("Default");
+
+        scene->AddModel("Floor", "/res/model/floor.obj");
+        scene->AddModel("Dragon", "/res/model/dragon2.obj");
 
         Renderer renderer;
         
@@ -54,6 +59,15 @@ namespace NixEngine {
         {
             glfwPollEvents();
 
+            //Set Model Variables
+            Model* dragon = scene->getModel("Dragon");
+            dragon->SetPosition(debugconsole.getX(), debugconsole.getY(), debugconsole.getZ());
+            dragon->SetScale(0.25f, 0.25f, 0.25f);
+            dragon->SetRotation(0.0f, curAngle, 0.0f);
+
+            Model* floor = scene->getModel("Floor");
+            floor->SetPosition(0.0f, -1.0f, 0.0f);
+
             //Get the deltaTime
             curFrame = glfwGetTime();
             deltaTime = curFrame - lastFrame;
@@ -61,7 +75,7 @@ namespace NixEngine {
 
             camera.keyControl(window.getKeys(), deltaTime);
 		    camera.mouseControl(window.getXChange(), window.getYChange());
-            camera.setUniformCameraPosition(*m_shaderList[0]);
+            camera.setUniformCameraPosition(shader);
 
             //Rotate the triangle
             speed = debugconsole.getAngle() * toRadians * deltaTime;
@@ -72,9 +86,10 @@ namespace NixEngine {
             }
             
             //Calculate fov
-            projection = glm::perspective(glm::radians(debugconsole.getFov()), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 100.0f);
+            if(window.getWidth() != 0 && window.getHeight() != 0) projection = glm::perspective(glm::radians(debugconsole.getFov()), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 100.0f);
 
             //Clear the screen
+            //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             renderer.Clear();
 
@@ -83,40 +98,20 @@ namespace NixEngine {
             flashLight.setMovingLight(hand, camera.getDirection());
 
             //Use Light
-            if (debugconsole.getUseFlash()) flashLight.useLight(*m_shaderList[0]);
-            else flashLight.stopLight(*m_shaderList[0]);
-            blueLight.useLight(*m_shaderList[0]);
-            greenLight.useLight(*m_shaderList[0]);
-            redLight.useLight(*m_shaderList[0]);
-            //directionalLight.useLight(*m_shaderList[0]);
+            if (debugconsole.getUseFlash()) flashLight.useLight(shader);
+            else flashLight.stopLight(shader);
+            blueLight.useLight(shader);
+            greenLight.useLight(shader);
+            redLight.useLight(shader);
+            //directionalLight.useLight(shader);
             
             glm::mat4 model(1.0f);
-            m_shaderList[0]->SetUniformMatrix4fv("projection", projection);
-            m_shaderList[0]->SetUniformMatrix4fv("view", camera.calculateViewMatrix());
-            
-            //Draw Floor
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(0.0f, -1.0f, 0.0f));
-            m_shaderList[0]->SetUniformMatrix4fv("model", model);
-            dullMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
-            renderer.DrawModel(&floor, m_shaderList[0]);
+            shader->SetUniformMatrix4fv("projection", projection);
+            shader->SetUniformMatrix4fv("view", camera.calculateViewMatrix());
 
-            //Draw Backpack
-            model = glm::mat4(1.0f);
-            model = glm::rotate(model, curAngle, glm::vec3(0.0f, 1.0f, 0.0f));
-            model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
-            m_shaderList[0]->SetUniformMatrix4fv("model", model);
-            shinyMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
-            //renderer.DrawModel(&backpack, m_shaderList[0]);
-
-            //Draw Dragon
-            model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(debugconsole.getX(), debugconsole.getY(), debugconsole.getZ()));
-            model = glm::rotate(model, curAngle, glm::vec3(0.0f, 1.0f, 0.0f));
-            model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));
-            m_shaderList[0]->SetUniformMatrix4fv("model", model);
-            shinyMaterial.useMaterial(*m_shaderList[0], "material.specularIntensity", "material.shininess");
-            renderer.DrawModel(&dragon, m_shaderList[0]);
+            //Draw Scene
+            dullMaterial.useMaterial(shader, "material.specularIntensity", "material.shininess");
+            renderer.DrawScene(scene, shader);
 
             debugconsole.Run();
 

@@ -10,5 +10,5 @@ public:
     Material();
     Material(float specularIntensity, float shininess);
 
-    void useMaterial(Shader &shader, const std::string& specularIntensityName, const std::string& shininessName);    
+    void useMaterial(Shader* shader, const std::string& specularIntensityName, const std::string& shininessName);    
 };

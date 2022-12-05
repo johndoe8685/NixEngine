@@ -26,6 +26,14 @@ void Renderer::DrawModel(Model* model, Shader* shader)
     shader->Unbind();
 }
 
+void Renderer::DrawScene(Scene* scene, Shader* shader)
+{
+    shader->Bind();
+    scene->RenderScene();
+    shader->SetPointLightInUse(0);
+    shader->Unbind();
+}
+
 void Renderer::Clear()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

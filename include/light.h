@@ -158,6 +158,6 @@ public:
     void setAsSpotLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z, float constant, float linear, float exponent, glm::vec3 direction, float edge);
     void setMovingLight(glm::vec3 position, glm::vec3 direction);
 
-    void useLight(Shader &shader);
-    void stopLight(Shader& shader);
+    void useLight(Shader* shader);
+    void stopLight(Shader* shader);
 };

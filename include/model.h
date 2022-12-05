@@ -8,6 +8,7 @@
 #include <vendor/assimp/scene.h>
 #include <vendor/assimp/postprocess.h>
 #include "system.h"
+#include "shadermanager.h"
 #include "mesh.h"
 #include "texture.h"
 
@@ -19,6 +20,7 @@ private:
 	std::vector<unsigned int> m_textureID;
 
 	//Position, Scale, Rotate variables
+	glm::mat4 m_model;
 	glm::vec3 m_position;
 	glm::vec3 m_scale;
 	glm::vec3 m_rotation;
@@ -26,6 +28,7 @@ public:
 	Model(std::string componentName, const std::string& path);
 	~Model();
 
+	void processModel();
 	void RenderModel();
 
 	void SetPosition(float x, float y, float z);
@@ -37,4 +40,3 @@ private:
 	Mesh* processMesh(aiMesh *mesh, const aiScene *scene);
 	void processTexture(const aiScene* scene);
 };
-

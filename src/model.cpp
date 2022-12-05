@@ -1,8 +1,8 @@
 #include "model.h"
 
 Model::Model(std::string componentName, const std::string& path)
-	:System(componentName, "Model"), m_position(0, 0, 0),
-	 m_rotation(0, 0, 0), m_scale(0, 0, 0)
+	:System(componentName, "Model"), m_position(0, 0, 0), m_scale(1.0f, 1.0f, 1.0f), 
+	m_rotation(0.0f, 0.0f, 0.0f), m_model(glm::mat4(1.0f))
 {
 	directory.changePath(path);
 	debugger.giveMessage(Debugger::DebugLevel::Info, "Loading", path);
@@ -22,6 +22,20 @@ void Model::SetRotation(float x, float y, float z)
 void Model::SetScale(float x, float y, float z)
 {
 	m_scale = glm::vec3(x, y, z);
+}
+
+void Model::processModel()
+{
+	Shader* shader = ShaderManager::Get().getShader("Basic");
+
+	if (m_position != glm::vec3(0.0f, 0.0f, 0.0f)) m_model = glm::translate(m_model, m_position);
+	if (m_scale != glm::vec3(1.0f, 1.0f, 1.0f)) m_model = glm::scale(m_model, m_scale);
+	if (m_rotation != glm::vec3(0.0f, 0.0f, 0.0f)) m_model = glm::rotate(m_model, m_rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	if (m_rotation != glm::vec3(0.0f, 0.0f, 0.0f)) m_model = glm::rotate(m_model, m_rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	if (m_rotation != glm::vec3(0.0f, 0.0f, 0.0f)) m_model = glm::rotate(m_model, m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+
+	shader->SetUniformMatrix4fv("model", m_model);
+	m_model = glm::mat4(1.0f);
 }
 
 void Model::RenderModel()

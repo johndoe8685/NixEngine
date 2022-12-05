@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include "system.h"
 #include "model.h"
@@ -14,6 +15,6 @@ public:
 	void AddModel(std::string componentName, std::string Path);
 
 	Model* getModel(std::string componentName);
-	
+
 	void RenderScene();
 };

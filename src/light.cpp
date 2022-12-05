@@ -17,102 +17,102 @@ Light::Light(float red, float green, float blue)
 
 }
 
-void Light::useLight(Shader &shader)
+void Light::useLight(Shader* shader)
 {
 	if (light == LightType::ambientLight)
 	{
 		struct ambientUniformList list;
-		shader.SetUniform3f(list.m_colorName, m_color.x, m_color.y, m_color.z);
-    	shader.SetUniform1f(list.m_ambientIntensityName, ambient.m_ambientIntensity);
+		shader->SetUniform3f(list.m_colorName, m_color.x, m_color.y, m_color.z);
+    	shader->SetUniform1f(list.m_ambientIntensityName, ambient.m_ambientIntensity);
 	}
 	else if(light == LightType::directionalLight)
 	{
 		struct directionalUniformList list;
-		shader.SetUniform3f(list.m_colorName, m_color.x, m_color.y, m_color.z);
-    	shader.SetUniform1f(list.m_ambientIntensityName, directional.m_ambientIntensity);
+		shader->SetUniform3f(list.m_colorName, m_color.x, m_color.y, m_color.z);
+    	shader->SetUniform1f(list.m_ambientIntensityName, directional.m_ambientIntensity);
     
-    	shader.SetUniform3f(list.m_directionName, directional.m_direction.x, directional.m_direction.y, directional.m_direction.z);
-    	shader.SetUniform1f(list.m_diffuseIntensityName, directional.m_diffuseIntensity);
+    	shader->SetUniform3f(list.m_directionName, directional.m_direction.x, directional.m_direction.y, directional.m_direction.z);
+    	shader->SetUniform1f(list.m_diffuseIntensityName, directional.m_diffuseIntensity);
 	}
 	else if (light == LightType::pointLight)
 	{
-		shader.SetUniform3f(pointList.m_colorName, m_color.x, m_color.y, m_color.z);
-		shader.SetUniform1f(pointList.m_ambientIntensityName, point.directional.m_ambientIntensity);
-		shader.SetUniform1f(pointList.m_diffuseIntensityName, point.directional.m_diffuseIntensity);
+		shader->SetUniform3f(pointList.m_colorName, m_color.x, m_color.y, m_color.z);
+		shader->SetUniform1f(pointList.m_ambientIntensityName, point.directional.m_ambientIntensity);
+		shader->SetUniform1f(pointList.m_diffuseIntensityName, point.directional.m_diffuseIntensity);
 
-		shader.SetUniform3f(pointList.m_positionName, point.m_position.x, point.m_position.y, point.m_position.z);
-		shader.SetUniform1f(pointList.m_linearName, point.m_linear);
-		shader.SetUniform1f(pointList.m_constantName, point.m_constant);
-		shader.SetUniform1f(pointList.m_exponentName, point.m_exponent);
+		shader->SetUniform3f(pointList.m_positionName, point.m_position.x, point.m_position.y, point.m_position.z);
+		shader->SetUniform1f(pointList.m_linearName, point.m_linear);
+		shader->SetUniform1f(pointList.m_constantName, point.m_constant);
+		shader->SetUniform1f(pointList.m_exponentName, point.m_exponent);
 		
-		shader.SetUniform1i(pointList.m_pointSizeName, point.m_pointSize);
+		shader->SetUniform1i(pointList.m_pointSizeName, point.m_pointSize);
 
-		shader.SetPointLightInUse(1);
-		shader.SetUniform1i(pointList.m_inUseName, shader.GetPointLightInUse());
+		shader->SetPointLightInUse(1);
+		shader->SetUniform1i(pointList.m_inUseName, shader->GetPointLightInUse());
 	}
 	else if (light == LightType::spotLight)
 	{
-		shader.SetUniform3f(spotList.m_colorName, m_color.x, m_color.y, m_color.z);
-		shader.SetUniform1f(spotList.m_ambientIntensityName, spot.point.directional.m_ambientIntensity);
-		shader.SetUniform1f(spotList.m_diffuseIntensityName, spot.point.directional.m_diffuseIntensity);
+		shader->SetUniform3f(spotList.m_colorName, m_color.x, m_color.y, m_color.z);
+		shader->SetUniform1f(spotList.m_ambientIntensityName, spot.point.directional.m_ambientIntensity);
+		shader->SetUniform1f(spotList.m_diffuseIntensityName, spot.point.directional.m_diffuseIntensity);
 
-		shader.SetUniform3f(spotList.m_positionName, spot.point.m_position.x, spot.point.m_position.y, spot.point.m_position.z);
-		shader.SetUniform1f(spotList.m_linearName, spot.point.m_linear);
-		shader.SetUniform1f(spotList.m_constantName, spot.point.m_constant);
-		shader.SetUniform1f(spotList.m_exponentName, spot.point.m_exponent);
+		shader->SetUniform3f(spotList.m_positionName, spot.point.m_position.x, spot.point.m_position.y, spot.point.m_position.z);
+		shader->SetUniform1f(spotList.m_linearName, spot.point.m_linear);
+		shader->SetUniform1f(spotList.m_constantName, spot.point.m_constant);
+		shader->SetUniform1f(spotList.m_exponentName, spot.point.m_exponent);
 
-		shader.SetUniform3f(spotList.m_directionName, spot.m_direction.x, spot.m_direction.y, spot.m_direction.z);
-		shader.SetUniform1f(spotList.m_edgeName, spot.m_edge);
-		shader.SetUniform1i(spotList.m_spotSizeName, spot.m_spotSize);
+		shader->SetUniform3f(spotList.m_directionName, spot.m_direction.x, spot.m_direction.y, spot.m_direction.z);
+		shader->SetUniform1f(spotList.m_edgeName, spot.m_edge);
+		shader->SetUniform1i(spotList.m_spotSizeName, spot.m_spotSize);
 	}
 }
 
-void Light::stopLight(Shader& shader)
+void Light::stopLight(Shader* shader)
 {
 	if (light == LightType::ambientLight)
 	{
 		struct ambientUniformList list;
-		shader.SetUniform3f(list.m_colorName, 0, 0, 0);
-		shader.SetUniform1f(list.m_ambientIntensityName, 0);
+		shader->SetUniform3f(list.m_colorName, 0, 0, 0);
+		shader->SetUniform1f(list.m_ambientIntensityName, 0);
 	}
 	else if (light == LightType::directionalLight)
 	{
 		struct directionalUniformList list;
-		shader.SetUniform3f(list.m_colorName, 0, 0, 0);
-		shader.SetUniform1f(list.m_ambientIntensityName, 0);
+		shader->SetUniform3f(list.m_colorName, 0, 0, 0);
+		shader->SetUniform1f(list.m_ambientIntensityName, 0);
 
-		shader.SetUniform3f(list.m_directionName, 0, 0, 0);
-		shader.SetUniform1f(list.m_diffuseIntensityName, 0);
+		shader->SetUniform3f(list.m_directionName, 0, 0, 0);
+		shader->SetUniform1f(list.m_diffuseIntensityName, 0);
 	}
 	else if (light == LightType::pointLight)
 	{
-		shader.SetUniform3f(pointList.m_colorName, 0, 0, 0);
-		shader.SetUniform1f(pointList.m_ambientIntensityName, 0);
-		shader.SetUniform1f(pointList.m_diffuseIntensityName, 0);
+		shader->SetUniform3f(pointList.m_colorName, 0, 0, 0);
+		shader->SetUniform1f(pointList.m_ambientIntensityName, 0);
+		shader->SetUniform1f(pointList.m_diffuseIntensityName, 0);
 
-		shader.SetUniform3f(pointList.m_positionName, 0, 0, 0);
-		shader.SetUniform1f(pointList.m_linearName, 0);
-		shader.SetUniform1f(pointList.m_constantName, 0);
-		shader.SetUniform1f(pointList.m_exponentName, 0);
+		shader->SetUniform3f(pointList.m_positionName, 0, 0, 0);
+		shader->SetUniform1f(pointList.m_linearName, 0);
+		shader->SetUniform1f(pointList.m_constantName, 0);
+		shader->SetUniform1f(pointList.m_exponentName, 0);
 
-		shader.SetUniform1i(pointList.m_pointSizeName, 0);
+		shader->SetUniform1i(pointList.m_pointSizeName, 0);
 
-		shader.SetUniform1i(pointList.m_inUseName, 0);
+		shader->SetUniform1i(pointList.m_inUseName, 0);
 	}
 	else if (light == LightType::spotLight)
 	{
-		shader.SetUniform3f(spotList.m_colorName, 0, 0, 0);
-		shader.SetUniform1f(spotList.m_ambientIntensityName, 0);
-		shader.SetUniform1f(spotList.m_diffuseIntensityName, 0);
+		shader->SetUniform3f(spotList.m_colorName, 0, 0, 0);
+		shader->SetUniform1f(spotList.m_ambientIntensityName, 0);
+		shader->SetUniform1f(spotList.m_diffuseIntensityName, 0);
 
-		shader.SetUniform3f(spotList.m_positionName, 0, 0, 0);
-		shader.SetUniform1f(spotList.m_linearName, 0);
-		shader.SetUniform1f(spotList.m_constantName, 0);
-		shader.SetUniform1f(spotList.m_exponentName, 0);
+		shader->SetUniform3f(spotList.m_positionName, 0, 0, 0);
+		shader->SetUniform1f(spotList.m_linearName, 0);
+		shader->SetUniform1f(spotList.m_constantName, 0);
+		shader->SetUniform1f(spotList.m_exponentName, 0);
 
-		shader.SetUniform3f(spotList.m_directionName, 0, 0, 0);
-		shader.SetUniform1f(spotList.m_edgeName, 0);
-		shader.SetUniform1i(spotList.m_spotSizeName, 0);
+		shader->SetUniform3f(spotList.m_directionName, 0, 0, 0);
+		shader->SetUniform1f(spotList.m_edgeName, 0);
+		shader->SetUniform1i(spotList.m_spotSizeName, 0);
 	}
 
 }
