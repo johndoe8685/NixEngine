@@ -31,7 +31,6 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/system.cpp
         ${PROJECT_SOURCE_DIR}/directory.cpp
         ${PROJECT_SOURCE_DIR}/debugger.cpp
-        ${PROJECT_SOURCE_DIR}/storage.cpp
         ${PROJECT_SOURCE_DIR}/shader.cpp
         ${PROJECT_SOURCE_DIR}/texture.cpp
         ${PROJECT_SOURCE_DIR}/renderer.cpp
@@ -62,7 +61,6 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/system.h
         ${PROJECT_INCLUDE_DIR}/directory.h
         ${PROJECT_INCLUDE_DIR}/debugger.h
-        ${PROJECT_INCLUDE_DIR}/storage.h
         ${PROJECT_INCLUDE_DIR}/shader.h
         ${PROJECT_INCLUDE_DIR}/vertexBuffer.h
         ${PROJECT_INCLUDE_DIR}/vertexArray.h

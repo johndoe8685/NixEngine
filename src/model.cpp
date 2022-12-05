@@ -30,9 +30,9 @@ void Model::processModel()
 
 	if (m_position != glm::vec3(0.0f, 0.0f, 0.0f)) m_model = glm::translate(m_model, m_position);
 	if (m_scale != glm::vec3(1.0f, 1.0f, 1.0f)) m_model = glm::scale(m_model, m_scale);
-	if (m_rotation != glm::vec3(0.0f, 0.0f, 0.0f)) m_model = glm::rotate(m_model, m_rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	if (m_rotation != glm::vec3(0.0f, 0.0f, 0.0f)) m_model = glm::rotate(m_model, m_rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-	if (m_rotation != glm::vec3(0.0f, 0.0f, 0.0f)) m_model = glm::rotate(m_model, m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	if (m_rotation.x != 0.0f) m_model = glm::rotate(m_model, m_rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	if (m_rotation.y != 0.0f) m_model = glm::rotate(m_model, m_rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	if (m_rotation.z != 0.0f) m_model = glm::rotate(m_model, m_rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
 	shader->SetUniformMatrix4fv("model", m_model);
 	m_model = glm::mat4(1.0f);

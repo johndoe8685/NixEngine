@@ -19,28 +19,6 @@ class Light
         spotLight = 3,
         flashLight = 4
     };
-    struct ambientLight
-    {
-        float m_ambientIntensity;
-    };
-    struct ambientUniformList
-    {
-        const char* m_colorName = "ambientLight.base.color";
-        const char* m_ambientIntensityName = "ambientLight.ambientIntensity";
-    };
-    struct directionalLight
-    {
-        glm::vec3 m_direction;
-        float m_diffuseIntensity;
-        float m_ambientIntensity;
-    };
-    struct directionalUniformList
-    {
-        const char* m_colorName = "directionalLight.diffuse.ambient.base.color";
-        const char* m_ambientIntensityName = "directionalLight.diffuse.ambient.ambientIntensity";
-        const char* m_diffuseIntensityName = "directionalLight.diffuse.diffuseIntensity";
-        const char* m_directionName = "directionalLight.direction";
-    };
     struct pointLight
     {
         struct directionalLight directional;
@@ -152,7 +130,6 @@ public:
     void ShadowMapRead(unsigned int slot);
     glm::mat4 CalculateLightTransform();
     
-    void setAsAmbientLight(float ambientIntensity);
     void setAsDirectionalLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z);
     void setAsPointLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z, float constant, float linear, float exponent);
     void setAsSpotLight(float ambientIntensity, float diffuseIntensity, float x, float y, float z, float constant, float linear, float exponent, glm::vec3 direction, float edge);
