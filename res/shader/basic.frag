@@ -42,10 +42,6 @@ struct SpotLight
     vec3 direction;
     float edge;
 };
-struct FlashLight
-{
-	SpotLight spot;
-};
 
 struct Material
 {
@@ -58,7 +54,6 @@ uniform int spotLightCount;
 uniform sampler2D aTexture;
 uniform AmbientLight ambientLight;
 uniform DirectionalLight directionalLight;
-uniform FlashLight flashLight;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
 uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
 uniform Material material;

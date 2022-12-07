@@ -11,22 +11,7 @@ namespace NixEngine {
         
         Camera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.2f);
         Window window(800, 600, &camera);
-        
-        Light directionalLight = Light(1.0f, 1.0f, 1.0f);
-        Light blueLight = Light(0.0f, 0.0f, 1.0f);
-        Light greenLight = Light(0.0f, 1.0f, 0.0f);
-        Light redLight = Light(1.0f, 0.0f, 0.0f);
-        Light flashLight = Light(1.0f, 1.0f, 1.0f);
-        
-        directionalLight.setAsDirectionalLight(0.2f, 0.8f, 2.0f, -1.0f, -2.0f);
-        blueLight.setAsPointLight(0.0f, 1.0f, -1.0f, 0.0f, -3.0f, 0.3f, 0.2f, 0.1f);
-        greenLight.setAsPointLight(0.0f, 1.0f, 1.0f, 0.0f, -3.0f, 0.3f, 0.2f, 0.1f);
-        redLight.setAsPointLight(0.0f, 0.5f, 0.0f, 0.0f, -1.732f, 0.3f, 0.2f, 0.1f);
-        flashLight.setAsSpotLight(0.0f, 0.5f, 0.0f, 2.0f, 0.0f, 1.0f, 0.0f, 0.0f, glm::vec3(-1.0f, 0.0f, 0.0f), 30.0f);
 
-        Material shinyMaterial(4.0f, 256);
-        Material dullMaterial(1.0f, 4);
-        
         ShaderManager& shaderManager = ShaderManager::Get();
         AssetManager& assetManager = AssetManager::Get();
 
@@ -38,6 +23,15 @@ namespace NixEngine {
 
         scene->AddModel("Floor", "/res/model/floor.obj");
         scene->AddModel("Dragon", "/res/model/dragon2.obj");
+        
+        DirectionalLight directionalLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2.0f, -1.0f, -2.0f), 0.2f, 0.8f);
+        PointLight blueLight(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(-1.0f, 0.0f, -3.0f), 0.0f, 1.0f, true);
+        PointLight greenLight(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.0f, -3.0f), 0.0f, 1.0f, true);
+        PointLight redLight(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.732f), 0.0f, 1.0f, true);
+        SpotLight flashLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), 0.0f, 1.0f, 30.0f, true);
+
+        Material shinyMaterial(4.0f, 256);
+        Material dullMaterial(1.0f, 4);
 
         Renderer renderer;
         
@@ -95,15 +89,15 @@ namespace NixEngine {
 
             glm::vec3 hand = camera.getPosition();
             hand.y = hand.y - 0.3f;
-            flashLight.setMovingLight(hand, camera.getDirection());
+            flashLight.setFlash(hand, camera.getDirection());
 
             //Use Light
-            if (debugconsole.getUseFlash()) flashLight.useLight(shader);
-            else flashLight.stopLight(shader);
-            blueLight.useLight(shader);
-            greenLight.useLight(shader);
-            redLight.useLight(shader);
-            //directionalLight.useLight(shader);
+            if (debugconsole.getUseFlash()) flashLight.UseLight();
+            else flashLight.StopLight();
+            blueLight.UseLight();
+            redLight.UseLight();
+            greenLight.UseLight();
+            //directionalLight.UseLight();
             
             glm::mat4 model(1.0f);
             shader->SetUniformMatrix4fv("projection", projection);

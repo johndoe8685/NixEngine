@@ -14,7 +14,6 @@ void Renderer::DrawMesh(Mesh* mesh, Shader* shader)
 {
     shader->Bind();
     mesh->RenderMesh();
-    shader->SetPointLightInUse(0);
     shader->Unbind();
 }
 
@@ -22,7 +21,6 @@ void Renderer::DrawModel(Model* model, Shader* shader)
 {
     shader->Bind();
     model->RenderModel();
-    shader->SetPointLightInUse(0);
     shader->Unbind();
 }
 
@@ -30,7 +28,6 @@ void Renderer::DrawScene(Scene* scene, Shader* shader)
 {
     shader->Bind();
     scene->RenderScene();
-    shader->SetPointLightInUse(0);
     shader->Unbind();
 }
 

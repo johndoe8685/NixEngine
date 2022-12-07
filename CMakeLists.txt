@@ -25,6 +25,12 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/vendor/imGui/imgui_demo.cpp
         ${PROJECT_SOURCE_DIR}/vendor/imGui/imgui_impl_glfw.cpp
         ${PROJECT_SOURCE_DIR}/vendor/imGui/imgui_impl_opengl3.cpp
+        ${PROJECT_SOURCE_DIR}/Light/light.cpp
+        ${PROJECT_SOURCE_DIR}/Light/ambientlight.cpp
+        ${PROJECT_SOURCE_DIR}/Light/directionallight.cpp
+        ${PROJECT_SOURCE_DIR}/Light/positionallight.cpp
+        ${PROJECT_SOURCE_DIR}/Light/pointlight.cpp
+        ${PROJECT_SOURCE_DIR}/Light/spotlight.cpp
         ${PROJECT_SOURCE_DIR}/main.cpp
         ${PROJECT_SOURCE_DIR}/Application.cpp
         ${PROJECT_SOURCE_DIR}/window.cpp
@@ -36,7 +42,6 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/renderer.cpp
         ${PROJECT_SOURCE_DIR}/mesh.cpp
         ${PROJECT_SOURCE_DIR}/camera.cpp
-        ${PROJECT_SOURCE_DIR}/light.cpp
         ${PROJECT_SOURCE_DIR}/material.cpp
         ${PROJECT_SOURCE_DIR}/model.cpp
         ${PROJECT_SOURCE_DIR}/debugconsole.cpp
@@ -56,6 +61,12 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_rectpack.h
         ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_impl_glfw.h
         ${PROJECT_INCLUDE_DIR}/vendor/imgui/imgui_impl_opengl3.h
+        ${PROJECT_INCLUDE_DIR}/Light/light.h
+        ${PROJECT_INCLUDE_DIR}/Light/ambientlight.h
+        ${PROJECT_INCLUDE_DIR}/Light/directionallight.h
+        ${PROJECT_INCLUDE_DIR}/Light/positionallight.h
+        ${PROJECT_INCLUDE_DIR}/Light/pointlight.h
+        ${PROJECT_INCLUDE_DIR}/Light/spotlight.h
         ${PROJECT_INCLUDE_DIR}/Application.h
         ${PROJECT_INCLUDE_DIR}/window.h
         ${PROJECT_INCLUDE_DIR}/system.h
@@ -70,7 +81,6 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/renderer.h
         ${PROJECT_INCLUDE_DIR}/mesh.h
         ${PROJECT_INCLUDE_DIR}/camera.h
-        ${PROJECT_INCLUDE_DIR}/light.h
         ${PROJECT_INCLUDE_DIR}/scene.h
         ${PROJECT_INCLUDE_DIR}/material.h
         ${PROJECT_INCLUDE_DIR}/model.h

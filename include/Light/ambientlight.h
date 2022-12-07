@@ -1,13 +1,15 @@
 #pragma once
-#include "light.h"
+#include "Light/light.h"
 
 class AmbientLight : public Light
 {
 private:
+	std::string m_colorName = "ambientLight.base.color";
+	std::string m_ambientIntensityName = "ambientLight.ambientIntensity";
+public:
 	float m_ambientIntensity;
 
-	const char* m_colorName = "ambientLight.base.color";
-	const char* m_ambientIntensityName = "ambientLight.ambientIntensity";
-public:
-	AmbientLight(float ambientIntensity);
+	AmbientLight(glm::vec3 color, float ambientIntensity);
+	void UseLight();
+	void StopLight();
 };

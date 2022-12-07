@@ -1,7 +1,5 @@
 #include "shader.h"
 
-int Shader::PointLightInUse = 0;
-
 Shader::Shader(std::string componentName,const std::string& fragmentShader,const std::string& vertexShader)
     :System(componentName, "Shader"), m_FragmentFilePath(fragmentShader), m_VertexFilePath(vertexShader), m_ModuleID(0)
 {
@@ -102,14 +100,4 @@ void Shader::SetUniform1i(const std::string& name, int v0)
     Bind();
     glUniform1i(GetUniformLocation(name), v0);
     Unbind();
-}
-
-void Shader::SetPointLightInUse(int value)
-{
-    Shader::PointLightInUse = value;
-}
-
-int Shader::GetPointLightInUse()
-{
-    return Shader::PointLightInUse;
 }
