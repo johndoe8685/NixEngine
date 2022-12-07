@@ -9,7 +9,7 @@ private:
 public:
 	float m_ambientIntensity;
 
-	AmbientLight(glm::vec3 color, float ambientIntensity);
+	AmbientLight(std::string componentName, glm::vec3 color, float ambientIntensity);
 	void UseLight();
 	void StopLight();
 };

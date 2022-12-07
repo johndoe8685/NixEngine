@@ -15,6 +15,6 @@ public:
 
 	static ShaderManager& Get() { return s_Instance; }
 
-	void addShader(std::string componentName, const std::string& fragmentShader, const std::string& vertexShader);
+	void AddShader(std::string componentName, const std::string& fragmentShader, const std::string& vertexShader);
 	Shader* getShader(std::string componentName);
 };

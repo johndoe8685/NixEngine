@@ -3,8 +3,8 @@
 int PointLight::m_PointLightIndex = 0;
 int PointLight::m_pointSize = 0;
 
-PointLight::PointLight(glm::vec3 color, glm::vec3 position, float ambientIntensity, float diffuseIntensity, bool isPoint)
-	:PositionalLight(color, position, ambientIntensity, diffuseIntensity), m_constant(0.3f), m_linear(0.2f), m_exponent(0.1f), m_inUse(false)
+PointLight::PointLight(std::string componentName, glm::vec3 color, glm::vec3 position, float ambientIntensity, float diffuseIntensity, bool isPoint)
+	:PositionalLight(componentName, color, position, ambientIntensity, diffuseIntensity), m_constant(0.3f), m_linear(0.2f), m_exponent(0.1f), m_inUse(false)
 {
 	char Buffer[1024] = { "\0" };
 

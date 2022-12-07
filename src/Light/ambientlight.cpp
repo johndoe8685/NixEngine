@@ -1,7 +1,7 @@
 #include "Light/ambientlight.h"
 
-AmbientLight::AmbientLight(glm::vec3 color, float ambientIntensity)
-	:Light(color), m_ambientIntensity(ambientIntensity)
+AmbientLight::AmbientLight(std::string componentName, glm::vec3 color, float ambientIntensity)
+	:Light(componentName, color), m_ambientIntensity(ambientIntensity)
 {
 }
 

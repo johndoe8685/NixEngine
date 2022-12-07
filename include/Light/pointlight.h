@@ -33,7 +33,7 @@ public:
     float m_exponent;
     bool m_inUse;
 
-    PointLight(glm::vec3 color, glm::vec3 position, float ambientIntensity, float diffuseIntensity, bool isPoint);
+    PointLight(std::string componentName, glm::vec3 color, glm::vec3 position, float ambientIntensity, float diffuseIntensity, bool isPoint);
     void UseLight();
     void StopLight();
 };

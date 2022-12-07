@@ -2,8 +2,8 @@
 
 int SpotLight::m_SpotLightIndex = 0;
 
-SpotLight::SpotLight(glm::vec3 color, glm::vec3 position, glm::vec3 direction, float ambientIntensity, float diffuseIntensity, float edge, bool isSpot)
-	:PointLight(color ,position, ambientIntensity, diffuseIntensity, false), m_direction(direction), m_edge(edge)
+SpotLight::SpotLight(std::string componentName, glm::vec3 color, glm::vec3 position, glm::vec3 direction, float ambientIntensity, float diffuseIntensity, float edge, bool isSpot)
+	:PointLight(componentName, color ,position, ambientIntensity, diffuseIntensity, false), m_direction(direction), m_edge(edge)
 {
 	m_direction = glm::normalize(direction);
 	m_edge = cosf(glm::radians(edge));

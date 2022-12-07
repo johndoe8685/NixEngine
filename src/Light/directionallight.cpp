@@ -1,7 +1,7 @@
 #include "Light/directionallight.h"
 
-DirectionalLight::DirectionalLight(glm::vec3 color, glm::vec3 direction , float ambientIntensity, float diffuseIntensity)
-	:AmbientLight(color, ambientIntensity), m_direction(direction), m_diffuseIntensity(diffuseIntensity)
+DirectionalLight::DirectionalLight(std::string componentName, glm::vec3 color, glm::vec3 direction , float ambientIntensity, float diffuseIntensity)
+	:AmbientLight(componentName, color, ambientIntensity), m_direction(direction), m_diffuseIntensity(diffuseIntensity)
 {
 }
 

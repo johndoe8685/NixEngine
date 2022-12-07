@@ -15,20 +15,26 @@ namespace NixEngine {
         ShaderManager& shaderManager = ShaderManager::Get();
         AssetManager& assetManager = AssetManager::Get();
 
-        assetManager.addScene("Default");
-        shaderManager.addShader("Basic", "/res/shader/basic.frag", "/res/shader/basic.vert");
+        assetManager.AddScene("Default");
+        shaderManager.AddShader("Basic", "/res/shader/basic.frag", "/res/shader/basic.vert");
 
         Shader* shader = shaderManager.getShader("Basic");
-        Scene* scene = assetManager.getScene("Default");
+        Scene* scene = assetManager.GetScene("Default");
+
+        assetManager.AddDirectionalLight("directionalLight", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2.0f, -1.0f, -2.0f), 0.2f, 0.8f);
+        assetManager.AddPointLight("blueLight", glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(-1.0f, 0.0f, -3.0f), 0.0f, 1.0f);
+        assetManager.AddPointLight("greenLight", glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.0f, -3.0f), 0.0f, 1.0f);
+        assetManager.AddPointLight("redLight", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.732f), 0.0f, 1.0f);
+        assetManager.AddSpotLight("flashLight", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), 0.0f, 1.0f, 30.0f);
 
         scene->AddModel("Floor", "/res/model/floor.obj");
         scene->AddModel("Dragon", "/res/model/dragon2.obj");
         
-        DirectionalLight directionalLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2.0f, -1.0f, -2.0f), 0.2f, 0.8f);
-        PointLight blueLight(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(-1.0f, 0.0f, -3.0f), 0.0f, 1.0f, true);
-        PointLight greenLight(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.0f, -3.0f), 0.0f, 1.0f, true);
-        PointLight redLight(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.732f), 0.0f, 1.0f, true);
-        SpotLight flashLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), 0.0f, 1.0f, 30.0f, true);
+        DirectionalLight* directionalLight = assetManager.GetDirectionalLight("directionalLight");
+        PointLight* blueLight = assetManager.GetPointLight("blueLight");
+        PointLight* greenLight = assetManager.GetPointLight("greenLight");
+        PointLight* redLight = assetManager.GetPointLight("redLight");
+        SpotLight* flashLight = assetManager.GetSpotLight("flashLight");
 
         Material shinyMaterial(4.0f, 256);
         Material dullMaterial(1.0f, 4);
@@ -89,15 +95,15 @@ namespace NixEngine {
 
             glm::vec3 hand = camera.getPosition();
             hand.y = hand.y - 0.3f;
-            flashLight.setFlash(hand, camera.getDirection());
+            flashLight->setFlash(hand, camera.getDirection());
 
             //Use Light
-            if (debugconsole.getUseFlash()) flashLight.UseLight();
-            else flashLight.StopLight();
-            blueLight.UseLight();
-            redLight.UseLight();
-            greenLight.UseLight();
-            //directionalLight.UseLight();
+            if (debugconsole.getUseFlash()) flashLight->UseLight();
+            else flashLight->StopLight();
+            blueLight->UseLight();
+            redLight->UseLight();
+            greenLight->UseLight();
+            //directionalLight->UseLight();
             
             glm::mat4 model(1.0f);
             shader->SetUniformMatrix4fv("projection", projection);

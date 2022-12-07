@@ -1,13 +1,13 @@
 #include "Light/light.h"
 
-Light::Light()
-	:m_color(glm::vec3(1.0f, 1.0f, 1.0f))
+Light::Light(std::string componentName)
+	:System(componentName, "Light"), m_color(glm::vec3(1.0f, 1.0f, 1.0f))
 {
 	shader = ShaderManager::Get().getShader("Basic");
 }
 
-Light::Light(glm::vec3 color)
-:m_color(color)
+Light::Light(std::string componentName, glm::vec3 color)
+	:System(componentName, "Light"), m_color(color)
 {
 	shader = ShaderManager::Get().getShader("Basic");
 }

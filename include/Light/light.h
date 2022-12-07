@@ -3,9 +3,10 @@
 #include <sstream>
 #include <vector>
 #include "vendor/glm/glm.hpp"
+#include "system.h"
 #include "shadermanager.h"
 
-class Light
+class Light : public System
 {
 private:
 
@@ -20,8 +21,8 @@ public:
 
     Shader* shader;
 
-    Light();
-    Light(glm::vec3 color);
+    Light(std::string componentName);
+    Light(std::string componentName, glm::vec3 color);
     ~Light();
 
     bool createShadowMap(int shadowWidth, int shadowHeight);

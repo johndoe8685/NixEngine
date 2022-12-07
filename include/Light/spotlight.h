@@ -33,7 +33,7 @@ public:
 	float m_edge;
 	int m_spotSize;
 
-    SpotLight(glm::vec3 color, glm::vec3 position, glm::vec3 direction, float ambientIntensity, float diffuseIntensity, float edge, bool isSpot);
+    SpotLight(std::string componentName, glm::vec3 color, glm::vec3 position, glm::vec3 direction, float ambientIntensity, float diffuseIntensity, float edge, bool isSpot);
     void setFlash(glm::vec3 position, glm::vec3 direction);
 
     void UseLight();

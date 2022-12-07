@@ -12,7 +12,7 @@ public:
     glm::vec3 m_direction;
     float m_diffuseIntensity;
 
-    DirectionalLight(glm::vec3 color, glm::vec3 direction, float ambientIntensity, float diffuseIntensity);
+    DirectionalLight(std::string componentName, glm::vec3 color, glm::vec3 direction, float ambientIntensity, float diffuseIntensity);
     void UseLight();
     void StopLight();
 };
