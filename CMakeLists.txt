@@ -93,7 +93,7 @@ include_directories(${PROJECT_INCLUDE_DIR})
 file(COPY ${PROJECT_DIR}/res DESTINATION ${CMAKE_BINARY_DIR})
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} )
-set(GCC_COVERAGE_LINK_FLAGS "-lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl ")
+set(GCC_COVERAGE_LINK_FLAGS "-lGL -lX11 -lpthread -lXrandr -lXi -ldl ")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 target_link_libraries(${PROJECT_NAME} glfw)
 target_link_libraries(${PROJECT_NAME} ${PROJECT_VENDOR_DIR}/assimp-5.2.5/assimp-vc143-mtd.lib)

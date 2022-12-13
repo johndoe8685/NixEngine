@@ -7,7 +7,8 @@ DebugConsole::DebugConsole(Window* window)
     m_y = 0.0f;
     m_z = -2.5f;
     m_fov = 90.0f;
-    m_Useflash = true;
+    m_Useflash = false;
+    m_UseDirectional = false;
     m_deltaTime = 0.0f;
     m_angle = 80.0f;
     IMGUI_CHECKVERSION();
@@ -41,6 +42,7 @@ void DebugConsole::Run()
     ImGui::SliderFloat("Speed", &m_angle, 0.0f, 360.0f);
     ImGui::SliderFloat("FOV", &m_fov, 5.0f, 120.0f);
     ImGui::Checkbox("FlashLight", &m_Useflash);
+    ImGui::Checkbox("Directional Light", &m_UseDirectional);
     ImGui::End();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

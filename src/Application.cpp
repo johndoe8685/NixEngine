@@ -98,12 +98,22 @@ namespace NixEngine {
             flashLight->setFlash(hand, camera.getDirection());
 
             //Use Light
-            if (debugconsole.getUseFlash()) flashLight->UseLight();
+            if (debugconsole.m_Useflash) flashLight->UseLight();
             else flashLight->StopLight();
-            blueLight->UseLight();
-            redLight->UseLight();
-            greenLight->UseLight();
-            //directionalLight->UseLight();
+            if (debugconsole.m_UseDirectional) 
+            {
+                directionalLight->UseLight();
+                blueLight->StopLight();
+                redLight->StopLight();
+                greenLight->StopLight();
+            }
+            else 
+            {
+                directionalLight->StopLight();
+                blueLight->UseLight();
+                redLight->UseLight();
+                greenLight->UseLight();
+            }
             
             glm::mat4 model(1.0f);
             shader->SetUniformMatrix4fv("projection", projection);
