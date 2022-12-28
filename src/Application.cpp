@@ -28,8 +28,9 @@ namespace NixEngine {
         assetManager.AddSpotLight("flashLight", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), 0.0f, 1.0f, 30.0f);
 
         scene->AddModel("Floor", "/res/model/floor.obj");
-        scene->AddModel("Dragon", "/res/model/dragon2.obj");
-        
+        scene->AddModel("Dragon", "/res/model/dragon.obj");
+        //scene->AddModel("Land", "/res/model/land.fbx");
+
         DirectionalLight* directionalLight = assetManager.GetDirectionalLight("directionalLight");
         PointLight* blueLight = assetManager.GetPointLight("blueLight");
         PointLight* greenLight = assetManager.GetPointLight("greenLight");
@@ -84,7 +85,33 @@ namespace NixEngine {
             {
                 curAngle -= 360;
             }
-            
+
+            /*--------------------------------------------------------------------------------------------------------------------------*/
+            if (!debugconsole.m_UseDirectional)
+            {
+                directionalLight->UseLight();
+                blueLight->StopLight();
+                redLight->StopLight();
+                greenLight->StopLight();
+            }
+            else
+            {
+                directionalLight->StopLight();
+                blueLight->UseLight();
+                redLight->UseLight();
+                greenLight->UseLight();
+            }
+
+            if (window.getWidth() != 0 && window.getHeight() != 0) projection = glm::perspective(glm::radians(debugconsole.getFov()), (float)400 / (float)300, 0.1f, 100.0f);
+            shader->SetUniformMatrix4fv("projection", projection);
+            shader->SetUniformMatrix4fv("view", camera.calculateViewMatrix());
+
+            debugconsole.test.Write(scene, shader);
+            renderer.DrawScene(scene);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glViewport(0, 0, window.getWidth(), window.getHeight());
+            /*--------------------------------------------------------------------------------------------------------------------------*/
+
             //Calculate fov
             if(window.getWidth() != 0 && window.getHeight() != 0) projection = glm::perspective(glm::radians(debugconsole.getFov()), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 100.0f);
 
@@ -121,7 +148,7 @@ namespace NixEngine {
 
             //Draw Scene
             dullMaterial.useMaterial(shader, "material.specularIntensity", "material.shininess");
-            renderer.DrawScene(scene, shader);
+            renderer.DrawScene(scene);
 
             debugconsole.Run();
 

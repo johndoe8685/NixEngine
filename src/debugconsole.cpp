@@ -1,7 +1,7 @@
 #include "debugconsole.h"
 
 DebugConsole::DebugConsole(Window* window)
-    :m_window(window)
+    :m_window(window), test("test", 400, 300)
 {
     m_x = 0.0f;
     m_y = 0.0f;
@@ -9,6 +9,7 @@ DebugConsole::DebugConsole(Window* window)
     m_fov = 90.0f;
     m_Useflash = false;
     m_UseDirectional = false;
+    m_isFramebufferOpen = false;
     m_deltaTime = 0.0f;
     m_angle = 80.0f;
     IMGUI_CHECKVERSION();
@@ -43,7 +44,22 @@ void DebugConsole::Run()
     ImGui::SliderFloat("FOV", &m_fov, 5.0f, 120.0f);
     ImGui::Checkbox("FlashLight", &m_Useflash);
     ImGui::Checkbox("Directional Light", &m_UseDirectional);
+    if (ImGui::Button("FrameBuffers"))
+    {
+        if (m_isFramebufferOpen) m_isFramebufferOpen = false;
+        else m_isFramebufferOpen = true;
+    }
     ImGui::End();
+    if (m_isFramebufferOpen)
+    {
+        ImGui::Begin("FrameBuffers Window", &m_isFramebufferOpen);
+        ImVec2 uv_min = ImVec2(0.0f, 1.0f);                 // Top-left
+        ImVec2 uv_max = ImVec2(1.0f, 0.0f);                 // Lower-right
+        ImVec4 tint_col = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);   // No tint
+        ImVec4 border_col = ImVec4(0.2f, 0.3f, 0.3f, 1.0f); // 100% green
+        ImGui::Image((ImTextureID)test.m_frameBufferTexture, ImVec2(test.m_textureWidth, test.m_textureHeight), uv_min, uv_max, tint_col, border_col);
+        ImGui::End();
+    }
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

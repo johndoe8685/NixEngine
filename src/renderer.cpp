@@ -2,7 +2,10 @@
 
 Renderer::Renderer()
 {
+    shadermanager = ShaderManager::Get();
+
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 }
 
 Renderer::~Renderer()
@@ -10,25 +13,15 @@ Renderer::~Renderer()
     
 }
 
-void Renderer::DrawMesh(Mesh* mesh, Shader* shader)
+void Renderer::DrawScene(Scene* scene)
 {
-    shader->Bind();
-    mesh->RenderMesh();
-    shader->Unbind();
+    Shader* shader = shadermanager.getShader("Basic");
+    scene->RenderScene(shader);
 }
 
-void Renderer::DrawModel(Model* model, Shader* shader)
+void Renderer::ProcessShadowMap()
 {
-    shader->Bind();
-    model->RenderModel();
-    shader->Unbind();
-}
 
-void Renderer::DrawScene(Scene* scene, Shader* shader)
-{
-    shader->Bind();
-    scene->RenderScene();
-    shader->Unbind();
 }
 
 void Renderer::Clear()

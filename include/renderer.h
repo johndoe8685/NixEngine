@@ -12,12 +12,11 @@
 class Renderer
 {
 private:
-
+    ShaderManager shadermanager;
 public:
     Renderer();
     ~Renderer();
-    void DrawMesh(Mesh* mesh, Shader* shader);
-    void DrawModel(Model* model, Shader* shader);
-    void DrawScene(Scene* scene, Shader* shader);
+    void DrawScene(Scene* scene);
+    void ProcessShadowMap();
     void Clear();
 };

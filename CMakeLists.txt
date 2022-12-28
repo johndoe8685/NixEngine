@@ -47,7 +47,9 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/debugconsole.cpp
         ${PROJECT_SOURCE_DIR}/scene.cpp
         ${PROJECT_SOURCE_DIR}/assetmanager.cpp
+        ${PROJECT_SOURCE_DIR}/framebuffer.cpp
         ${PROJECT_SOURCE_DIR}/shadermanager.cpp
+        ${PROJECT_SOURCE_DIR}/shadowmap.cpp
 )
 
 set(PROJECT_HEADERS
@@ -87,14 +89,17 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/debugconsole.h
         ${PROJECT_INCLUDE_DIR}/assetmanager.h
         ${PROJECT_INCLUDE_DIR}/shadermanager.h
+        ${PROJECT_INCLUDE_DIR}/framebuffer.h
+        ${PROJECT_INCLUDE_DIR}/shadowmap.h
 )
 
 include_directories(${PROJECT_INCLUDE_DIR})
+file(COPY ${PROJECT_VENDOR_DIR}/assimp-5.2.5/assimp-vc143-mt.dll DESTINATION ${CMAKE_BINARY_DIR})
 file(COPY ${PROJECT_DIR}/res DESTINATION ${CMAKE_BINARY_DIR})
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} )
-set(GCC_COVERAGE_LINK_FLAGS "-lGL -lX11 -lpthread -lXrandr -lXi -ldl ")
+set(GCC_COVERAGE_LINK_FLAGS "-lGL -lX11 -lpthread -lXrandr -lXi -ldl")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 target_link_libraries(${PROJECT_NAME} glfw)
-target_link_libraries(${PROJECT_NAME} ${PROJECT_VENDOR_DIR}/assimp-5.2.5/assimp-vc143-mtd.lib)
-target_link_libraries(${PROJECT_NAME} ${PROJECT_VENDOR_DIR}/assimp-5.2.5/zlibstaticd.lib)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_VENDOR_DIR}/assimp-5.2.5/assimp-vc143-mt.lib)
+target_link_libraries(${PROJECT_NAME} ${PROJECT_VENDOR_DIR}/assimp-5.2.5/zlibstatic.lib)

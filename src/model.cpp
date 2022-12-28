@@ -24,10 +24,8 @@ void Model::SetScale(float x, float y, float z)
 	m_scale = glm::vec3(x, y, z);
 }
 
-void Model::processModel()
+void Model::ProcessModel(Shader* shader)
 {
-	Shader* shader = ShaderManager::Get().getShader("Basic");
-
 	if (m_position != glm::vec3(0.0f, 0.0f, 0.0f)) m_model = glm::translate(m_model, m_position);
 	if (m_scale != glm::vec3(1.0f, 1.0f, 1.0f)) m_model = glm::scale(m_model, m_scale);
 	if (m_rotation.x != 0.0f) m_model = glm::rotate(m_model, m_rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));

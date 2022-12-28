@@ -4,5 +4,4 @@
 /.cache
 /out
 imgui.ini
-/vendor/assimp-5.2.5/assimp-vc143-mtd.lib
-/vendor/assimp-5.2.5/zlibstaticd.lib
+/vendor/assimp-5.2.5/

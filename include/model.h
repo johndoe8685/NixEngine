@@ -28,7 +28,7 @@ public:
 	Model(std::string componentName, const std::string& path);
 	~Model();
 
-	void processModel();
+	void ProcessModel(Shader* shader);
 	void RenderModel();
 
 	void SetPosition(float x, float y, float z);

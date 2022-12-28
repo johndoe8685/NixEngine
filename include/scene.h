@@ -16,5 +16,6 @@ public:
 
 	Model* getModel(std::string componentName);
 
-	void RenderScene();
+	void RenderScene(Shader* shader);
+	void ProcessScene(Shader* shader);
 };

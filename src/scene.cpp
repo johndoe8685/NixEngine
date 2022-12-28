@@ -25,16 +25,23 @@ Model* Scene::getModel(std::string componentName)
 	return m_ModelList[0];
 }
 
-void Scene::RenderScene()
+void Scene::RenderScene(Shader* shader)
 {
-	Shader* shader = ShaderManager::Get().getShader("Basic");
-
 	for (size_t i = 0; i < m_ModelList.size(); i++)
 	{
-		m_ModelList[i]->processModel();
+		m_ModelList[i]->ProcessModel(shader);
+
 		shader->Bind();
 		m_ModelList[i]->RenderModel();
 		shader->Unbind();
+	}
+}
+
+void Scene::ProcessScene(Shader* shader)
+{
+	for (size_t i = 0; i < m_ModelList.size(); i++)
+	{
+		m_ModelList[i]->ProcessModel(shader);
 	}
 }
 
