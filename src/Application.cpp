@@ -17,8 +17,11 @@ namespace NixEngine {
 
         assetManager.AddScene("Default");
         shaderManager.AddShader("Basic", "/res/shader/basic.frag", "/res/shader/basic.vert");
+        shaderManager.AddShader("Shadow", "/res/shader/shadow_map.frag", "/res/shader/shadow_map.vert");
+        shaderManager.AddShader("DepthDebug", "/res/shader/debug_quad.frag", "/res/shader/debug_quad.vert");
 
         Shader* shader = shaderManager.getShader("Basic");
+        Shader* shadow_shader = shaderManager.getShader("Shadow");
         Scene* scene = assetManager.GetScene("Default");
 
         assetManager.AddDirectionalLight("directionalLight", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2.0f, -1.0f, -2.0f), 0.2f, 0.8f);
@@ -29,7 +32,6 @@ namespace NixEngine {
 
         scene->AddModel("Floor", "/res/model/floor.obj");
         scene->AddModel("Dragon", "/res/model/dragon.obj");
-        scene->AddModel("Land", "/res/model/land_big.fbx");
 
         DirectionalLight* directionalLight = assetManager.GetDirectionalLight("directionalLight");
         PointLight* blueLight = assetManager.GetPointLight("blueLight");
@@ -40,7 +42,7 @@ namespace NixEngine {
         Material shinyMaterial(4.0f, 256);
         Material dullMaterial(1.0f, 4);
 
-        Renderer renderer;
+        Renderer renderer(&window);
         
         DebugConsole debugconsole(&window);
 
@@ -56,6 +58,10 @@ namespace NixEngine {
         //Get the first frame time
         lastFrame = glfwGetTime();
 
+        //Set Model Variables staticly
+        Model* floor = scene->getModel("Floor");
+        floor->SetPosition(0.0f, -1.0f, 0.0f);
+
         while (!window.GetWindowShouldClose())
         {
             glfwPollEvents();
@@ -65,9 +71,6 @@ namespace NixEngine {
             dragon->SetPosition(debugconsole.getX(), debugconsole.getY(), debugconsole.getZ());
             dragon->SetScale(0.25f, 0.25f, 0.25f);
             dragon->SetRotation(0.0f, curAngle, 0.0f);
-
-            Model* floor = scene->getModel("Floor");
-            floor->SetPosition(0.0f, -1.0f, 0.0f);
 
             //Get the deltaTime
             curFrame = glfwGetTime();
@@ -86,38 +89,10 @@ namespace NixEngine {
                 curAngle -= 360;
             }
 
-            /*--------------------------------------------------------------------------------------------------------------------------*/
-            if (!debugconsole.m_UseDirectional)
-            {
-                directionalLight->UseLight();
-                blueLight->StopLight();
-                redLight->StopLight();
-                greenLight->StopLight();
-            }
-            else
-            {
-                directionalLight->StopLight();
-                blueLight->UseLight();
-                redLight->UseLight();
-                greenLight->UseLight();
-            }
-
-            if (window.getWidth() != 0 && window.getHeight() != 0) projection = glm::perspective(glm::radians(debugconsole.getFov()), (float)400 / (float)300, 0.1f, 500.0f);
-            shader->SetUniformMatrix4fv("projection", projection);
-            shader->SetUniformMatrix4fv("view", camera.calculateViewMatrix());
-
-            debugconsole.test.Write(scene, shader);
-            renderer.DrawScene(scene);
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            glViewport(0, 0, window.getWidth(), window.getHeight());
-            /*--------------------------------------------------------------------------------------------------------------------------*/
-
             //Calculate fov
-            if(window.getWidth() != 0 && window.getHeight() != 0) projection = glm::perspective(glm::radians(debugconsole.getFov()), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 500.0f);
+            if(window.getWidth() != 0 && window.getHeight() != 0) projection = glm::perspective(glm::radians(debugconsole.getFov()), (float)window.getWidth() / (float)window.getHeight(), 0.1f, 1000.0f);
 
             //Clear the screen
-            //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             renderer.Clear();
 
             glm::vec3 hand = camera.getPosition();
@@ -148,7 +123,10 @@ namespace NixEngine {
 
             //Draw Scene
             dullMaterial.useMaterial(shader, "material.specularIntensity", "material.shininess");
+            //renderer.DepthDebug(scene);
             renderer.DrawScene(scene);
+
+
 
             debugconsole.Run();
 

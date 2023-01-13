@@ -3,6 +3,8 @@
 DebugConsole::DebugConsole(Window* window)
     :m_window(window), test("test", 400, 300)
 {
+    assetmanager = AssetManager::Get();
+    testshadow = assetmanager.GetShadowMap(0);
     m_x = 0.0f;
     m_y = 0.0f;
     m_z = -2.5f;
@@ -44,6 +46,7 @@ void DebugConsole::Run()
     ImGui::SliderFloat("FOV", &m_fov, 5.0f, 120.0f);
     ImGui::Checkbox("FlashLight", &m_Useflash);
     ImGui::Checkbox("Directional Light", &m_UseDirectional);
+    /*
     if (ImGui::Button("FrameBuffers"))
     {
         if (m_isFramebufferOpen) m_isFramebufferOpen = false;
@@ -60,6 +63,8 @@ void DebugConsole::Run()
         ImGui::Image((ImTextureID)test.m_frameBufferTexture, ImVec2(test.m_textureWidth, test.m_textureHeight), uv_min, uv_max, tint_col, border_col);
         ImGui::End();
     }
+    */
+    ImGui::End();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

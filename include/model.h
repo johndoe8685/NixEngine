@@ -7,10 +7,11 @@
 #include <vendor/assimp/Importer.hpp>
 #include <vendor/assimp/scene.h>
 #include <vendor/assimp/postprocess.h>
+#include "shader.h"
 #include "system.h"
-#include "shadermanager.h"
 #include "mesh.h"
 #include "texture.h"
+#include "shadowmap.h"
 
 class Model : public System
 {
@@ -29,6 +30,7 @@ public:
 	~Model();
 
 	void ProcessModel(Shader* shader);
+	void RenderModel(ShadowMap* shadowMap);
 	void RenderModel();
 
 	void SetPosition(float x, float y, float z);

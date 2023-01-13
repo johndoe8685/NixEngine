@@ -25,6 +25,18 @@ Model* Scene::getModel(std::string componentName)
 	return m_ModelList[0];
 }
 
+void Scene::RenderScene(ShadowMap* shadowMap, Shader* shader)
+{
+	for (size_t i = 0; i < m_ModelList.size(); i++)
+	{
+		m_ModelList[i]->ProcessModel(shader);
+
+		shader->Bind();
+		m_ModelList[i]->RenderModel(shadowMap);
+		shader->Unbind();
+	}
+}
+
 void Scene::RenderScene(Shader* shader)
 {
 	for (size_t i = 0; i < m_ModelList.size(); i++)
@@ -43,6 +55,12 @@ void Scene::ProcessScene(Shader* shader)
 	{
 		m_ModelList[i]->ProcessModel(shader);
 	}
+}
+
+void Scene::ProcessShadowMap(ShadowMap* shadowMap, Shader* shader)
+{
+	shadowMap->Write();
+	shadowMap->Process(shader);
 }
 
 Scene::~Scene()

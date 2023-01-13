@@ -29,6 +29,9 @@ void AssetManager::AddDirectionalLight(std::string componentName, glm::vec3 colo
 {
 	std::shared_ptr<DirectionalLight> light = std::make_shared<DirectionalLight>(componentName, color, direction, ambientIntensity, diffuseIntensity);
 	m_DirectionalLightMap[componentName] = light;
+	
+	std::shared_ptr<ShadowMap> shadowMap = std::make_shared<ShadowMap>(componentName, 8192, 8192, direction);
+	m_ShadowMapList.push_back(shadowMap);
 }
 
 void AssetManager::AddPointLight(std::string componentName, glm::vec3 color, glm::vec3 position, float ambientIntensity, float diffuseIntensity)
@@ -67,6 +70,16 @@ PointLight* AssetManager::GetPointLight(std::string componentName)
 SpotLight* AssetManager::GetSpotLight(std::string componentName)
 {
 	return dynamic_cast<SpotLight*>(find(componentName, m_SpotLightMap));
+}
+
+ShadowMap* AssetManager::GetShadowMap(size_t index)
+{
+	return dynamic_cast<ShadowMap*>(m_ShadowMapList[index].get());
+}
+
+std::vector<std::shared_ptr<ShadowMap>>* AssetManager::GetShadowMapList()
+{
+	return &m_ShadowMapList;
 }
 
 

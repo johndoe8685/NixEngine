@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <memory>
+#include <vector>
 #include "scene.h"
 #include "Light/light.h"
 #include "Light/ambientlight.h"
@@ -8,6 +9,7 @@
 #include "Light/positionallight.h"
 #include "Light/pointlight.h"
 #include "Light/spotlight.h"
+#include "shadowmap.h"
 
 class AssetManager : public System
 {
@@ -19,6 +21,7 @@ private:
 	std::unordered_map<std::string, std::shared_ptr<DirectionalLight>> m_DirectionalLightMap;
 	std::unordered_map<std::string, std::shared_ptr<PointLight>> m_PointLightMap;
 	std::unordered_map<std::string, std::shared_ptr<SpotLight>> m_SpotLightMap;
+	std::vector<std::shared_ptr<ShadowMap>> m_ShadowMapList;
 	template<typename T> T* find(std::string componentName, std::unordered_map<std::string, std::shared_ptr<T>> map);
 public:
 	AssetManager();
@@ -36,4 +39,6 @@ public:
 	DirectionalLight* GetDirectionalLight(std::string componentName);
 	PointLight* GetPointLight(std::string componentName);
 	SpotLight* GetSpotLight(std::string componentName);
+	ShadowMap* GetShadowMap(size_t index);
+	std::vector<std::shared_ptr<ShadowMap>>* GetShadowMapList();
 };

@@ -36,6 +36,25 @@ void Model::ProcessModel(Shader* shader)
 	m_model = glm::mat4(1.0f);
 }
 
+void Model::RenderModel(ShadowMap* shadowMap)
+{
+	for (size_t i = 0; i < m_meshList.size(); i++)
+	{
+		unsigned int materialIndex = m_textureID[i];
+
+		if (materialIndex < m_textureList.size() && m_textureList[materialIndex])
+		{
+			shadowMap->Read(GL_TEXTURE1); //Buralar deðiþmesi lazým çünkü birden fazla texture kullanýlýrsa buna göre yer sampler yer deðiþtirmeli
+			m_textureList[materialIndex]->Bind();
+			m_meshList[i]->RenderMesh();
+		}
+		else
+		{
+			m_meshList[i]->RenderMesh();
+		}
+	}
+}
+
 void Model::RenderModel()
 {
 	for (size_t i = 0; i < m_meshList.size(); i++)
@@ -53,6 +72,7 @@ void Model::RenderModel()
 		}
 	}
 }
+
 
 void Model::LoadModel()
 {
@@ -147,7 +167,7 @@ void Model::processTexture(const aiScene* scene)
 				std::string filename = std::string(path.data).substr(idx + 1);
 
 				std::string texPath = std::string("/res/texture/") + directory.getFileName() + "/" + filename;
-				debugger.giveMessage(Debugger::DebugLevel::Info, "Loading::Texture", texPath);
+				debugger.giveMessage(Debugger::DebugLevel::Info, "Texture::Loading", texPath);
 
 				m_textureList[i] = new Texture(texPath);
 

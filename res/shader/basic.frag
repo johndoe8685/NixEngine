@@ -3,6 +3,7 @@
 in vec2 TexCoord;
 in vec3 Normal;
 in vec3 FragPos;
+in vec4 LightSpacePos;
 
 const int MAX_POINT_LIGHTS = 10;
 const int MAX_SPOT_LIGHTS = 5;
@@ -42,26 +43,55 @@ struct SpotLight
     vec3 direction;
     float edge;
 };
-
 struct Material
 {
     float specularIntensity;
     float shininess;
 };
 
+uniform sampler2D aTexture;
+uniform sampler2D shadowMap;
+
 uniform int pointLightCount;	
 uniform int spotLightCount;
-uniform sampler2D aTexture;
+
+uniform float ShadowMapBiasMin;
+uniform float ShadowMapBiasMax;
+
 uniform AmbientLight ambientLight;
 uniform DirectionalLight directionalLight;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
 uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
+
 uniform Material material;
 uniform vec3 eyePosition;
 
+
+
 out vec4 FragColor;
 
-vec4 CalcLightByDirection(DiffuseLight diffuse, vec3 direction)
+float ShadowCalculation(vec4 LightSpacePos, vec3 direction)
+{
+	vec3 projCoords = LightSpacePos.xyz / LightSpacePos.w;
+	projCoords = projCoords * 0.5 + 0.5; 
+	float closestDepth = texture(shadowMap, projCoords.xy).r;
+	float currentDepth = projCoords.z;
+	float bias = max(ShadowMapBiasMax * (1.0 - dot(Normal, direction)), ShadowMapBiasMin);
+	float shadow = 0.0;
+	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+	for(int x = -1; x <= 1; ++x)
+	{
+		for(int y = -1; y <= 1; ++y)
+		{
+		   float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+	       shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
+	    }    
+	}
+	shadow /= 9.0;
+    return shadow;
+}
+
+vec4 CalcLightByDirection(DiffuseLight diffuse, vec3 direction, float shadowFactor)
 {
 	vec4 ambientColor = vec4(diffuse.ambient.base.color, 1.0f) * diffuse.ambient.ambientIntensity;
     float diffuseFactor = max(dot(normalize(Normal), normalize(direction)), 0.0f);
@@ -81,12 +111,13 @@ vec4 CalcLightByDirection(DiffuseLight diffuse, vec3 direction)
         }
     }
 	
-	return (ambientColor + diffuseColor + specularColor);
+	return (ambientColor + (1.0 - shadowFactor) * (diffuseColor + specularColor));
 }
 
 vec4 CalcDirectionalLight()
 {
-	return CalcLightByDirection(directionalLight.diffuse, directionalLight.direction);
+	float shadow = ShadowCalculation(LightSpacePos, directionalLight.direction);
+	return CalcLightByDirection(directionalLight.diffuse, directionalLight.direction, shadow);
 }
 
 vec4 CalcPointLight(PointLight point)
@@ -95,7 +126,7 @@ vec4 CalcPointLight(PointLight point)
     float distance = length(direction);
     direction = normalize(direction);
 
-    vec4 color = CalcLightByDirection(point.diffuse, direction);
+    vec4 color = CalcLightByDirection(point.diffuse, direction, 0.0f);
     float attenuation = point.exponent * distance * distance + point.linear * distance + point.constant;
 
     return ( color / attenuation);
@@ -127,7 +158,7 @@ vec4 CalcPointLights()
 		vec3 direction = FragPos - pointLights[i].position;
 		float distance = length(direction);
 		
-		vec4 color = CalcLightByDirection(pointLights[i].diffuse, direction);
+		vec4 color = CalcLightByDirection(pointLights[i].diffuse, direction, 0.0f);
 		float attenuation = pointLights[i].exponent * distance * distance + pointLights[i].linear * distance + pointLights[i].constant;
 		totalColor += (color / attenuation);
 		}

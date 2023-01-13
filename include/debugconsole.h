@@ -1,6 +1,8 @@
 #pragma once
 #include "window.h"
-#include "framebuffer.h"
+//---Testing---
+#include "assetmanager.h"
+//---Testing---
 #include "vendor/imGui/imgui.h"
 #include "vendor/imGui/imgui_impl_glfw.h"
 #include "vendor/imGui/imgui_impl_opengl3.h"
@@ -15,6 +17,10 @@ private:
 	float m_angle;
 	bool m_isFramebufferOpen;
 	Window* m_window;
+	//---Testing---
+	AssetManager assetmanager;
+	ShadowMap* testshadow;
+	//---Testing---
 public:
 	FrameBuffer test;
 	DebugConsole(Window* window);

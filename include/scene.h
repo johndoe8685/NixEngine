@@ -1,8 +1,9 @@
 #pragma once
-
 #include <vector>
 #include "system.h"
 #include "model.h"
+#include "shadowmap.h"
+
 
 class Scene : public System
 {
@@ -16,6 +17,8 @@ public:
 
 	Model* getModel(std::string componentName);
 
+	void RenderScene(ShadowMap* shadowMap, Shader* shader);
 	void RenderScene(Shader* shader);
 	void ProcessScene(Shader* shader);
+	void ProcessShadowMap(ShadowMap* shadowMap, Shader* shader);
 };
