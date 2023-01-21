@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <unordered_map>
 #include "system.h"
 
 class Shader : public System
@@ -13,6 +14,7 @@ private:
     unsigned int m_ModuleID;
     std::string m_FragmentFilePath;
 	std::string m_VertexFilePath;
+    std::unordered_map<std::string, GLint> m_UniformLocationMap;
 public:
     Shader(std::string componentName, const std::string& fragmentShader, const std::string& vertexShader);
     ~Shader() { glDeleteProgram(m_ModuleID); }

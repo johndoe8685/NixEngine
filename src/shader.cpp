@@ -65,10 +65,17 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 
 int Shader::GetUniformLocation(const std::string& name)
 {
-    int location = glGetUniformLocation(m_ModuleID, name.c_str());
-    if (location == -1)
-        debugger.giveMessage(Debugger::Warning, "GetUniformLocation::Uniform Doesnt exist", name);
-    return location;
+    if (m_UniformLocationMap.find(name) != m_UniformLocationMap.end())
+    {
+        return m_UniformLocationMap[name];
+    }
+    else
+    {
+        int location = glGetUniformLocation(m_ModuleID, name.c_str());
+        if (location == -1)
+            debugger.giveMessage(Debugger::Warning, "GetUniformLocation::Uniform Doesnt exist", name);
+        return location;
+    }
 }
 
 void Shader::SetUniformMatrix4fv(const std::string& name, glm::mat4 value)

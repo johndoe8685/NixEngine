@@ -29,7 +29,7 @@ void AssetManager::AddDirectionalLight(std::string componentName, glm::vec3 colo
 {
 	std::shared_ptr<DirectionalLight> light = std::make_shared<DirectionalLight>(componentName, color, direction, ambientIntensity, diffuseIntensity);
 	m_DirectionalLightMap[componentName] = light;
-	
+
 	std::shared_ptr<ShadowMap> shadowMap = std::make_shared<ShadowMap>(componentName, 8192, 8192, direction);
 	m_ShadowMapList.push_back(shadowMap);
 }
