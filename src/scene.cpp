@@ -12,6 +12,11 @@ void Scene::AddModel(std::string componentName, std::string Path)
 	m_ModelList.push_back(model);
 }
 
+void Scene::AddSkybox(std::string componentName, std::string fileName)
+{
+	m_skybox = new Skybox(componentName, fileName);
+}
+
 Model* Scene::getModel(std::string componentName)
 {
 	for (size_t i = 0; i < m_ModelList.size(); i++)
@@ -27,9 +32,11 @@ Model* Scene::getModel(std::string componentName)
 
 void Scene::RenderScene(ShadowMap* shadowMap, Shader* shader)
 {
+	m_skybox->DrawSkybox();
 	for (size_t i = 0; i < m_ModelList.size(); i++)
 	{
 		m_ModelList[i]->ProcessModel(shader);
+
 
 		shader->Bind();
 		m_ModelList[i]->RenderModel(shadowMap);

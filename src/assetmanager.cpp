@@ -45,6 +45,13 @@ void AssetManager::AddSpotLight(std::string componentName, glm::vec3 color, glm:
 	std::shared_ptr<SpotLight> light = std::make_shared<SpotLight>(componentName, color, position, direction, ambientIntensity, diffuseIntensity, edge, true);
 	m_SpotLightMap[componentName] = light;
 }
+/*
+void AssetManager::AddSkybox(std::string componentName, std::string fileName)
+{
+	std::shared_ptr<Skybox> skybox = std::make_shared<Skybox>(componentName, fileName);
+	m_SkyboxMap[componentName] = skybox;
+}
+*/
 
 Scene* AssetManager::GetScene(std::string componentName)
 {
@@ -72,10 +79,18 @@ SpotLight* AssetManager::GetSpotLight(std::string componentName)
 	return dynamic_cast<SpotLight*>(find(componentName, m_SpotLightMap));
 }
 
+/*
+Skybox* AssetManager::GetSkybox(std::string componentName)
+{
+	return dynamic_cast<Skybox*>(find(componentName, m_SkyboxMap));
+}
+*/
+
 ShadowMap* AssetManager::GetShadowMap(size_t index)
 {
 	return dynamic_cast<ShadowMap*>(m_ShadowMapList[index].get());
 }
+
 
 std::vector<std::shared_ptr<ShadowMap>>* AssetManager::GetShadowMapList()
 {

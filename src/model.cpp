@@ -166,7 +166,7 @@ void Model::processTexture(const aiScene* scene)
 				int idx = std::string(path.data).rfind("\\");
 				std::string filename = std::string(path.data).substr(idx + 1);
 
-				std::string texPath = std::string("/res/texture/") + directory.getFileName() + "/" + filename;
+				std::string texPath = std::string("/res/texture/model/") + directory.getFileName() + "/" + filename;
 				debugger.giveMessage(Debugger::DebugLevel::Info, "Texture::Loading", texPath);
 
 				m_textureList[i] = new Texture(texPath);
@@ -181,7 +181,7 @@ void Model::processTexture(const aiScene* scene)
 		}
 		if (!m_textureList[i])
 		{
-			m_textureList[i] = new Texture("/res/texture/plain.png");
+			m_textureList[i] = new Texture("/res/texture/default.png");
 			m_textureList[i]->LoadTexture();
 		}
 	}

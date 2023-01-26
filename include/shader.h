@@ -15,15 +15,15 @@ private:
     std::string m_FragmentFilePath;
 	std::string m_VertexFilePath;
     std::unordered_map<std::string, GLint> m_UniformLocationMap;
+    
+    unsigned int CreateShader(const std::string& vertexSource, const std::string& fragmentSource);
+    unsigned int CompileShader(unsigned int type, const std::string& source);
+    
+    int GetUniformLocation(const std::string& name);
+    std::string GetShaderSource(const std::string& filepath);
 public:
     Shader(std::string componentName, const std::string& fragmentShader, const std::string& vertexShader);
     ~Shader() { glDeleteProgram(m_ModuleID); }
-
-    unsigned int CreateShader(const std::string& vertexSource, const std::string& fragmentSource);
-    unsigned int CompileShader(unsigned int type, const std::string& source);
-
-    int GetUniformLocation(const std::string& name);
-    std::string GetShaderSource(const std::string& filepath);
 
     void SetUniformMatrix4fv(const std::string& name, glm::mat4 value);
     void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);

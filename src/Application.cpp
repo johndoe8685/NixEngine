@@ -19,25 +19,32 @@ namespace NixEngine {
         shaderManager.AddShader("Basic", "/res/shader/basic.frag", "/res/shader/basic.vert");
         shaderManager.AddShader("Shadow", "/res/shader/shadow_map.frag", "/res/shader/shadow_map.vert");
         shaderManager.AddShader("DepthDebug", "/res/shader/debug_quad.frag", "/res/shader/debug_quad.vert");
+        
 
         Shader* shader = shaderManager.getShader("Basic");
         Shader* shadow_shader = shaderManager.getShader("Shadow");
         Scene* scene = assetManager.GetScene("Default");
+        
 
         assetManager.AddDirectionalLight("directionalLight", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2.0f, -1.0f, -2.0f), 0.2f, 0.8f);
         assetManager.AddPointLight("blueLight", glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(-1.0f, 0.0f, -3.0f), 0.0f, 1.0f);
         assetManager.AddPointLight("greenLight", glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.0f, -3.0f), 0.0f, 1.0f);
         assetManager.AddPointLight("redLight", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.732f), 0.0f, 1.0f);
         assetManager.AddSpotLight("flashLight", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), 0.0f, 1.0f, 30.0f);
+        //assetManager.AddSkybox("Blue", "Blue");
 
         scene->AddModel("Floor", "/res/model/floor.obj");
         scene->AddModel("Dragon", "/res/model/dragon.obj");
+        scene->AddModel("Baba", "/res/model/backpack.obj");
+        scene->AddSkybox("Blue", "Blue");
 
         DirectionalLight* directionalLight = assetManager.GetDirectionalLight("directionalLight");
         PointLight* blueLight = assetManager.GetPointLight("blueLight");
         PointLight* greenLight = assetManager.GetPointLight("greenLight");
         PointLight* redLight = assetManager.GetPointLight("redLight");
         SpotLight* flashLight = assetManager.GetSpotLight("flashLight");
+
+        //Skybox* skybox = assetManager.GetSkybox("Blue");
 
         Material shinyMaterial(4.0f, 256);
         Material dullMaterial(1.0f, 4);
@@ -61,6 +68,10 @@ namespace NixEngine {
         //Set Model Variables staticly
         Model* floor = scene->getModel("Floor");
         floor->SetPosition(0.0f, -1.0f, 0.0f);
+
+        Model* baba = scene->getModel("Baba");
+        baba->SetPosition(5.0f, 0.0f, 0.0f);
+        baba->SetScale(0.25f, 0.25f, 0.25f);
 
         while (!window.GetWindowShouldClose())
         {
@@ -117,16 +128,17 @@ namespace NixEngine {
                 greenLight->UseLight();
             }
             
-            glm::mat4 model(1.0f);
+            glm::mat4 view = camera.calculateViewMatrix();
             shader->SetUniformMatrix4fv("projection", projection);
-            shader->SetUniformMatrix4fv("view", camera.calculateViewMatrix());
+            shader->SetUniformMatrix4fv("view", view);
+            
+            shaderManager.projection = projection;
+            shaderManager.view = view;
 
             //Draw Scene
             dullMaterial.useMaterial(shader, "material.specularIntensity", "material.shininess");
             //renderer.DepthDebug(scene);
             renderer.DrawScene(scene);
-
-
 
             debugconsole.Run();
 

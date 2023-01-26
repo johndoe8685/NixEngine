@@ -11,6 +11,7 @@ private:
 	std::unordered_map<std::string, std::shared_ptr<Shader>> m_shaderMap;
 	Shader* find(std::string componentName, std::unordered_map<std::string, std::shared_ptr<Shader>> map);
 public:
+	glm::mat4 view, projection;
 	ShaderManager();
 
 	static ShaderManager& Get() { return s_Instance; }

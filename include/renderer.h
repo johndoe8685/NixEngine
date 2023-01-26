@@ -6,11 +6,6 @@
 #include "shadermanager.h"
 #include "assetmanager.h"
 #include "window.h"
-#include "shader.h"
-#include "scene.h"
-#include "mesh.h"
-#include "model.h"
-#include "shadowmap.h"
 
 class Renderer
 {

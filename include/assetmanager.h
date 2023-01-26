@@ -10,6 +10,7 @@
 #include "Light/pointlight.h"
 #include "Light/spotlight.h"
 #include "shadowmap.h"
+//#include "skybox.h"
 
 class AssetManager : public System
 {
@@ -21,6 +22,7 @@ private:
 	std::unordered_map<std::string, std::shared_ptr<DirectionalLight>> m_DirectionalLightMap;
 	std::unordered_map<std::string, std::shared_ptr<PointLight>> m_PointLightMap;
 	std::unordered_map<std::string, std::shared_ptr<SpotLight>> m_SpotLightMap;
+	//std::unordered_map<std::string, std::shared_ptr<Skybox>> m_SkyboxMap;
 	std::vector<std::shared_ptr<ShadowMap>> m_ShadowMapList;
 	template<typename T> T* find(std::string componentName, std::unordered_map<std::string, std::shared_ptr<T>> map);
 public:
@@ -33,6 +35,7 @@ public:
 	void AddDirectionalLight(std::string componentName, glm::vec3 color, glm::vec3 direction, float ambientIntensity, float diffuseIntensity);
 	void AddPointLight(std::string componentName, glm::vec3 color, glm::vec3 position, float ambientIntensity, float diffuseIntensity);
 	void AddSpotLight(std::string componentName, glm::vec3 color, glm::vec3 position, glm::vec3 direction, float ambientIntensity, float diffuseIntensity, float edge);
+	//void AddSkybox(std::string componentName, std::string fileName);
 
 	Scene* GetScene(std::string componentName);
 	AmbientLight* GetAmbientLight(std::string componentName);
@@ -40,5 +43,6 @@ public:
 	PointLight* GetPointLight(std::string componentName);
 	SpotLight* GetSpotLight(std::string componentName);
 	ShadowMap* GetShadowMap(size_t index);
+	//Skybox* GetSkybox(std::string componentName);
 	std::vector<std::shared_ptr<ShadowMap>>* GetShadowMapList();
 };

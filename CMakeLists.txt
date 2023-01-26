@@ -50,6 +50,7 @@ set(PROJECT_SOURCES
         ${PROJECT_SOURCE_DIR}/framebuffer.cpp
         ${PROJECT_SOURCE_DIR}/shadermanager.cpp
         ${PROJECT_SOURCE_DIR}/shadowmap.cpp
+        ${PROJECT_SOURCE_DIR}/skybox.cpp
 )
 
 set(PROJECT_HEADERS
@@ -91,6 +92,7 @@ set(PROJECT_HEADERS
         ${PROJECT_INCLUDE_DIR}/shadermanager.h
         ${PROJECT_INCLUDE_DIR}/framebuffer.h
         ${PROJECT_INCLUDE_DIR}/shadowmap.h
+        ${PROJECT_INCLUDE_DIR}/skybox.h
 )
 
 include_directories(${PROJECT_INCLUDE_DIR})
