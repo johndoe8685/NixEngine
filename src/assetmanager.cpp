@@ -3,7 +3,7 @@
 AssetManager AssetManager::s_Instance;
 
 AssetManager::AssetManager()
-	:System("Default", "AssetManager")
+	:System("Default", "AssetManager"), m_DirectionalIndex(0)
 {
 }
 
@@ -27,11 +27,12 @@ void AssetManager::AddAmbientLight(std::string componentName, glm::vec3 color, f
 
 void AssetManager::AddDirectionalLight(std::string componentName, glm::vec3 color, glm::vec3 direction, float ambientIntensity, float diffuseIntensity)
 {
-	std::shared_ptr<DirectionalLight> light = std::make_shared<DirectionalLight>(componentName, color, direction, ambientIntensity, diffuseIntensity);
-	m_DirectionalLightMap[componentName] = light;
-
 	std::shared_ptr<ShadowMap> shadowMap = std::make_shared<ShadowMap>(componentName, 8192, 8192, direction);
 	m_ShadowMapList.push_back(shadowMap);
+
+	std::shared_ptr<DirectionalLight> light = std::make_shared<DirectionalLight>(componentName, color, direction, ambientIntensity, diffuseIntensity, GetShadowMap(m_DirectionalIndex));
+	m_DirectionalLightMap[componentName] = light;
+
 }
 
 void AssetManager::AddPointLight(std::string componentName, glm::vec3 color, glm::vec3 position, float ambientIntensity, float diffuseIntensity)

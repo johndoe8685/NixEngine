@@ -14,6 +14,10 @@ DebugConsole::DebugConsole(Window* window)
     m_isFramebufferOpen = false;
     m_deltaTime = 0.0f;
     m_angle = 80.0f;
+
+    m_dx = 0.0f;
+    m_dy = 0.0f;
+    m_dz = 0.0f;
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -46,6 +50,22 @@ void DebugConsole::Run()
     ImGui::SliderFloat("FOV", &m_fov, 5.0f, 120.0f);
     ImGui::Checkbox("FlashLight", &m_Useflash);
     ImGui::Checkbox("Directional Light", &m_UseDirectional);
+    if (ImGui::Button("Directiona Light Direction"))
+    {
+        if (m_isFramebufferOpen) m_isFramebufferOpen = false;
+        else m_isFramebufferOpen = true;
+    }
+    ImGui::End();
+
+    //Directional Light Direction Box
+    if (m_isFramebufferOpen)
+    {
+        ImGui::Begin("Directional Light Direction", &m_isFramebufferOpen);
+        ImGui::SliderFloat("X Position", &m_dx, -1.0f, 1.0f);
+        ImGui::SliderFloat("Y Position", &m_dy, -1.0f, 1.0f);
+        ImGui::SliderFloat("Z Position", &m_dz, -1.0f, 1.0f);
+        ImGui::End();
+    }
     /*
     if (ImGui::Button("FrameBuffers"))
     {
@@ -64,7 +84,6 @@ void DebugConsole::Run()
         ImGui::End();
     }
     */
-    ImGui::End();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }

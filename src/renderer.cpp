@@ -15,20 +15,13 @@ Renderer::~Renderer()
     
 }
 
-void Renderer::DrawScene(Scene* scene)
+void Renderer::DrawScene(Scene* scene, glm::mat4 view, glm::mat4 projection)
 {
     Shader* shader = shadermanager.getShader("Basic");
     ShadowMap* shadowMap = assetmanager.GetShadowMap(0);
     ProcessShadowMap(scene);
 
-    //Geçici bir çözüm birden fazla shadow map kullanýldýðýnda deðiþtirilecek
-    shader->SetUniformMatrix4fv("lightSpaceMatrix", shadowMap->GetLightSpaceMatrix());
-    shader->SetUniform1f("ShadowMapBiasMin", shadowMap->m_biasMin);
-    shader->SetUniform1f("ShadowMapBiasMax", shadowMap->m_biasMax);
-    shader->SetUniform1i("aTexture", 0);
-    shader->SetUniform1i("shadowMap", 1);
-
-    scene->RenderScene(shadowMap, shader);
+    scene->RenderScene(shadowMap, shader, view, projection);
 }
 
 void Renderer::ProcessShadowMap(Scene* scene)

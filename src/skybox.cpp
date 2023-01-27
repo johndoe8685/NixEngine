@@ -4,9 +4,10 @@ Skybox::Skybox(std::string componentName, std::string fileName)
 	:System(componentName, "Skybox")
 {
 	shadermanager = ShaderManager::Get();
+	stbi_set_flip_vertically_on_load(0);
 
 	//Burada eklenecek olan skyboxlar /res/texture/skybox/ klasöründe, verilen fileName'e sahip olup 6 resmin de ismini right left up gibi devam etmesini standartlaþtýrýyor
-	std::string faceLocations[] = { "right", "left", "top", "bottom", "back", "front" };
+	std::string faceLocations[] = { "right", "left", "top", "bottom", "front" ,"back" };
 	for (size_t i = 0; i < 6; i++)
 	{
 		faceLocations[i] = std::string("/res/texture/skybox/") + fileName + "/" + faceLocations[i];
@@ -109,20 +110,19 @@ Skybox::Skybox(std::string componentName, std::string fileName)
 	m_skyMesh = new Mesh(skyboxVertices, skyboxIndices);
 }
 //void Skybox::DrawSkybox(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
-void Skybox::DrawSkybox()
+void Skybox::DrawSkybox(glm::mat4 view, glm::mat4 projection)
 {
 	if (m_skyMesh != nullptr && m_skyShader != nullptr)
 	{
 		//viewMatrix'i matris 4x4'ten matris 3x3'e dönüþtür.
 		//Bu dönüþüm viewMatrix'in scale ve position'ununu deðiþtirmiyor ama rotation'nunu kaldýrýyor
-		glm::mat4 viewMatrix = shadermanager.view;
+		glm::mat4 viewMatrix = view;
 		viewMatrix = glm::mat4(glm::mat3(viewMatrix));
 
 		//Burada depth testi kapat çünkü skybox'u en son framebuffer'a yazacaðýz
 		glDepthMask(GL_FALSE);
-
 		
-		m_skyShader->SetUniformMatrix4fv("projection", shadermanager.projection);
+		m_skyShader->SetUniformMatrix4fv("projection", projection);
 		m_skyShader->SetUniformMatrix4fv("view", viewMatrix);
 
 		m_skyShader->Bind();

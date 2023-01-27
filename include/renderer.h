@@ -20,7 +20,7 @@ private:
 public:
     Renderer(Window* window);
     ~Renderer();
-    void DrawScene(Scene* scene);
+    void DrawScene(Scene* scene, glm::mat4 view, glm::mat4 projection);
     void ProcessShadowMap(Scene* scene);
     void Clear();
 

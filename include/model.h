@@ -25,9 +25,12 @@ private:
 	glm::vec3 m_position;
 	glm::vec3 m_scale;
 	glm::vec3 m_rotation;
+
 public:
 	Model(std::string componentName, const std::string& path);
 	~Model();
+	
+	bool isDraw;
 
 	void ProcessModel(Shader* shader);
 	void RenderModel(ShadowMap* shadowMap);

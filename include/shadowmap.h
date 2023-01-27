@@ -18,6 +18,8 @@ public:
 	void TextureFilters() override;
 	void FrameBufferSettings() override;
 
+	void SetDirection(glm::vec3 direction) { m_direction = direction; };
+
 	void Write() override;
 	void Process(Shader* shader);
 

@@ -15,10 +15,20 @@ Window::Window()
 }
 
 
-Window::Window(int width, int height, Camera* camera)
-:m_width(width), m_height(height), mouseFirstMoved(true), tabclicked(false), xChange(0), yChange(0), m_camera(camera)
+Window::Window(int width, int height)
+:m_width(width), m_height(height), mouseFirstMoved(true), tabclicked(false), xChange(0), yChange(0)
 {
     for(size_t i = 0; i < 1024; i++)
+    {
+        keys[i] = 0;
+    }
+    Init(m_width, m_height);
+}
+
+Window::Window(int width, int height, Camera* camera)
+    :m_width(width), m_height(height), mouseFirstMoved(true), tabclicked(false), xChange(0), yChange(0), m_current_camera(camera)
+{
+    for (size_t i = 0; i < 1024; i++)
     {
         keys[i] = 0;
     }
@@ -62,6 +72,11 @@ void Window::Init(int width, int height)
     glfwSetWindowUserPointer(mainWindow, this);
 }
 
+void Window::SetCamera(Camera* camera)
+{
+    m_current_camera = camera;
+}
+
 
 void Window::handleKeys(GLFWwindow* window, int key, int code, int action, int mode)
 {
@@ -76,14 +91,14 @@ void Window::handleKeys(GLFWwindow* window, int key, int code, int action, int m
         if(!theWindow->tabclicked)
         {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            theWindow->m_camera->setIsFocused(true);
+            theWindow->m_current_camera->setIsFocused(true);
             ImGui::SetWindowFocus(nullptr);
             theWindow->tabclicked = true;
         }
         else
         {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-            theWindow->m_camera->setIsFocused(false);
+            theWindow->m_current_camera->setIsFocused(false);
             ImGui::SetWindowFocus("Nix Engine Debug Console");
             theWindow->tabclicked = false;
         }

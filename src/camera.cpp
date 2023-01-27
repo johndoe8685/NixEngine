@@ -1,9 +1,10 @@
 #include "camera.h"
 #include <GLFW/glfw3.h>
 
-Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, float startYaw, float startPitch, float startMoveSpeed, float startTurnSpeed)
-:position(startPosition), worldUp(startUp), yaw(startYaw), pitch(startPitch), moveSpeed(startMoveSpeed), turnSpeed(startTurnSpeed), front(glm::vec3(0.0f, 0.0f, -1.0f)), isFocused(false)
+Camera::Camera(std::string componentName, glm::vec3 startPosition, glm::vec3 startUp, float startYaw, float startPitch, float startMoveSpeed, float startTurnSpeed)
+:System(componentName, "Camera"), position(startPosition), worldUp(startUp), yaw(startYaw), pitch(startPitch), moveSpeed(startMoveSpeed), turnSpeed(startTurnSpeed), front(glm::vec3(0.0f, 0.0f, -1.0f)), isFocused(false)
 {
+	debugger.giveMessage(Debugger::Info, "Init");
     update();
 }
 

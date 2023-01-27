@@ -3,9 +3,10 @@
 #include <GLFW/glfw3.h>
 #include <vendor/glm/glm.hpp>
 #include <vendor/glm/gtc/matrix_transform.hpp>
+#include "system.h"
 #include "shader.h"
 
-class Camera
+class Camera : public System
 {
 private:
     unsigned int m_ModuleID;
@@ -18,7 +19,7 @@ private:
     float yaw, pitch;
     float moveSpeed, turnSpeed;
 public:
-    Camera(glm::vec3 startPosition, glm::vec3 startUp, float startYaw, float startPitch, float startMoveSpeed, float startTurnSpeed);
+    Camera(std::string componentName, glm::vec3 startPosition, glm::vec3 startUp, float startYaw, float startPitch, float startMoveSpeed, float startTurnSpeed);
     ~Camera();
 
     void keyControl(bool* keys, float deltaTime);

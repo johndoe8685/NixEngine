@@ -2,7 +2,7 @@
 
 Model::Model(std::string componentName, const std::string& path)
 	:System(componentName, "Model"), m_position(0, 0, 0), m_scale(1.0f, 1.0f, 1.0f), 
-	m_rotation(0.0f, 0.0f, 0.0f), m_model(glm::mat4(1.0f))
+	m_rotation(0.0f, 0.0f, 0.0f), m_model(glm::mat4(1.0f)), isDraw(false)
 {
 	directory.changePath(path);
 	debugger.giveMessage(Debugger::DebugLevel::Info, "Loading", path);

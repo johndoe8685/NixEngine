@@ -22,6 +22,9 @@ private:
 	ShadowMap* testshadow;
 	//---Testing---
 public:
+	float m_dx;
+	float m_dy;
+	float m_dz;
 	FrameBuffer test;
 	DebugConsole(Window* window);
 	~DebugConsole();

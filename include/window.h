@@ -22,14 +22,16 @@ private:
     bool tabclicked;
 
     GLFWwindow* mainWindow;
-    Camera* m_camera;
+    Camera* m_current_camera;
 public:
     Window();
+    Window(int width, int height);
     Window(int width, int height, Camera* camera);
     ~Window() { glfwTerminate(); }
 
     void Init(int height, int width);
 
+    void SetCamera(Camera* camera);
     void SwapBuffers() { glfwSwapBuffers(mainWindow); }
     bool GetWindowShouldClose() { return glfwWindowShouldClose(mainWindow); }
     void getSize() { glfwGetWindowSize(mainWindow, &m_width, &m_height); }

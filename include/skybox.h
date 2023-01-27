@@ -16,5 +16,5 @@ private:
 	unsigned int m_textureID;
 public:
 	Skybox(std::string componentName, std::string fileName);
-	void DrawSkybox();
+	void DrawSkybox(glm::mat4 view, glm::mat4 projection);
 };

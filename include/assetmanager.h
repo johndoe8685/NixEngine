@@ -25,6 +25,8 @@ private:
 	//std::unordered_map<std::string, std::shared_ptr<Skybox>> m_SkyboxMap;
 	std::vector<std::shared_ptr<ShadowMap>> m_ShadowMapList;
 	template<typename T> T* find(std::string componentName, std::unordered_map<std::string, std::shared_ptr<T>> map);
+
+	size_t m_DirectionalIndex;
 public:
 	AssetManager();
 

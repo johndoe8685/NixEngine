@@ -8,9 +8,8 @@ namespace NixEngine {
     void Application::Run()
     {
         float toRadians = 3.14159265358979323846f / 180.f;
-        
-        Camera camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.2f);
-        Window window(800, 600, &camera);
+
+        Window window(800, 600);
 
         ShaderManager& shaderManager = ShaderManager::Get();
         AssetManager& assetManager = AssetManager::Get();
@@ -20,31 +19,31 @@ namespace NixEngine {
         shaderManager.AddShader("Shadow", "/res/shader/shadow_map.frag", "/res/shader/shadow_map.vert");
         shaderManager.AddShader("DepthDebug", "/res/shader/debug_quad.frag", "/res/shader/debug_quad.vert");
         
-
         Shader* shader = shaderManager.getShader("Basic");
         Shader* shadow_shader = shaderManager.getShader("Shadow");
         Scene* scene = assetManager.GetScene("Default");
         
-
-        assetManager.AddDirectionalLight("directionalLight", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2.0f, -1.0f, -2.0f), 0.2f, 0.8f);
+        assetManager.AddDirectionalLight("directionalLight", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(2.0f, -1.0f, 2.0f), 0.2f, 0.8f);
         assetManager.AddPointLight("blueLight", glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(-1.0f, 0.0f, -3.0f), 0.0f, 1.0f);
         assetManager.AddPointLight("greenLight", glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.0f, -3.0f), 0.0f, 1.0f);
         assetManager.AddPointLight("redLight", glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.732f), 0.0f, 1.0f);
         assetManager.AddSpotLight("flashLight", glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), 0.0f, 1.0f, 30.0f);
-        //assetManager.AddSkybox("Blue", "Blue");
 
+        scene->AddCamera("Default", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.2f);
+        scene->AddModel("Error", "/res/model/error.obj");
         scene->AddModel("Floor", "/res/model/floor.obj");
         scene->AddModel("Dragon", "/res/model/dragon.obj");
         scene->AddModel("Baba", "/res/model/backpack.obj");
         scene->AddSkybox("Blue", "Blue");
+
+        Camera* camera = scene->getCamera("Default");
+        window.SetCamera(camera);
 
         DirectionalLight* directionalLight = assetManager.GetDirectionalLight("directionalLight");
         PointLight* blueLight = assetManager.GetPointLight("blueLight");
         PointLight* greenLight = assetManager.GetPointLight("greenLight");
         PointLight* redLight = assetManager.GetPointLight("redLight");
         SpotLight* flashLight = assetManager.GetSpotLight("flashLight");
-
-        //Skybox* skybox = assetManager.GetSkybox("Blue");
 
         Material shinyMaterial(4.0f, 256);
         Material dullMaterial(1.0f, 4);
@@ -77,6 +76,8 @@ namespace NixEngine {
         {
             glfwPollEvents();
 
+            directionalLight->SetDirection(glm::vec3(debugconsole.m_dx, debugconsole.m_dy, debugconsole.m_dz));
+
             //Set Model Variables
             Model* dragon = scene->getModel("Dragon");
             dragon->SetPosition(debugconsole.getX(), debugconsole.getY(), debugconsole.getZ());
@@ -88,9 +89,9 @@ namespace NixEngine {
             deltaTime = curFrame - lastFrame;
             lastFrame = curFrame;
 
-            camera.keyControl(window.getKeys(), deltaTime);
-		    camera.mouseControl(window.getXChange(), window.getYChange());
-            camera.setUniformCameraPosition(shader);
+            camera->keyControl(window.getKeys(), deltaTime);
+		    camera->mouseControl(window.getXChange(), window.getYChange());
+            camera->setUniformCameraPosition(shader);
 
             //Rotate the triangle
             speed = debugconsole.getAngle() * toRadians * deltaTime;
@@ -106,9 +107,9 @@ namespace NixEngine {
             //Clear the screen
             renderer.Clear();
 
-            glm::vec3 hand = camera.getPosition();
+            glm::vec3 hand = camera->getPosition();
             hand.y = hand.y - 0.3f;
-            flashLight->setFlash(hand, camera.getDirection());
+            flashLight->setFlash(hand, camera->getDirection());
 
             //Use Light
             if (debugconsole.m_Useflash) flashLight->UseLight();
@@ -128,17 +129,14 @@ namespace NixEngine {
                 greenLight->UseLight();
             }
             
-            glm::mat4 view = camera.calculateViewMatrix();
+            glm::mat4 view = camera->calculateViewMatrix();
             shader->SetUniformMatrix4fv("projection", projection);
             shader->SetUniformMatrix4fv("view", view);
-            
-            shaderManager.projection = projection;
-            shaderManager.view = view;
 
             //Draw Scene
             dullMaterial.useMaterial(shader, "material.specularIntensity", "material.shininess");
             //renderer.DepthDebug(scene);
-            renderer.DrawScene(scene);
+            renderer.DrawScene(scene, camera->calculateViewMatrix(), projection);
 
             debugconsole.Run();
 
