@@ -10,14 +10,14 @@ DebugConsole::DebugConsole(Window* window)
     m_z = -2.5f;
     m_fov = 90.0f;
     m_Useflash = false;
-    m_UseDirectional = false;
+    m_UseDirectional = true;
     m_isFramebufferOpen = false;
     m_deltaTime = 0.0f;
     m_angle = 80.0f;
 
-    m_dx = 0.0f;
-    m_dy = 0.0f;
-    m_dz = 0.0f;
+    m_dx = 0.5f;
+    m_dy = -0.5f;
+    m_dz = 1.0f;
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;

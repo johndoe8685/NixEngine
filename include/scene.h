@@ -19,13 +19,13 @@ public:
 	~Scene();
 	
 	void AddModel(std::string componentName, std::string Path);
-	void AddCamera(std::string componentName, glm::vec3 startPosition, glm::vec3 startUp, float startYaw, float startPitch, float moveSpeed, float sensivity);
+	void AddCamera(std::string componentName, glm::vec3 position, glm::vec3 up, float yaw, float pitch, float movementSpeed, float sensivity, Projection projectionMode, float near, float far);
 	void AddSkybox(std::string componentName, std::string fileName);
 
 	Model* getModel(std::string componentName);
 	Camera* getCamera(std::string componentName);
 
-	void RenderScene(ShadowMap* shadowMap, Shader* shader, glm::mat4 view, glm::mat4 projection);
+	void RenderScene(ShadowMap* shadowMap, Shader* shader, std::string cameraName, glm::mat4 projection);
 	void RenderScene(Shader* shader);
 	void ProcessScene(Shader* shader);
 	void ProcessShadowMap(ShadowMap* shadowMap, Shader* shader);

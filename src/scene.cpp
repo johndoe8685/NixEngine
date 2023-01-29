@@ -12,9 +12,9 @@ void Scene::AddModel(std::string componentName, std::string Path)
 	m_ModelList.push_back(model);
 }
 
-void Scene::AddCamera(std::string componentName, glm::vec3 startPosition, glm::vec3 startUp, float startYaw, float startPitch, float moveSpeed, float sensivity)
+void Scene::AddCamera(std::string componentName, glm::vec3 position, glm::vec3 up, float yaw, float pitch, float movementSpeed, float sensivity, Projection projectionMode, float near, float far)
 {
-	Camera* camera = new Camera(componentName, startPosition, startUp, startYaw, startPitch, moveSpeed, sensivity);
+	Camera* camera = new Camera(componentName, position, up, yaw, pitch, movementSpeed, sensivity, projectionMode, near, far);
 	m_CameraMap[componentName] = camera;
 }
 
@@ -34,6 +34,7 @@ Model* Scene::getModel(std::string componentName)
 		}
 	}
 	debugger.giveMessage(Debugger::Error, "getModel::Failed to get model", componentName);
+	m_ModelList[0]->isDraw = true;
 	return m_ModelList[0];
 }
 
@@ -50,9 +51,17 @@ Camera* Scene::getCamera(std::string componentName)
 	}
 }
 
-void Scene::RenderScene(ShadowMap* shadowMap, Shader* shader, glm::mat4 view, glm::mat4 projection)
+void Scene::RenderScene(ShadowMap* shadowMap, Shader* shader, std::string cameraName, glm::mat4 projection)
 {
-	m_skybox->DrawSkybox(view, projection);
+	Camera* camera = getCamera(cameraName);
+	glm::mat4 view = camera->calculateViewMatrix();
+	glm::mat4 proj = camera->getProjection();
+
+	m_skybox->DrawSkybox(view, proj);
+
+	//Set view and projection
+	shader->SetUniformMatrix4fv("view", view);
+	shader->SetUniformMatrix4fv("projection", proj);
 
 	//Geçici bir çözüm birden fazla shadow map kullanýldýðýnda deðiþtirilecek
 	shader->SetUniformMatrix4fv("lightSpaceMatrix", shadowMap->GetLightSpaceMatrix());
@@ -78,7 +87,7 @@ void Scene::RenderScene(Shader* shader)
 {
 	for (size_t i = 0; i < m_ModelList.size(); i++)
 	{
-		if (m_ModelList[i]->isDraw)
+		if (m_ModelList[i]->isDraw && m_ModelList[i]->m_componentName != "Error")
 		{
 			m_ModelList[i]->ProcessModel(shader);
 

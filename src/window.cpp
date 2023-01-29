@@ -5,8 +5,11 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 Window::Window()
-:m_width(800), m_height(600), mouseFirstMoved(true), tabclicked(false), xChange(0), yChange(0)
+:m_width(800), m_height(600), mouseFirstMoved(true), tabclicked(false), xChange(0), yChange(0), m_curFrame(0.0f), m_lastFrame(0.0f)
 {
+    shadermanager = ShaderManager::Get();
+
+
     for(size_t i = 0; i < 1024; i++)
     {
         keys[i] = 0;
@@ -70,11 +73,27 @@ void Window::Init(int width, int height)
     glViewport(0, 0, width, height);
     glfwSetFramebufferSizeCallback(mainWindow, framebuffer_size_callback);
     glfwSetWindowUserPointer(mainWindow, this);
+
+    //Get the first frame time
+    m_lastFrame = glfwGetTime();
 }
 
 void Window::SetCamera(Camera* camera)
 {
     m_current_camera = camera;
+}
+
+bool Window::GetWindowShouldClose()
+{
+    //Get the deltaTime
+    m_curFrame = glfwGetTime();
+    shadermanager.deltaTime = m_curFrame - m_lastFrame;
+    m_lastFrame = m_curFrame;
+
+    getSize();
+    shadermanager.currentWindowWidth = m_width;
+    shadermanager.currentWindowHeight = m_height;
+    return glfwWindowShouldClose(mainWindow);
 }
 
 

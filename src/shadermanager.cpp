@@ -1,6 +1,10 @@
 #include "shadermanager.h"
 
 ShaderManager ShaderManager::s_Instance;
+int ShaderManager::currentWindowWidth;
+int ShaderManager::currentWindowHeight;
+float ShaderManager::currentCameraFov;
+float ShaderManager::deltaTime;
 
 ShaderManager::ShaderManager()
 	:System("Default", "ShaderManager")

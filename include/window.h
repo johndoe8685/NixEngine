@@ -1,11 +1,12 @@
 #pragma once
-#include "camera.h"
 #include <iostream>
 #include <vendor/glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "vendor/imGui/imgui.h"
 #include "vendor/imGui/imgui_impl_glfw.h"
 #include "vendor/imGui/imgui_impl_opengl3.h"
+#include "camera.h"
+#include "shadermanager.h"
 
 class Window
 {
@@ -17,12 +18,15 @@ private:
     double lastX, lastY;
     double xChange, yChange;
 
+    float m_curFrame, m_lastFrame;
+
     bool keys[1024];
     bool mouseFirstMoved;
     bool tabclicked;
 
     GLFWwindow* mainWindow;
     Camera* m_current_camera;
+    ShaderManager shadermanager;
 public:
     Window();
     Window(int width, int height);
@@ -33,7 +37,7 @@ public:
 
     void SetCamera(Camera* camera);
     void SwapBuffers() { glfwSwapBuffers(mainWindow); }
-    bool GetWindowShouldClose() { return glfwWindowShouldClose(mainWindow); }
+    bool GetWindowShouldClose();
     void getSize() { glfwGetWindowSize(mainWindow, &m_width, &m_height); }
     int getHeight() { getSize(); return m_height; }
     int getWidth() { getSize(); return m_width; }

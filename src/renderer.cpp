@@ -15,13 +15,13 @@ Renderer::~Renderer()
     
 }
 
-void Renderer::DrawScene(Scene* scene, glm::mat4 view, glm::mat4 projection)
+void Renderer::DrawScene(Scene* scene, std::string cameraName, glm::mat4 projection)
 {
     Shader* shader = shadermanager.getShader("Basic");
     ShadowMap* shadowMap = assetmanager.GetShadowMap(0);
     ProcessShadowMap(scene);
 
-    scene->RenderScene(shadowMap, shader, view, projection);
+    scene->RenderScene(shadowMap, shader, cameraName, projection);
 }
 
 void Renderer::ProcessShadowMap(Scene* scene)
